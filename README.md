@@ -8,7 +8,6 @@ The core of mizOS is the **miz** script. Without the **miz** script, mizOS is ju
 The **miz** script manages the following:
 - Runit services
 - Package installation (pacman management)
-- Desktop Environment installation
 - mizOS system updates
 - More to come
 
@@ -24,7 +23,6 @@ The **miz** script has 4 main arguments. Being **system**, **service**, **pac**,
 - **service** manages services (runit).
 - **pac** manages pacman packages.
 - **aur** manages aur packages (yay).
-- **desktop** manages Desktop Environment installation.
 
 ###### 1. miz system
 **miz system update** - Updates the **miz** script and upgrades all packages.
