@@ -367,4 +367,34 @@ elseif arg[1] == "info" then
 		print("https://sudev.neocities.org")
 		print(" ")
 	end
+elseif arg[1] == "system" then
+	if arg[2] == "update" then
+		print("Update mizOS? Y/N")
+		if io.read() == "Y" then
+			x("cd /tmp")
+			x("rm -rf mizOS")
+			x("git clone https://github.com/Mizosu97/mizOS")
+			x("sudo rm /usr/bin/mizOS")
+			x("sudo cp mizOS/assets/miz /usr/bin")
+		end
+	end
+else
+	print("! Error ! Invalid command!")
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

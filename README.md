@@ -19,7 +19,7 @@ The **miz** script manages the following:
 
 The **miz** script contains a lot of options (arguments). You can read up on how to use the **miz** script below.
 
-The **miz** script has 4 main arguments. Being **system**, **service**, **pac**, and **aur**.
+The **miz** script has 7 main arguments. Being **system**, **service**, **pac**, **aur**, **desktop**, **wm**, and **info**.
 
 - **system** manages mizOS system updates.
 - **service** manages services (runit).

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 sudo pacman -Syu
-sudo pacman -S i3-gaps xclip maim
+sudo pacman -S lua i3-gaps xclip maim
 
 
 mkdir $HOME/Documents
