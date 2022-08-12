@@ -1,43 +1,360 @@
 #!/bin/lua
 
+local function x(cmd)
+	os.execute(cmd)
+end
+
+local function ipkg(pkg)
+	x("sudo pacman -S " .. pkg)
+end
+
+local function ypkg(pkg)
+	x("yay -S " .. pkg)
+end
+
+local function idesk(desk)
+	if desk == "budgie" then
+		ipkg("budgie-desktop")
+	elseif desk == "cinnamon" then 
+		ipkg("cinnamon")
+	elseif desk == "cutefish" then
+		ipkg("cutefish")
+	elseif desk == "deepin" then
+		ipkg("deepin")
+	elseif desk == "enlightenment" then
+		ipkg("enlightenment")
+	elseif desk == "gnome" then
+		ipkg("gnome")
+	elseif desk == "gnome-flashback" then
+		ipkg("gnome-flashback")
+	elseif desk == "kde" then
+		ipkg("plasma")
+	elseif desk == "lxde" then
+		ipkg("lxde")
+	elseif desk == "lxqt" then
+		ipkg("lxqt")
+	elseif desk == "mate" then
+		ipkg("mate")
+	elseif desk == "sugar" then
+		ipkg("sugar sugar-fructose")
+	elseif desk == "ukui" then
+		ipkg("ukui")
+	elseif desk == "xfce" then
+		ipkg("xfce4")
+		-- unofficial
+	elseif desk == "cde" then
+		ypkg("cdesktopenv")
+	elseif desk == "ede" then
+		ypkg("ede")
+	elseif desk == "kde1" then
+		ypkg("kde1-kdebase-git")
+	elseif desk == "liri" then
+		ypkg("liri-shell-git")
+	elseif desk == "lumina" then
+		ypkg("lumina-desktop")
+	elseif desk == "moksha" then
+		ypkg("moksha-git")
+	elseif desk == "pantheon" then
+		ypkg("pantheon-session-git")
+	elseif desk == "paperde" then
+		ypkg("paperde")
+	elseif desk == "phosh" then
+		ypkg("phosh")
+	elseif desk == "plasma-mobile" then
+		ypkg("plasma-mobile")
+	elseif desk == "thedesk" then
+		ypkg("thedesk")
+	elseif desk == "trinity" then
+		ipkg("trinity")
+	elseif desk == "maui-shell" then
+		ypkg("maui-shell-git")
+	else 
+		print("! Error ! Desktop Environment not found!")
+	end
+
+end
+
+
+local function iwm(wm)
+	if wm == "2bwm" then
+		ypkg("2bwm")
+	elseif wm == "9wm" then
+		ypkg("9wm")
+	elseif wm == "afterstep" then
+		ypkg("afterstep-git")
+	elseif wm == "berry" then
+		ypkg("berry-git")
+	elseif wm == "blackbox" then
+		ipkg("blackbox")
+	elseif wm == "compiz" then
+		ipkg("compiz")
+	elseif wm == "cwm" then
+		ypkg("cwm")
+	elseif wm == "eggwm" then
+		ypkg("eggwm")
+	elseif wm == "enlightenment" then
+		ipkg("enlightenment")
+	elseif wm == "evilwm" then
+		ypkg("evilwm")
+	elseif wm == "fluxbox" then
+		ipkg("fluxbox")
+	elseif wm == "flwm" then
+		ypkg("flwm")
+	elseif wm == "fvwm" then
+		ypkg("fvwm")
+	elseif wm == "gala" then
+		ipkg("gala")
+	elseif wm == "goomwwm" then
+		ypkg("goomwwm")
+	elseif wm == "icewm" then
+		ipkg("icewm")
+	elseif wm == "jbwm" then
+		ypkg("jbwm")
+	elseif wm == "jwm" then
+		ipkg("jwm")
+	elseif wm == "karmen" then
+		ypkg("karmen")
+	elseif wm == "kwin" then
+		ipkg("kwin")
+	elseif wm == "lwm" then
+		ipkg("lwm")
+	elseif wm == "marco" then
+		ipkg("marco")
+	elseif wm == "metacity" then
+		ipkg("metacity")
+	elseif wm == "muffin" then
+		ipkg("muffin")
+	elseif wm == "mutter" then
+		ipkg("mutter")
+	elseif wm == "mwm" then
+		ipkg("openmotif")
+	elseif wm == "openbox" then
+		ipkg("openbox")
+	elseif wm == "pawm" then
+		ypkg("pawm")
+	elseif wm == "pekwm" then
+		ipkg("pekwm")
+	elseif wm == "sawfish" then
+		ypkg("sawfish")
+	elseif wm == "sowm" then
+		ypkg("sowm")
+	elseif wm == "tinywm" then
+		ypkg("tinywm")
+	elseif wm == "twm" then
+		ipkg("xorg-twm")
+	elseif wm == "ukwm" then
+		ipkg("ukwm")
+	elseif wm == "uwm" then
+		ypkg("ude")
+	elseif wm == "wind" then
+		ypkg("windwm")
+	elseif wm == "windowlab" then
+		ypkg("windowlab")
+	elseif wm == "windowmaker" then
+		ypkg("windowmaker")
+	elseif wm == "wm2" then
+		ypkg("wm2")
+	elseif wm == "worm" then
+		ypkg("worm-git")
+	elseif wm == "xfwm" then
+		ipkg("xfwm4")
+		-- tiling
+	elseif wm == "bspwm" then
+		ipkg("bspwm")
+	elseif wm == "exwm" then
+		ypkg("exwm-git")
+	elseif wm == "herbstluftwm" then
+		ipkg("herbstluftwm")
+	elseif wm == "i3" then
+		ipkg("i3-wm")
+	elseif wm == "larswm" then
+		ypkg("larswm")
+	elseif wm == "leftwm" then
+		ypkg("leftwm")
+	elseif wm == "notion" then
+		ipkg("notion")
+	elseif wm == "ratpoison" then
+		ipkg("ratpoison")
+	elseif wm == "stumpwm" then
+		ipkg("stumpwm")
+	elseif wm == "subtle" then
+		ypkg("subtle-hg")
+	elseif wm == "wmfs2" then
+		ypkg("wmfs2-git")
+		-- Dynamic
+	elseif wm == "awesome" then
+		ipkg("awesome")
+	elseif wm == "dwm" then
+		ypkg("dwm")
+	elseif wm == "echinus" then
+		ypkg("echinus")
+	elseif wm == "frankenwm" then
+		ypkg("frankenwm")
+	elseif wm == "i3-gaps" then
+		ipkg("i3-gaps")
+	elseif wm == "spectrwm" then
+		ipkg("spectrwm")
+	elseif wm == "qtile" then
+		ipkg("qtile")
+	elseif wm == "xmonad" then
+		ipkg("xmonad")
+	end
+
+end
+
+
+
 if arg[1] == "service" then
 	if arg[2] == "link" then
-		os.execute("sudo ln -s /etc/runit/sv/" .. arg[3] .. " /run/runit/service/")
+		x("sudo ln -s /etc/runit/sv/" .. arg[3] .. " /run/runit/service/")
 	elseif arg[2] == "unlink" then
-		os.execute("sudo rm /run/runit/service/" .. arg[3])
+		x("sudo rm /run/runit/service/" .. arg[3])
 	elseif arg[2] == "disable" then
-		os.execute("sudo touch /run/runit/service/" .. arg[3] .. "/down")
+		x("sudo touch /run/runit/service/" .. arg[3] .. "/down")
 	elseif arg[2] == "enable" then
-		os.execute("sudo rm /run/runit/service/" .. arg[3] .. "/down")
+		x("sudo rm /run/runit/service/" .. arg[3] .. "/down")
 	elseif arg[2] == "start" then
-		os.execute("sudo sv start " .. arg[3])
+		x("sudo sv start " .. arg[3])
 	elseif arg[2] == "stop" then
-		os.execute("sudo sv stop " .. arg[3])
+		x("sudo sv stop " .. arg[3])
 	elseif arg[2] == "restart" then
-		os.execute("sudo sv restart " .. arg[3])
+		x("sudo sv restart " .. arg[3])
 	elseif arg[2] == "list" then
 		if arg[3] == "installed" then
-			os.execute("ls /etc/runit/sv/")
+			x("ls /etc/runit/sv/")
 		elseif arg[3] == "linked" then
-			os.execute("ls /run/runit/service/")
+			x("ls /run/runit/service/")
 		end
 	end
 elseif arg[1] == "pac" then
 	if arg[2] == "install" then
-		os.execute("sudo pacman -S " .. arg[3])
+		ipkg(arg[3])
 	elseif arg[2] == "remove" then
-		os.execute("sudo pacman -R " .. arg[3])
+		x("sudo pacman -R " .. arg[3])
 	elseif arg[2] == "sync" then
-		os.execute("sudo pacman -Sy")
+		x("sudo pacman -Sy")
 	elseif arg[2] == "update" then
-		os.execute("sudo pacman -Syu")
+		x("sudo pacman -Syu")
 	end
 elseif arg[1] == "aur" then
 	if arg[2] == "install" then
-		os.execute("yay -S " .. arg[3])
+		ypkg(arg[3])
 	elseif arg[2] == "remove" then
-		os.execute("yay -R " .. arg[3])
+		x("yay -R " .. arg[3])
 	elseif arg[2] == "update" then
-		os.execute("yay -Syu")
+		x("yay -Syu")
+	end
+elseif arg[1] == "desktop" then
+	if arg[2] == "list" then
+		print("List of Desktop Environments:")
+		print(" ")
+		print(" ")
+		print("Officially supported:")
+		print("budgie")
+		print("cinnamon")
+		print("cutefish")
+		print("deepin")
+		print("enlightenment")
+		print("gnome")
+		print("gnome-flashback")
+		print("kde")
+		print("lxde")
+		print("lxde")
+		print("mate")
+		print("sugar")
+		print("ukui")
+		print("xfce")
+		print(" ")
+		print("Unofficially supported:")
+		print("! Warining ! Unofficially supported Desktop Environments are usually downloaded from the AUR and may be unstable or broken!")
+		print("cde")
+		print("ede")
+		print("kde1")
+		print("liri")
+		print("lumina")
+		print("moksha")
+		print("pantheon")
+		print("paperde")
+		print("phosh")
+		print("plasma-mobile")
+		print("thedesk")
+		print("trinity")
+		print("maui-shell")
+	elseif arg[2] == "install" then
+		idesk(arg[3])
+	end
+elseif arg[1] == "wm" then
+	if arg[2] == "list" then
+		print("List of Window Managers:")
+		print("! Warning ! Window managers are usually used by advanced users, use caution!")
+		print(" ")
+		print(" ")
+		print("Stacking:")
+		print("2bwm")
+		print("9wm")
+		print("afterstep")
+		print("berry")
+		print("blackbox")
+		print("compiz")
+		print("cwm")
+		print("eggwm")
+		print("enlightenment")
+		print("evilwm")
+		print("fluxbox")
+		print("flwm")
+		print("fvwm")
+		print("gala")
+		print("goomwwm")
+		print("icewm")
+		print("jbwm")
+		print("jwm")
+		print("karmen")
+		print("kwin")
+		print("lwm")
+		print("marco")
+		print("metacity")
+		print("muffin")
+		print("mutter")
+		print("mwm")
+		print("openbox")
+		print("pawm")
+		print("pekwm")
+		print("sawfish")
+		print("sowm")
+		print("tinywm")
+		print("twm")
+		print("ukwm")
+		print("uwm")
+		print("wind")
+		print("windowlab")
+		print("windowmaker")
+		print("wm2")
+		print("worm")
+		print("xfwm")
+		print(" ")
+		print("Tiling:")
+		print("bspwm")
+		print("exwm")
+		print("herbstluftwm")
+		print("i3")
+		print("larswm")
+		print("leftwm")
+		print("notion")
+		print("ratpoison")
+		print("stumpwm")
+		print("subtle")
+		print("wmfs2")
+		print(" ")
+		print("Dynamic:")
+		print("awesome")
+		print("dwm")
+		print("echinus")
+		print("frankenwm")
+		print("i3-gaps")
+		print("spectrwm")
+		print("qtile")
+		print("xmonad")
+	elseif arg[2] == "install" then
+		iwm(arg[3])
 	end
 end
