@@ -3,9 +3,9 @@
 ## Section 1. Overview
 Made by [https://sudev.neocities.org](https://sudev.neocities.org)
 
-mizOS is a fork of Artix Linux, with the Runit init system.
+mizOS is based on Artix Linux, with the Runit init system.
 
-The core of mizOS is the **miz** script. Without the **miz** script, mizOS is just Artix Linux.
+The core of mizOS is the **miz** script and the i3 config file. Without these, mizOS is just Artix Linux.
 
 The **miz** script manages the following:
 - Runit services
@@ -17,9 +17,11 @@ The **miz** script manages the following:
 
 ( mizOS also comes with i3-gaps and picom, with some sexy configuration files. )
 
-**Why does mizOS use a hijack script, and not an ISO image?** - Because it's much more conveniant, and I still have no clue how to make a custom Artix ISO.
+**Why does mizOS use a hijack script, and not an ISO image?**
+- Because it's much more conveniant, and I still have no clue how to make a custom Artix ISO.
 
-**wHy DOes mIzOs uSE LUa aNd nOt A LiGhtEr lANGuaGe LiKE rUsT?** - Please, shut up.
+**wHy DOes mIzOs uSE LUa aNd nOt A LiGhtEr lANGuaGe LiKE rUsT?**
+- Please, shut up.
 
 ## Section 2. Installation
 
