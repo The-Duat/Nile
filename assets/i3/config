@@ -197,10 +197,10 @@ bar {
 	urgent_workspace #f38ba8 #1e1e2e #f38ba8
 	}
 }
-exec feh --bg-fill --zoom fill ~/Pictures/gltree.png
+exec feh --bg-fill --zoom fill /etc/mizOS/wallpaper/mizOStree.png
 
-gaps inner 5
-gaps outer 5
+gaps inner 10
+
 
 client.focused #f5c2e7 #000000 #000000 #f5c2e7 #f5c2e7
 client.focused_inactive #1e1e2e #000000 #000000 #1e1e2e #1e1e2e
@@ -208,4 +208,5 @@ client.unfocused #1e1e2e #000000 #000000 #1e1e2e #1e1e2e
 client.urgent #f38ba8 #000000 #000000 #f38ba8 #f38ba8
 
 bindsym $mod+shift+a exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
-exec picom --experimental-backends
+bindsym $mod+shift+m exec picom --experimental-backends
+bindsym $mod+shift+n exec pkill -fi picom

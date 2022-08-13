@@ -1,20 +1,71 @@
 #!/bin/bash
 
+
+echo "Updating your current Artix-Runit install to the latest packages."
 sudo pacman -Syu
-sudo pacman -S lua i3-gaps xclip maim
+
+echo "Installing a few dependancies."
+sudo pacman -S lua feh
+
+echo "Creating /etc/mizOS"
+sudo mkdir /etc/mizOS
+
+echo "Creating /etc/mizOS/wallpaper"
+sudo mkdir /etc/mizOS/wallpaper
+
+echo "Adding that amazing wallpaper to /etc/mizOS/wallpaper"
 
 
-mkdir $HOME/Documents
+if [-d "$HOME/Documents"]; then
+	echo "Documents folder found."
+else
+	echo "No Documents folder, creating one."
+	mkdir $HOME/Documents
+fi
+
+
 cd $HOME/Documents
 
+
+echo "Installing yay, so you dont have to."
 git clone https://aur.archlinux.org/yay-git.git
 cd yay-git
 makepkg -si
 
-mkdir $HOME/.config/i3
-cp assets/i3/config $HOME/.config/i3
+if [-d "$HOME/.config/i3"]; then
+	echo "You already have an i3 config folder, were backing that up to HOME/.config/youri3backup."
+	mkdir $HOME/.config/youri3backup
+	mv $HOME/.config/i3/ $HOME/.config/youri3backup
+	mkdir $HOME/.config/i3
+	cp assets/i3/config $HOME/.config/i3
+else 
+	echo "i3-gaps is not installed on this system, were fixing that."
+	sudo pacman -S i3-gaps dmenu xclip maim
+	cp assets/i3/config $HOME/.config/i3
+fi
 
-cp assets/picom.conf $HOME/.config
+if test -f "$HOME/.config/picom.conf"; then
+	echo "You already have a picom config file, were backing that up to HOME/.config/yourpicombackup."
+	mkdir $HOME/.config/yourpicombackup
+	mv $HOME/.config/picom.conf $HOME/.config/yourpicombackup
+	cp assets/picom.conf $HOME/.config
+else
+	echo "Picom doesnt seem to be installed, fixing that now."
+	sudo pacman -S picom
+	cp assets/picom.conf $HOME/.config
+fi
 
+echo "Installing the miz script. finally!! :D"
 sudo cp assets/miz /usr/bin
 
+
+echo "Changing your os-release file."
+sudo rm /etc/os-release
+sudo cp assets/os-release /etc
+
+echo "Changing your lsb-release file."
+sudo rm /etc/lsb-release
+sudo cp assets/lsb-release /etc
+
+
+echo "My work here is done! You dont have to reboot, but its a good idea."

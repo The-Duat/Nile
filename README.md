@@ -1,6 +1,6 @@
 # mizOS Documentation
 
-## Section 1. Intro
+## Section 1. Overview
 mizOS is a fork of Artix Linux, with the Runit init system.
 
 The core of mizOS is the **miz** script. Without the **miz** script, mizOS is just Artix Linux.
@@ -15,7 +15,27 @@ The **miz** script manages the following:
 
 ( mizOS also comes with i3-gaps and picom, with some sexy configuration files. )
 
-## Section 2. **miz** Documentation
+## Section 2. Installation
+
+**Step 1** - Install Artix Linux with the Runit init system, preferably the XFCE image as it contains many tools to easily manage your system. Get it [here](https://artixlinux.org/download.php).
+
+**Step 2** - Connect to wifi.
+
+**Step 3** - Open a terminal.
+
+**Step 4** - Run *sudo pacman -Syu* to ensure your system has the latest packages.
+
+**Step 5** - Enable the universe repository, instructions [here](https://wiki.artixlinux.org/Main/Repositories)
+
+**Step 6** - Run *sudo pacman -S artix-archlinux-support* and follow the on-screen instructions to enable the Arch Linux repositories.
+
+**Step 7** - Run *sudo pacman -S git* to install the git package.
+
+**Step 8** - Run *git clone https://github.com/Mizosu97/mizOS* to install the mizOS source code, then run *cd mizOS*.
+
+**Step 9** - Run *./install* to begin the installation. If it gives a permissions error, run *chmod +x install* and try again.
+
+## Section 3. **miz** Documentation
 
 The **miz** script contains a lot of options (arguments). You can read up on how to use the **miz** script below.
 
@@ -67,14 +87,20 @@ The **miz** script has 7 main arguments. Being **system**, **service**, **pac**,
 ###### 5. miz desktop
 **miz desktop list** - Lists the Desktop Environments you can install.
 
-**miz desktop install \<desktop\> - Installs that Desktop Environment.
+**miz desktop install \<desktop\>** - Installs that Desktop Environment.
 
 ###### 6. miz wm
 **miz wm list** - Lists the Window Managers you can install.
 
-**miz wm install \<wm\> - Installs that Window Manager.
+**miz wm install \<wm\>** - Installs that Window Manager.
 
 ###### 7. miz info
 **miz info help** - Links you to the GitHub.
 
 **miz info creator** - Links you to the sudev website.
+
+## Section 4. i3-gaps config changes.
+
+When i3-gaps installs, it will ask to either set the Windows Key or Alt key as 
+
+If you dont know how to navigate i3-gaps, follow the tutorial here
