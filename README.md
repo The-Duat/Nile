@@ -110,7 +110,7 @@ The **miz** script has 7 main arguments. Being **system**, **service**, **pac**,
 
 ## Section 4. i3-gaps config changes.
 
-When i3-gaps installs, it will ask to either set the Windows Key or Alt key as the MOD key, remember the key you chose.
+When i3-gaps first runs, it will ask to either set the Windows Key or Alt key as the MOD key, remember the key you chose.
 
 If you dont know how to navigate i3-gaps, follow the tutorial [here](https://i3wm.org/docs/refcard.html)
 
