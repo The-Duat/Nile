@@ -56,6 +56,7 @@ else
 fi
 
 echo "Installing the miz script. finally!! :D"
+chmod +x assets/miz
 sudo cp assets/miz /usr/bin
 
 
