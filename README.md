@@ -27,7 +27,7 @@ The **miz** script manages the following:
 
 ## Section 2. Installation
 
-**Step 1** - Install Artix Linux with the Runit init system, preferably the XFCE image as it contains many tools to easily manage your system. Get the ISO [here](https://artixlinux.org/download.php).
+**Step 1** - Install the XFCE image of Artix Linux with the Runit init system. Get the ISO [here](https://iso.artixlinux.org/iso/artix-xfce-runit-20220713-x86_64.iso).
 
 **Step 2** - Connect to wifi.
 
