@@ -7,7 +7,7 @@ echo "Updating your current Artix-Runit install to the latest packages."
 sudo pacman -Syu
 
 echo "Installing a few dependancies."
-sudo pacman -S lua feh neofetch
+sudo pacman -S lua feh neofetch alacritty
 
 echo "Creating /etc/mizOS"
 sudo mkdir /etc/mizOS
