@@ -16,7 +16,7 @@ echo "Creating /etc/mizOS/wallpaper"
 sudo mkdir /etc/mizOS/wallpaper
 
 echo "Adding that amazing wallpaper to /etc/mizOS/wallpaper"
-
+sudo cp assets/mizOStree.png /etc/mizOS/wallpaper
 
 if [ -d "$HOME/Documents" ]; then
 	echo "Documents folder found."
