@@ -227,17 +227,17 @@ if arg[1] == "service" then
 		end
 	end
 elseif arg[1] == "pac" then
-	if arg[2] == "install" then
+	if arg[2] == "fetch" then
 		ipkg(arg[3])
 	elseif arg[2] == "remove" then
 		x("sudo pacman -R " .. arg[3])
 	elseif arg[2] == "sync" then
 		x("sudo pacman -Sy")
 	elseif arg[2] == "update" then
-		x("sudo pacman -Syu")
+		print("STOOOOOOPPPPPPPPP")
 	end
 elseif arg[1] == "aur" then
-	if arg[2] == "install" then
+	if arg[2] == "fetch" then
 		ypkg(arg[3])
 	elseif arg[2] == "remove" then
 		x("yay -R " .. arg[3])
@@ -280,7 +280,7 @@ elseif arg[1] == "desktop" then
 		print("thedesk")
 		print("trinity")
 		print("maui-shell")
-	elseif arg[2] == "install" then
+	elseif arg[2] == "fetch" then
 		idesk(arg[3])
 	end
 elseif arg[1] == "wm" then
@@ -354,7 +354,7 @@ elseif arg[1] == "wm" then
 		print("spectrwm")
 		print("qtile")
 		print("xmonad")
-	elseif arg[2] == "install" then
+	elseif arg[2] == "fetch" then
 		iwm(arg[3])
 	end
 elseif arg[1] == "info" then
@@ -374,8 +374,8 @@ elseif arg[1] == "system" then
 			x("cd /tmp")
 			x("rm -rf mizOS")
 			x("git clone https://github.com/Mizosu97/mizOS")
-			x("sudo rm /usr/bin/mizOS")
-			x("sudo cp mizOS/assets/miz /usr/bin")
+			x("sudo rm /usr/bin/miz")
+			x("./install")
 		end
 	end
 else

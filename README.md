@@ -3,6 +3,8 @@
 ## Section 1. Overview
 Made by [https://sudev.neocities.org](https://sudev.neocities.org)
 
+! PLEASE READ ! After installation DO NOT use **sudo pacman -Syu** to update your system. Use **miz system update** instead.
+
 mizOS is based on Artix Linux, with the Runit init system.
 
 The core of mizOS is the **miz** script and the i3 config file. Without these, mizOS is just Artix Linux.
@@ -80,16 +82,14 @@ The **miz** script has 7 main arguments. Being **system**, **service**, **pac**,
 **miz service list linked** - List the services that have been symlinked to /run/runit/service/
 
 ###### 3. miz pac
-**miz pac install \<package\>** - Installs that package.
+**miz pac fetch \<package\>** - Installs that package.
 
 **miz pac remove \<package\>** - Removes that package.
 
 **miz pac sync** - Syncs the repos.
 
-**miz pac update** - Upgrades all packages installed by pacman.
-
 ###### 4. miz aur
-**miz aur install \<package\>** - Installs that AUR package.
+**miz aur fetch \<package\>** - Installs that AUR package.
 
 **miz aur remove \<package\>** - Removes that AUR package.
 
@@ -98,12 +98,12 @@ The **miz** script has 7 main arguments. Being **system**, **service**, **pac**,
 ###### 5. miz desktop
 **miz desktop list** - Lists the Desktop Environments you can install.
 
-**miz desktop install \<desktop\>** - Installs that Desktop Environment.
+**miz desktop fetch \<desktop\>** - Installs that Desktop Environment.
 
 ###### 6. miz wm
 **miz wm list** - Lists the Window Managers you can install.
 
-**miz wm install \<wm\>** - Installs that Window Manager.
+**miz wm fetch \<wm\>** - Installs that Window Manager.
 
 ###### 7. miz info
 **miz info help** - Links you to the GitHub.

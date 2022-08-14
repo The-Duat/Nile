@@ -28,6 +28,10 @@ fi
 
 cd $HOME/Documents
 
+if [ -d "$HOME/Documents/yay-git" ]; then
+	echo "yay build files found, removing"
+	rm -rf $HOME/Documents/yay-git
+fi
 
 echo "Installing yay, so you dont have to."
 git clone https://aur.archlinux.org/yay-git.git
@@ -74,3 +78,8 @@ sudo cp assets/lsb-release /etc
 
 
 echo "My work here is done! You should probably reboot."
+echo "  "
+
+echo "If you are currently using i3-gaps, reload with MOD+shift+c, then press MOD+shift+n then MOD+shift+m to see theming changes."
+echo " "
+echo "! WARNING ! PLEASE REFRAIN FROM USING \"sudo pacman -Syu\" to update, instead, PLEASE use \"miz system update\"
