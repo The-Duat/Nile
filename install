@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+currentdir=$(pwd)
+
 echo "Updating your current Artix-Runit install to the latest packages."
 sudo pacman -Syu
 
@@ -16,7 +18,7 @@ sudo mkdir /etc/mizOS/wallpaper
 echo "Adding that amazing wallpaper to /etc/mizOS/wallpaper"
 
 
-if [-d "$HOME/Documents"]; then
+if [ -d "$HOME/Documents" ]; then
 	echo "Documents folder found."
 else
 	echo "No Documents folder, creating one."
@@ -32,7 +34,9 @@ git clone https://aur.archlinux.org/yay-git.git
 cd yay-git
 makepkg -si
 
-if [-d "$HOME/.config/i3"]; then
+cd $currentdir
+
+if [ -d "$HOME/.config/i3" ]; then
 	echo "You already have an i3 config folder, were backing that up to HOME/.config/youri3backup."
 	mkdir $HOME/.config/youri3backup
 	mv $HOME/.config/i3/ $HOME/.config/youri3backup
