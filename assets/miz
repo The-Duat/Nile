@@ -371,7 +371,9 @@ elseif arg[1] == "system" then
 	if arg[2] == "update" then
 		print("Update mizOS? Y/N")
 		if io.read() == "Y" then
+			x("pwd")
 			x("cd $HOME/Documents")
+			x("pwd")
 			x("rm -rf mizOS")
 			x("git clone https://github.com/Mizosu97/mizOS")
 			x("sudo rm /usr/bin/miz")
