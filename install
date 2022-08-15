@@ -12,28 +12,28 @@ echo "Creating $HOME/.mizOS"
 if [ -d "$HOME/.mizOS" ]; then
 	echo "already made"
 else
-	sudo mkdir $HOME/.mizOS
+	mkdir $HOME/.mizOS
 fi
 
 
 echo "Creating $HOME/.mizOS/wallpaper"
 if [ -d "$HOME/.mizOS/wallpaper" ]; then
-	sudo rm -rf $HOME/.mizOS/wallpaper
+	rm -rf $HOME/.mizOS/wallpaper
 else
-	sudo mkdir $HOME/.mizOS/wallpaper
+	mkdir $HOME/.mizOS/wallpaper
 fi
 
 
 echo "creating $HOME/.mizOS/src"
-sudo mkdir $HOME/.mizOS/src
+mkdir $HOME/.mizOS/src
 
 
 echo "Adding that amazing wallpaper to /etc/mizOS/wallpaper"
-sudo cp assets/mizOStree.png $HOME/.mizOS/wallpaper
+cp assets/mizOStree.png $HOME/.mizOS/wallpaper
 
 if [ -d "$HOME/.mizOS/yay-git" ]; then
 	echo "yay build files found, removing"
-	sudo rm -rf $HOME/.mizOS/yay-git
+	rm -rf $HOME/.mizOS/yay-git
 fi
 
 echo "Installing yay, so you dont have to."
