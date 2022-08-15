@@ -10,11 +10,11 @@ sudo pacman -S lua feh neofetch alacritty
 
 echo "Creating /etc/mizOS"
 if [ -d "/etc/mizOS" ]; then
-	sudo rm -rf /etc/mizOS/src/mizOS
+	echo "already made"
 else
 	sudo mkdir /etc/mizOS
 fi
-sudo mkdir /etc/mizOS/src
+
 
 echo "Creating /etc/mizOS/wallpaper"
 if [ -d "/etc/mizOS/wallpaper" ]; then
