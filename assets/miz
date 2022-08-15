@@ -12,195 +12,103 @@ local function ypkg(pkg)
 	x("yay -S " .. pkg)
 end
 
-local function idesk(desk)
-	if desk == "budgie" then
-		ipkg("budgie-desktop")
-	elseif desk == "cinnamon" then 
-		ipkg("cinnamon")
-	elseif desk == "cutefish" then
-		ipkg("cutefish")
-	elseif desk == "deepin" then
-		ipkg("deepin")
-	elseif desk == "enlightenment" then
-		ipkg("enlightenment")
-	elseif desk == "gnome" then
-		ipkg("gnome")
-	elseif desk == "gnome-flashback" then
-		ipkg("gnome-flashback")
-	elseif desk == "kde" then
-		ipkg("plasma")
-	elseif desk == "lxde" then
-		ipkg("lxde")
-	elseif desk == "lxqt" then
-		ipkg("lxqt")
-	elseif desk == "mate" then
-		ipkg("mate")
-	elseif desk == "sugar" then
-		ipkg("sugar sugar-fructose")
-	elseif desk == "ukui" then
-		ipkg("ukui")
-	elseif desk == "xfce" then
-		ipkg("xfce4")
-		-- unofficial
-	elseif desk == "cde" then
-		ypkg("cdesktopenv")
-	elseif desk == "ede" then
-		ypkg("ede")
-	elseif desk == "kde1" then
-		ypkg("kde1-kdebase-git")
-	elseif desk == "liri" then
-		ypkg("liri-shell-git")
-	elseif desk == "lumina" then
-		ypkg("lumina-desktop")
-	elseif desk == "moksha" then
-		ypkg("moksha-git")
-	elseif desk == "pantheon" then
-		ypkg("pantheon-session-git")
-	elseif desk == "paperde" then
-		ypkg("paperde")
-	elseif desk == "phosh" then
-		ypkg("phosh")
-	elseif desk == "plasma-mobile" then
-		ypkg("plasma-mobile")
-	elseif desk == "thedesk" then
-		ypkg("thedesk")
-	elseif desk == "trinity" then
-		ipkg("trinity")
-	elseif desk == "maui-shell" then
-		ypkg("maui-shell-git")
-	else 
-		print("! Error ! Desktop Environment not found!")
-	end
 
-end
+des = {
+	{"budgie", "budgie-desktop", false},
+	{"cinnamon", "cinnamon", false},
+	{"cutefish", "cutefish", false},
+	{"deepin", "deepin", false},
+	{"enlightenment", "enlightenment", false},
+	{"gnome", "gnome", false},
+	{"gnome-flashback", "gnome-flashback", false},
+	{"kde", "plasma", false},
+	{"lxde", "lxde", false},
+	{"lxqt", "lxqt", false},
+	{"mate", "mate", false},
+	{"sugar", "sugar sugar-fructose", false},
+	{"ukui", "ukui", false},
+	{"xfce", "xfce4", false},
+	{"cde", "cdesktopenv", true},
+	{"ede", "ede", true},
+	{"kde1", "kde1-kdebase-git", true},
+	{"liri", "liri-shell-git", true},
+	{"lumina", "lumina-desktop", true},
+	{"moksha", "moksha-git", true},
+	{"pantheon", "pantheon-session-git", true},
+	{"paperde", "paperde", true},
+	{"phosh", "phosh", true},
+	{"plasma-mobile", "plasma-mobile", true},
+	{"thedesk", "thedesk", true},
+	{"trinity", "trinity", false},
+	{"maui", "maui-shell-git", true}
+}
 
 
-local function iwm(wm)
-	if wm == "2bwm" then
-		ypkg("2bwm")
-	elseif wm == "9wm" then
-		ypkg("9wm")
-	elseif wm == "afterstep" then
-		ypkg("afterstep-git")
-	elseif wm == "berry" then
-		ypkg("berry-git")
-	elseif wm == "blackbox" then
-		ipkg("blackbox")
-	elseif wm == "compiz" then
-		ipkg("compiz")
-	elseif wm == "cwm" then
-		ypkg("cwm")
-	elseif wm == "eggwm" then
-		ypkg("eggwm")
-	elseif wm == "enlightenment" then
-		ipkg("enlightenment")
-	elseif wm == "evilwm" then
-		ypkg("evilwm")
-	elseif wm == "fluxbox" then
-		ipkg("fluxbox")
-	elseif wm == "flwm" then
-		ypkg("flwm")
-	elseif wm == "fvwm" then
-		ypkg("fvwm")
-	elseif wm == "gala" then
-		ipkg("gala")
-	elseif wm == "goomwwm" then
-		ypkg("goomwwm")
-	elseif wm == "icewm" then
-		ipkg("icewm")
-	elseif wm == "jbwm" then
-		ypkg("jbwm")
-	elseif wm == "jwm" then
-		ipkg("jwm")
-	elseif wm == "karmen" then
-		ypkg("karmen")
-	elseif wm == "kwin" then
-		ipkg("kwin")
-	elseif wm == "lwm" then
-		ipkg("lwm")
-	elseif wm == "marco" then
-		ipkg("marco")
-	elseif wm == "metacity" then
-		ipkg("metacity")
-	elseif wm == "muffin" then
-		ipkg("muffin")
-	elseif wm == "mutter" then
-		ipkg("mutter")
-	elseif wm == "mwm" then
-		ipkg("openmotif")
-	elseif wm == "openbox" then
-		ipkg("openbox")
-	elseif wm == "pawm" then
-		ypkg("pawm")
-	elseif wm == "pekwm" then
-		ipkg("pekwm")
-	elseif wm == "sawfish" then
-		ypkg("sawfish")
-	elseif wm == "sowm" then
-		ypkg("sowm")
-	elseif wm == "tinywm" then
-		ypkg("tinywm")
-	elseif wm == "twm" then
-		ipkg("xorg-twm")
-	elseif wm == "ukwm" then
-		ipkg("ukwm")
-	elseif wm == "uwm" then
-		ypkg("ude")
-	elseif wm == "wind" then
-		ypkg("windwm")
-	elseif wm == "windowlab" then
-		ypkg("windowlab")
-	elseif wm == "windowmaker" then
-		ypkg("windowmaker")
-	elseif wm == "wm2" then
-		ypkg("wm2")
-	elseif wm == "worm" then
-		ypkg("worm-git")
-	elseif wm == "xfwm" then
-		ipkg("xfwm4")
-		-- tiling
-	elseif wm == "bspwm" then
-		ipkg("bspwm")
-	elseif wm == "exwm" then
-		ypkg("exwm-git")
-	elseif wm == "herbstluftwm" then
-		ipkg("herbstluftwm")
-	elseif wm == "i3" then
-		ipkg("i3-wm")
-	elseif wm == "larswm" then
-		ypkg("larswm")
-	elseif wm == "leftwm" then
-		ypkg("leftwm")
-	elseif wm == "notion" then
-		ipkg("notion")
-	elseif wm == "ratpoison" then
-		ipkg("ratpoison")
-	elseif wm == "stumpwm" then
-		ipkg("stumpwm")
-	elseif wm == "subtle" then
-		ypkg("subtle-hg")
-	elseif wm == "wmfs2" then
-		ypkg("wmfs2-git")
-		-- Dynamic
-	elseif wm == "awesome" then
-		ipkg("awesome")
-	elseif wm == "dwm" then
-		ypkg("dwm")
-	elseif wm == "echinus" then
-		ypkg("echinus")
-	elseif wm == "frankenwm" then
-		ypkg("frankenwm")
-	elseif wm == "i3-gaps" then
-		ipkg("i3-gaps")
-	elseif wm == "spectrwm" then
-		ipkg("spectrwm")
-	elseif wm == "qtile" then
-		ipkg("qtile")
-	elseif wm == "xmonad" then
-		ipkg("xmonad")
-	end
 
-end
+wms = {
+
+	{"2bwm", "2bwm", true},
+	{"9wm", "9wm", true},
+	{"afterstep", "afterstep-git", true},
+	{"berry", "berry-git", true},
+	{"blackbox", "blackbox", false},
+	{"compiz", "compiz", false},
+	{"cwm", "cwm", true},
+	{"eggwm", "eggwm", true},
+	{"enlightenment", "enlightenment", false},
+	{"evilwm", "evilwm", true},
+	{"fluxbox", "fluxbox", false},
+	{"flwm", "flwm", true},
+	{"fvmm", "fvmm", true},
+	{"gala", "gala", false},
+	{"goomwwm", "goomwwm", true},
+	{"icewm", "icewm", false},
+	{"jbwm", "jbwm", true},
+	{"jwm", "jwm", false},
+	{"karmen", "karmen", true},
+	{"kwin", "kwin", false},
+	{"lwm", "lwm", false},
+	{"marco", "marco", false},
+	{"metacity", "metacity", false},
+	{"muffin", "muffin", false},
+	{"mutter", "mutter", false},
+	{"mwm", "openmotif", false},
+	{"openbox", "openbox", false},
+	{"pawm", "pawm", true},
+	{"pekwm", "pekwm", false},
+	{"sawfish", "sawfish", true},
+	{"sowm", "sowm", true},
+	{"tinywm", "tinywm", true},
+	{"twm", "xorg-twm", false},
+	{"ukwm", "ukwm", false},
+	{"uwm", "ude", true},
+	{"wind", "windwm", true},
+	{"windowlab", "windowlab", true},
+	{"windowmaker", "windowmaker", true},
+	{"wm2", "wm2", true},
+	{"worm", "worm-git", true},
+	{"xfwm", "xfwm4", false},
+	{"bspwm", "bspwm", false},
+	{"exwm", "exwm-git", true},
+	{"herbstluftwm", "herbstluftwm", false},
+	{"i3", "i3-wm", false},
+	{"larswm", "larswm", true},
+	{"leftwm", "leftwm", true},
+	{"notion", "notion", false},
+	{"ratpoison", "ratpoison", false},
+	{"stumpwm", "stumpwm", false},
+	{"subtle", "subtle-hg", true},
+	{"wmfs2", "wmfs2-git", true},
+	{"awesome", "awesome", false},
+	{"dwm", "dwm", true},
+	{"echinus", "echinus", true},
+	{"frankenwm", "frankenwm", true},
+	{"i3-gaps", "i3-gaps", false},
+	{"spectrwm", "spectrwm", false},
+	{"sway", "sway", false},
+	{"qtile", "qtile", false},
+	{"xmonad", "xmonad", false}
+}
 
 
 
@@ -248,114 +156,48 @@ elseif arg[1] == "desktop" then
 	if arg[2] == "list" then
 		print("List of Desktop Environments:")
 		print(" ")
-		print(" ")
-		print("Officially supported:")
-		print("budgie")
-		print("cinnamon")
-		print("cutefish")
-		print("deepin")
-		print("enlightenment")
-		print("gnome")
-		print("gnome-flashback")
-		print("kde")
-		print("lxde")
-		print("lxde")
-		print("mate")
-		print("sugar")
-		print("ukui")
-		print("xfce")
-		print(" ")
-		print("Unofficially supported:")
-		print("! Warining ! Unofficially supported Desktop Environments are usually downloaded from the AUR and may be unstable or broken!")
-		print("cde")
-		print("ede")
-		print("kde1")
-		print("liri")
-		print("lumina")
-		print("moksha")
-		print("pantheon")
-		print("paperde")
-		print("phosh")
-		print("plasma-mobile")
-		print("thedesk")
-		print("trinity")
-		print("maui-shell")
+		for _,desktop in pairs(des) do
+			local name
+			if desktop[3] == false then
+				name = desktop[1] .. "   (pacman)"
+			elseif desktop[3] == true then
+				name = desktop[1] .. "   (AUR)"
+			end
+			print(name)
+		end
 	elseif arg[2] == "fetch" then
-		idesk(arg[3])
+		for _,desktop in pairs(des) do
+			if desktop[1] == arg[3] then
+				if desktop[3] == false then
+					ipkg(desktop[2])
+				elseif desktop[3] == true then
+					ypkg(desktop[2])
+				end
+			end
+		end
 	end
 elseif arg[1] == "wm" then
 	if arg[2] == "list" then
 		print("List of Window Managers:")
-		print("! Warning ! Window managers are usually used by advanced users, use caution!")
 		print(" ")
-		print(" ")
-		print("Stacking:")
-		print("2bwm")
-		print("9wm")
-		print("afterstep")
-		print("berry")
-		print("blackbox")
-		print("compiz")
-		print("cwm")
-		print("eggwm")
-		print("enlightenment")
-		print("evilwm")
-		print("fluxbox")
-		print("flwm")
-		print("fvwm")
-		print("gala")
-		print("goomwwm")
-		print("icewm")
-		print("jbwm")
-		print("jwm")
-		print("karmen")
-		print("kwin")
-		print("lwm")
-		print("marco")
-		print("metacity")
-		print("muffin")
-		print("mutter")
-		print("mwm")
-		print("openbox")
-		print("pawm")
-		print("pekwm")
-		print("sawfish")
-		print("sowm")
-		print("tinywm")
-		print("twm")
-		print("ukwm")
-		print("uwm")
-		print("wind")
-		print("windowlab")
-		print("windowmaker")
-		print("wm2")
-		print("worm")
-		print("xfwm")
-		print(" ")
-		print("Tiling:")
-		print("bspwm")
-		print("exwm")
-		print("herbstluftwm")
-		print("i3")
-		print("larswm")
-		print("leftwm")
-		print("notion")
-		print("ratpoison")
-		print("stumpwm")
-		print("subtle")
-		print("wmfs2")
-		print(" ")
-		print("Dynamic:")
-		print("awesome")
-		print("dwm")
-		print("echinus")
-		print("frankenwm")
-		print("i3-gaps")
-		print("spectrwm")
-		print("qtile")
-		print("xmonad")
+		for _,wm in pairs(wms) do
+			if wm[3] == false then
+				name = wm[1] .. "   (pacman)"
+			elseif wm[3] == true then
+				name = wm[1] .. "   (AUR)"
+			end
+			print(name)
+		end
 	elseif arg[2] == "fetch" then
-		iwm(arg[3])
+		for _,wm in pairs(wms) do
+			if wm[1] == arg[3] then
+				if wm[3] == false then
+					ipkg(wm[2])
+				elseif wm[3] == true then
+					ypkg(wm[2])
+				end
+			end
+		end
 	end
 elseif arg[1] == "info" then
 	if arg[2] == "help" then
@@ -371,13 +213,12 @@ elseif arg[1] == "system" then
 	if arg[2] == "update" then
 		print("Update mizOS? Y/N")
 		if io.read() == "Y" then
-			x("rm -rf $HOME/Documents/mizOS")
-			x("cd $HOME/Documents && git clone https://github.com/Mizosu97/mizOS")
+			x("rm -rf /etc/mizOS/src/mizOS")
+			x("cd /etc/mizOS/src && git clone https://github.com/Mizosu97/mizOS")
 			x("sudo rm /usr/bin/miz")
 			x("rm -rf $HOME/.config/youri3backup")
 			x("rm -rf $HOME/.config/yourpicombackup")
-			x("cd $HOME/Documents/mizOS")
-			x("cd $HOME/Documents/mizOS && ./install")
+			x("cd /etc/mizOS/src/mizOS && ./install")
 		end
 	end
 else
