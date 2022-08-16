@@ -67,7 +67,17 @@ else
 	cp assets/picom.conf $HOME/.config
 fi
 
+if [ -d "$HOME/.config/alacritty" ]; then
+	echo "alacritty config folder found. Backing it up to $HOME/.config/youralacrittybackup"
+	mkdir $HOME/.config/youralacrittybackup
+	mv $HOME/.config/alacritty $HOME/.config/youralacrittybackup
+else
+	echo "alacritty config folder not found, creating one"
+	mkdir $HOME/.config/alacritty
+fi
 
+echo "Installing alacritty catppuccin theme"
+cp assets/alacritty.yml $HOME/.config/alacritty
 
 echo "Installing the miz script. finally!! :D"
 
