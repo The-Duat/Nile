@@ -5,6 +5,8 @@ Made by [https://sudev.neocities.org](https://sudev.neocities.org)
 
 ! PLEASE READ ! After installation DO NOT use **sudo pacman -Syu** to update your system. Use **miz system update** instead.
 
+- ISO image coming soon.
+
 mizOS is based on Artix Linux, with the Runit init system.
 
 The core of mizOS is the **miz** script and the i3 config file. Without these, mizOS is just Artix Linux.
@@ -25,7 +27,7 @@ The **miz** script manages the following:
 **wHy DOes mIzOs uSE LUa aNd nOt A LiGhtEr lANGuaGe LiKE rUsT?**
 - Please, shut up.
 
-## Section 2. Installation
+## Section 2a. Installation via converting an existing Artix-Runit system
 
 **Step 1** - Install the XFCE image of Artix Linux with the Runit init system. Get the ISO [here](https://iso.artixlinux.org/iso/artix-xfce-runit-20220713-x86_64.iso).
 
