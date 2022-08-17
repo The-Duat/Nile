@@ -219,7 +219,6 @@ elseif arg[1] == "system" then
 			x("rm -rf $HOME/.config/youri3backup")
 			x("rm -rf $HOME/.config/yourpicombackup")
 			x("rm -rf $HOME/.config/youralacrittybackup")
-			x("rm $HOME/.config/alacritty/alacritty.yml")
 			x("cd $HOME/.mizOS/src/mizOS && ./install")
 		end
 	end
