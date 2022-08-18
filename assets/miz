@@ -136,7 +136,11 @@ if arg[1] == "service" then
 	end
 elseif arg[1] == "pac" then
 	if arg[2] == "fetch" then
-		ipkg(arg[3])
+		if arg[3] == "neofetch" then
+			print("Neofetch is already installed, forcing it to install will most likely break it.")
+		else
+			ipkg(arg[3])
+		end
 	elseif arg[2] == "remove" then
 		x("sudo pacman -R " .. arg[3])
 	elseif arg[2] == "sync" then

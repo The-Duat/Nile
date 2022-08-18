@@ -3,7 +3,7 @@
 ## Section 1. Overview
 Made by [https://sudev.neocities.org](https://sudev.neocities.org)
 
-! PLEASE READ ! After installation DO NOT use **sudo pacman -Syu** to update your system. Use **miz system update** instead.
+! PLEASE READ ! After installation DO NOT use **sudo pacman -Syu** to update your system. Use **miz system update** instead. Also, installing the **neofetch** package will break neofetch. Dont do it.
 
 - ISO image coming soon.
 
