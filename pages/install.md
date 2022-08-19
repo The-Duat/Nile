@@ -16,6 +16,6 @@ mizOS installation is very simple. All you need is a working install of any supp
 
 ## Supported Operating Systems
 
-mizOS installation supports the following operating systems:
+mizOS installation has been officially tested on the following operating systems:
 
 - Artix-runit

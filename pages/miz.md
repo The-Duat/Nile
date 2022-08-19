@@ -30,47 +30,47 @@ The `miz` script has 7 main arguments. Being `system`, `service`, `pac`, `aur`, 
 `miz system update` - Updates mizOS.
 
 ## miz service
-`miz service link \<service\>` - Add a service. Lets it start up at boot.
+`miz service link <service>` - Add a service. Lets it start up at boot.
 
-`miz service unlink \<service\>` - Removes the `miz service link` effect. Removes the service.
+`miz service unlink <service>` - Removes the `miz service link` effect. Removes the service.
 
-`miz service disable \<service\>` - Prevents a service from starting at boot.
+`miz service disable <service>` - Prevents a service from starting at boot.
 
-`miz service enable \<service\>` - Negates the `miz service disable` effect.
+`miz service enable <service>` - Negates the `miz service disable` effect.
 
-`miz service start \<service\>` - Starts a service.
+`miz service start <service>` - Starts a service.
 
-`miz service stop \<service\>` - Stops a service.
+`miz service stop <service>` - Stops a service.
 
-`miz service restart \<service\>` - Restarts a service.
+`miz service restart <service>` - Restarts a service.
 
 `miz service list installed` - List the services installed.
 
 `miz service list linked` - List the services that have been added via `miz service link` 
 
 ## miz pac
-`miz pac fetch \<package\>` - Installs that package.
+`miz pac fetch <package>` - Installs that package.
 
-`miz pac remove \<package\>` - Removes that package.
+`miz pac remove <package>` - Removes that package.
 
 `miz pac sync` - Syncs the repos. (Arch devs don't like you doing this. Has potential to break a system.)
 
 ## miz aur
-`miz aur fetch \<package\>` - Installs that AUR package.
+`miz aur fetch <package>` - Installs that AUR package.
 
-`miz aur remove \<package\>` - Removes that AUR package.
+`miz aur remove <package>` - Removes that AUR package.
 
 `miz aur update` - Upgrades all AUR packages.
 
 ## miz desktop
 `miz desktop list` - Lists the Desktop Environments you can install.
 
-`miz desktop fetch \<desktop\>` - Installs that Desktop Environment.
+`miz desktop fetch <desktop>` - Installs that Desktop Environment.
 
 ## miz wm
 `miz wm list` - Lists the Window Managers you can install.
 
-`miz wm fetch \<wm\>` - Installs that Window Manager.
+`miz wm fetch <wm>` - Installs that Window Manager.
 
 ## miz info
 `miz info help` - Links you to the GitHub.
