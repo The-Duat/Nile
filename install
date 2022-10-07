@@ -5,7 +5,7 @@ thisDir=$(pwd)
 echo "Updating your current Artix-Runit install to the latest packages."
 sudo pacman -Syu
 
-echo "Installing a few dependancies."
+echo "Installing a few dependencies."
 sudo pacman -S lua feh alacritty
 
 echo "Creating $HOME/.mizOS"
