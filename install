@@ -49,6 +49,18 @@ if [ -d "$HOME/.mizOS/yay-git" ]; then
 	rm -rf $HOME/.mizOS/yay-git
 fi
 
+echo "Detecting init."
+mkdir $HOME/.mizOS/init
+if test -f "/usr/bin/sv"; then
+	echo "Runit detected"
+	touch $HOME/.mizOS/init/runit
+elif test -f "/usr/bin/systemctl";
+	echo "SystemD detected"
+	touch $HOME/.mizOS/init/systemd
+fi
+
+
+
 echo "Installing yay, so you dont have to."
 cd $HOME/.mizOS
 git clone https://aur.archlinux.org/yay-git.git

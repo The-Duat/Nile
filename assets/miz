@@ -1,4 +1,5 @@
 #!/bin/lua
+local home = os.getenv("HOME")
 
 local function x(cmd)
 	os.execute(cmd)
@@ -12,6 +13,21 @@ local function ypkg(pkg)
 	x("yay -S " .. pkg)
 end
 
+local function checkfile(name)
+	local file = io.open(name, "r")
+        if file ~= nil then
+                io.close(file)
+                return true                                             end
+end
+
+local init
+if checkfile(home .. "/.mizOS/init/runit") == true then
+	init = "runit"
+elseif checkfile(home .. "/.mizOS/init/systemd") == true then
+	init = "systemd"
+else
+	print("Your init system isnt supported lol")
+end
 
 des = {
 	{"budgie", "budgie-desktop", false},
@@ -113,25 +129,49 @@ wms = {
 
 
 if arg[1] == "service" then
-	if arg[2] == "link" then
-		x("sudo ln -s /etc/runit/sv/" .. arg[3] .. " /run/runit/service/")
-	elseif arg[2] == "unlink" then
-		x("sudo rm /run/runit/service/" .. arg[3])
-	elseif arg[2] == "disable" then
-		x("sudo touch /run/runit/service/" .. arg[3] .. "/down")
-	elseif arg[2] == "enable" then
-		x("sudo rm /run/runit/service/" .. arg[3] .. "/down")
-	elseif arg[2] == "start" then
-		x("sudo sv start " .. arg[3])
-	elseif arg[2] == "stop" then
-		x("sudo sv stop " .. arg[3])
-	elseif arg[2] == "restart" then
-		x("sudo sv restart " .. arg[3])
-	elseif arg[2] == "list" then
-		if arg[3] == "installed" then
-			x("ls /etc/runit/sv/")
-		elseif arg[3] == "linked" then
-			x("ls /run/runit/service/")
+	if init == "runit" then
+		if arg[2] == "link" then
+			x("sudo ln -s /etc/runit/sv/" .. arg[3] .. " /run/runit/service/")
+		elseif arg[2] == "unlink" then
+			x("sudo rm /run/runit/service/" .. arg[3])
+		elseif arg[2] == "disable" then
+			x("sudo touch /run/runit/service/" .. arg[3] .. "/down")
+		elseif arg[2] == "enable" then
+			x("sudo rm /run/runit/service/" .. arg[3] .. "/down")
+		elseif arg[2] == "start" then
+			x("sudo sv start " .. arg[3])
+		elseif arg[2] == "stop" then
+			x("sudo sv stop " .. arg[3])
+		elseif arg[2] == "restart" then
+			x("sudo sv restart " .. arg[3])
+		elseif arg[2] == "list" then
+			if arg[3] == "installed" then
+				x("ls /etc/runit/sv/")
+			elseif arg[3] == "linked" then
+				x("ls /run/runit/service/")
+			end
+		end
+	elseif init == "systemd" then
+		if arg[2] == "link" then
+                	print("already done")
+		elseif arg[2] == "unlink" then            
+			print("brah??")
+		elseif arg[2] == "disable" then
+                        x("sudo systemctl disable " .. arg[3])
+                elseif arg[2] == "enable" then
+                        x("sudo systemctl enable " .. arg[3])
+                elseif arg[2] == "start" then
+                        x("sudo systemctl start " .. arg[3])
+		elseif arg[2] == "stop" then
+                        x("sudo systemctl stop " .. arg[3])
+                elseif arg[2] == "restart" then
+			x("sudo systemctl restart " .. arg[3])
+                elseif arg[2] == "list" then  
+			if arg[3] == "installed" then   
+				x("systemctl list-units --type=service --all")
+                        elseif arg[3] == "linked" then    
+				x("systemctl list-units --state=enabled")  
+			end    
 		end
 	end
 elseif arg[1] == "pac" then
