@@ -58,7 +58,7 @@ mkdir $HOME/.mizOS/init
 if test -f "/usr/bin/sv"; then
 	echo "Runit detected"
 	touch $HOME/.mizOS/init/runit
-elif test -f "/usr/bin/systemctl";
+elif test -f "/usr/bin/systemctl"; then
 	echo "SystemD detected"
 	touch $HOME/.mizOS/init/systemd
 fi
