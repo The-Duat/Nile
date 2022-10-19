@@ -61,6 +61,9 @@ if test -f "/usr/bin/sv"; then
 elif test -f "/usr/bin/systemctl"; then
 	echo "SystemD detected"
 	touch $HOME/.mizOS/init/systemd
+elif test -f "/usr/bin/rc-service"; then
+	echo "openRC detected"
+	touch $HOME/.mizOS/init/openrc
 fi
 
 

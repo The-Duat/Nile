@@ -32,25 +32,27 @@ The `miz` script has 8 main arguments. Being `system`, `service`, `gfx`, `pac`, 
 
 ## miz service
 
-**mizOS was originally built for the runit init system. Commands with an ¥ next to the name are SystemD compatible.**
+**mizOS was originally built for the runit init system.** 
+**Commands with an ¥ next to the name are SystemD compatible.**
+**Commands with a £ next to the name are openRC compatible.**
 
 `miz service link <service>` - Add a service. Lets it start up at boot.
 
 `miz service unlink <service>` - Removes the `miz service link` effect. Removes the service.
 
-¥ `miz service disable <service>` - Prevents a service from starting at boot.
+¥ £ `miz service disable <service>` - Prevents a service from starting at boot.
 
-¥ `miz service enable <service>` - Negates the `miz service disable` effect.
+¥ £ `miz service enable <service>` - Negates the `miz service disable` effect.
 
-¥ `miz service start <service>` - Starts a service.
+¥ £ `miz service start <service>` - Starts a service.
 
-¥ `miz service stop <service>` - Stops a service.
+¥ £ `miz service stop <service>` - Stops a service.
 
-¥ `miz service restart <service>` - Restarts a service.
+¥ £ `miz service restart <service>` - Restarts a service.
 
-¥ `miz service list installed` - List the services installed.
+¥ £ `miz service list installed` - List the services installed.
 
-¥ `miz service list linked` - List the services that have been added via `miz service link`. For SystemD, this lists all enabled services. 
+¥ £ `miz service list linked` - List the services that have been added via `miz service link`. For SystemD, this lists all enabled services. 
 
 ## miz gfx
 `miz gfx run d <command>` - Runs the given command on the Dedicated GPU.

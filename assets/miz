@@ -46,6 +46,8 @@ if checkfile(home .. "/.mizOS/init/runit") == true then
 	init = "runit"
 elseif checkfile(home .. "/.mizOS/init/systemd") == true then
 	init = "systemd"
+elseif checkfile(home .. "/.mizOS/init/openrc") == true then
+	init = "openrc"
 else
 	print("Your init system isnt supported lol")
 end
@@ -194,6 +196,28 @@ if arg[1] == "service" then
 				x("systemctl list-units --state=enabled")  
 			end    
 		end
+	elseif init == "openrc" then
+		if arg[2] == "link" then
+                        print("already done")
+                elseif arg[2] == "unlink" then
+                        print("brah??")
+                elseif arg[2] == "disable" then
+                        x("sudo rc-update del " .. arg[3] .. " default")
+                elseif arg[2] == "enable" then
+                        x("sudo rc-update add " .. arg[3] .. " default")
+                elseif arg[2] == "start" then
+                        x("sudo rc-service " .. arg[3] .. " start")
+                elseif arg[2] == "stop" then
+                        x("sudo rc-service " .. arg[3] .. " stop")
+                elseif arg[2] == "restart" then
+                        x("sudo rc-service " .. arg[3] .. " restart")
+                elseif arg[2] == "list" then
+                        if arg[3] == "installed" then                
+				x("rc-update show")
+                        elseif arg[3] == "linked" then
+                        	x("rc-update -v show")
+                        end
+                end
 	end
 elseif arg[1] == "gfx" then
 	if arg[2] == "run" then
