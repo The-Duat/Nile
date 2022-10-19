@@ -16,10 +16,11 @@ The `miz` script contains a lot of options (arguments). You can read up on how t
 
 
 
-The `miz` script has 7 main arguments. Being `system`, `service`, `pac`, `aur`, `desktop`, `wm`, and `info`.
+The `miz` script has 8 main arguments. Being `system`, `service`, `gfx`, `pac`, `aur`, `desktop`, `wm`, and `info`.
 
 - `system` manages mizOS system updates.
 - `service` manages services (runit).
+- `gfx` manages GPU and graphics-related things.
 - `pac` manages pacman packages.
 - `aur` manages aur packages (yay).
 - `desktop` manages Desktop Environment installation.
@@ -31,7 +32,7 @@ The `miz` script has 7 main arguments. Being `system`, `service`, `pac`, `aur`, 
 
 ## miz service
 
-**mizOS was originally built for the runit init system. Commands with an ¥ next to the name are SystemD compatable.**
+**mizOS was originally built for the runit init system. Commands with an ¥ next to the name are SystemD compatible.**
 
 `miz service link <service>` - Add a service. Lets it start up at boot.
 
