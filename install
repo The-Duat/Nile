@@ -6,7 +6,11 @@ echo "Updating your current Artix-Runit install to the latest packages."
 sudo pacman -Syu
 
 echo "Installing a few dependencies."
-sudo pacman -S lua feh alacritty
+sudo pacman -S lua feh alacritty asusctl supergfxctl
+
+echo "Enabling asusctl and supergfxctl."
+sudo systemctl enable --now power-profiles-daemon.service
+sudo systemctl enable --now supergfxd
 
 echo "Creating $HOME/.mizOS"
 if [ -d "$HOME/.mizOS" ]; then

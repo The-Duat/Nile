@@ -22,8 +22,24 @@ local function checkfile(name)
 	local file = io.open(name, "r")
         if file ~= nil then
                 io.close(file)
-                return true                                             end
+ 		return true
+	end
 end
+
+local gcmd = ""
+local function mgpu()
+	for _,ag in pairs(arg) do
+		if ag ~= "miz" and ag ~= "/bin/lua" and ag ~= "/usr/bin/miz" and ag ~= "./miz" and ag ~= "d" and ag ~= "i" and ag ~= "gfx" and ag ~= "run" then
+			gcmd = gcmd .. ag .. " "
+		end
+	end
+	if arg[3] == "d" then
+		x("export DRI_PRIME=1 && exec " .. gcmd)
+	elseif arg[3] == "i" then
+		x("export DRI_PRIME=0 && exec " .. gcmd)
+	end
+end
+
 
 local init
 if checkfile(home .. "/.mizOS/init/runit") == true then
@@ -177,6 +193,22 @@ if arg[1] == "service" then
                         elseif arg[3] == "linked" then    
 				x("systemctl list-units --state=enabled")  
 			end    
+		end
+	end
+elseif arg[1] == "gfx" then
+	if arg[2] == "run" then
+		mgpu()
+	elseif arg[2] == "mode" then
+		if arg[3] == "i" then
+			x("supergfxctl --mode integrated")
+		elseif arg[3] == "d" then
+			x("supergfxctl --mode dedicated")
+		elseif arg[3] == "h" then
+			x("supergfxctl --mode hybrid")
+		elseif arg[3] == "c" then
+			x("supergfxctl --mode compute")
+		elseif arg[3] == "v" then
+			x("supergfxctl --mode vfio")
 		end
 	end
 elseif arg[1] == "pac" then

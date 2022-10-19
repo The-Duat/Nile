@@ -51,6 +51,17 @@ The `miz` script has 7 main arguments. Being `system`, `service`, `pac`, `aur`, 
 
 ¥ `miz service list linked` - List the services that have been added via `miz service link`. For SystemD, this lists all enabled services. 
 
+## miz gfx
+`miz gfx run d <command>` - Runs the given command on the Dedicated GPU.
+
+`miz gfx run i <command>` - Runs the given command on the Integrated GPU.
+
+`miz gfx mode <mode>` - Changes the your GPU setup. Modes are listed brlow.
+- `i` - Uses your Integrated graphics card for graphics processing.
+- `d` - Uses your Dedicated graphics card for graphics processing.
+- `h` - Uses both graphics cards for graphics processing.
+- `c` - Enables Nvidia without Xorg. (whatever the fuck that means)
+- `v` - Binds the dedicated GPU to VFIO for VM passthrough.
 ## miz pac
 `miz pac fetch <package>` - Installs that package.
 
