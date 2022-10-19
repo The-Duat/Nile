@@ -56,7 +56,7 @@ The `miz` script has 7 main arguments. Being `system`, `service`, `pac`, `aur`, 
 
 `miz gfx run i <command>` - Runs the given command on the Integrated GPU.
 
-`miz gfx mode <mode>` - Changes the your GPU setup. Modes are listed brlow.
+`miz gfx mode <mode>` - Changes the your GPU setup. Modes are listed below.
 - `i` - Uses your Integrated graphics card for graphics processing.
 - `d` - Uses your Dedicated graphics card for graphics processing.
 - `h` - Uses both graphics cards for graphics processing.
