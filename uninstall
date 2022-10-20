@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo "Uninstalling mizOS"
+
+echo "Removing HOME/.mizOS"
+rm -rf $HOME/.mizOS
+echo "Removing HOME/.config/yourpicombackup"
+rm -rf $HOME/.confg/yourpicombackup
+echo "Removing HOME/.config/youri3backup"
+rm -rf $HOME/.config/youri3backup
+echo "Removing /usr/bin/miz"
+sufo rm /usr/bin/miz
+echo "Removing /usr/bin/neofetch"
+sudo rm /usr/bin/neofetch
+
+echo "Removing installed packages"
+sudo pacman -Rn lua feh alacritty asusctl supergfxctl i3-gaps xclip dmenu maim steam
+
+echo "mizOS uninstallation is almost complete :( All you need to do now is manually remove the g14 repo from /etc/pacman.conf"

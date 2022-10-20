@@ -2,11 +2,11 @@
 
 thisDir=$(pwd)
 
-echo "Updating your current Artix-Runit install to the latest packages."
+echo "Updating your current install to the latest packages."
 sudo pacman -Syu
 
 echo "Installing a few dependencies."
-sudo pacman -S lua feh alacritty asusctl supergfxctl
+sudo pacman -S lua feh alacritty asusctl supergfxctl steam
 
 echo "Enabling asusctl and supergfxctl."
 sudo systemctl enable --now power-profiles-daemon.service
