@@ -6,9 +6,11 @@ mizOS installation is very simple. All you need is a working install of any supp
 
 - Add the g14 repo to `/etc/pacman.conf`
 
+```
 [g14]
 SigLevel = DatabaseNever Optional TrustAll
 Server = https://arch.asus-linux.org
+```
 
 - Update your system with `sudo pacman -Syu`
 - On an Artix system, you need to enable the Arch Linux repositories. [tutorial here](https://wiki.artixlinux.org/Main/Repositories)
@@ -26,3 +28,4 @@ Server = https://arch.asus-linux.org
 mizOS installation has been officially tested on the following operating systems:
 
 - Artix-runit
+- Arch Linux
