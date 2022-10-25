@@ -23,6 +23,7 @@ fi
 echo "Creating $HOME/.mizOS/wallpaper"
 if [ -d "$HOME/.mizOS/wallpaper" ]; then
 	rm -rf $HOME/.mizOS/wallpaper
+	mkdir $HOME/.mizOS/wallpaper
 else
 	mkdir $HOME/.mizOS/wallpaper
 fi
