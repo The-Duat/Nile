@@ -46,7 +46,7 @@ echo "Adding custom neofetch."
 sudo cp assets/neofetch /usr/bin
 
 echo "Adding that amazing wallpaper to /etc/mizOS/wallpaper"
-cp assets/mizOStree.png $HOME/.mizOS/wallpaper
+cp assets/mizOStree.png $HOME/.mizOS/wallpaper/
 
 if [ -d "$HOME/.mizOS/yay-git" ]; then
 	echo "yay build files found, removing"
