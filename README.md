@@ -1,7 +1,5 @@
 # mizOS Documentation
 
-[Txmim](https://www.roblox.com/users/1647737309/profile) is a fucking retard.
-
 - Please note, mizOS is in VERY early development.
 
 Made by [https://theduat.neocities.org](https://theduat.neocities.org)
