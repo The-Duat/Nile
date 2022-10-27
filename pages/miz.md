@@ -86,6 +86,6 @@ The `miz` script has 5 main arguments. Being `update`, `service`, `gfx`, `sw`, a
 
 `miz info source` - Links you to the GitHub.
 
-`miz info creator` - Links you to the sudev website.
+`miz info creator` - Links you to the Duat website.
 
 `miz info uilist` - Prints the full list of preset DE/WM installs.
