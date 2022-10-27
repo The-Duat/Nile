@@ -318,7 +318,7 @@ end
 
 
 
---[=[ Graphics sruff. ]=]--
+--[=[ Graphics stuff. ]=]--
 local function gfx()
 	if arg[2] == "run" then
                 mgpu()
@@ -339,7 +339,7 @@ end
 
 
 
---[=[ System updater ]=]--
+--[=[ System updater. ]=]--
 local function update()
 	io.write("Update mizOS? y/n \n\n> ")
         if io.read() == "y" then
@@ -355,7 +355,7 @@ end
 
 
 
---[=[ Core command proccessor ]=]--
+--[=[ Core command processor. ]=]--
 if arg[1] == "service" then
 	if init == "runit" then
 		runit()
