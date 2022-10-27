@@ -69,10 +69,12 @@ The `miz` script has 5 main arguments. Being `update`, `service`, `gfx`, `sw`, a
 `miz sw remove <package>` - Removes that package.
 
 - Adding the `-aur` flag after `fetch` or `remove` will direct the command to yay instead of pacman, allowing you to install AUR packages.
-**Example:** `miz sw fetch -aur grapejuice-git
+
+**Example:** `miz sw fetch -aur grapejuice-git`.
 
 - Adding the `-ui` flag after `fetch` or `remove` will install packages based on the preset DE/WM list. Currently, you can only install one desktop at a time.
-**Example:** `miz sw fetch -ui kde`
+
+**Example:** `miz sw fetch -ui kde`.
 
 - Adding the `-custom` flag after `fetch` or `remove` allows you to automatically install custom mizOS packages. This feature is not yet implemented.
 
