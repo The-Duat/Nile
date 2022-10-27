@@ -6,6 +6,7 @@
 
 local home = os.getenv("HOME")
 
+--[=[ Commonly used functions. ]=]--
 local function x(cmd)
 	os.execute(cmd)
 end
@@ -18,6 +19,9 @@ local function ypkg(pkg)
 	x("yay -S " .. pkg)
 end
 
+
+
+--[=[ Check if file exists. ]=]--
 local function checkfile(name)
 	local file = io.open(name, "r")
         if file ~= nil then
@@ -26,10 +30,20 @@ local function checkfile(name)
 	end
 end
 
-local gcmd = ""
+
+
+--[=[ https://github.com/Mizosu97/mgpu ]=]--
 local function mgpu()
+	local gcmd = ""
 	for _,ag in pairs(arg) do
-		if ag ~= "miz" and ag ~= "/bin/lua" and ag ~= "/usr/bin/miz" and ag ~= "./miz" and ag ~= "d" and ag ~= "i" and ag ~= "gfx" and ag ~= "run" then
+		if ag ~= "miz" 
+		and ag ~= "/bin/lua" 
+		and ag ~= "/usr/bin/miz" 
+		and ag ~= "./miz" 
+		and ag ~= "d" 
+		and ag ~= "i" 
+		and ag ~= "gfx" 
+		and ag ~= "run" then
 			gcmd = gcmd .. ag .. " "
 		end
 	end
@@ -41,6 +55,8 @@ local function mgpu()
 end
 
 
+
+--[=[ Detect init system. ]=]--
 local init
 if checkfile(home .. "/.mizOS/init/runit") == true then
 	init = "runit"
@@ -52,7 +68,10 @@ else
 	print("Your init system isnt supported lol")
 end
 
-des = {
+
+
+--[=[ Preset list of Desktop Environments and Window Managers. ]=]--
+uis = { 
 	{"budgie", "budgie-desktop", false},
 	{"cinnamon", "cinnamon", false},
 	{"cutefish", "cutefish", false},
@@ -79,13 +98,7 @@ des = {
 	{"plasma-mobile", "plasma-mobile", true},
 	{"thedesk", "thedesk", true},
 	{"trinity", "trinity", false},
-	{"maui", "maui-shell-git", true}
-}
-
-
-
-wms = {
-
+	{"maui", "maui-shell-git", true},
 	{"2bwm", "2bwm", true},
 	{"9wm", "9wm", true},
 	{"afterstep", "afterstep-git", true},
@@ -149,76 +162,210 @@ wms = {
 	{"xmonad", "xmonad", false}
 }
 
+local function getuilist()
+	print("List of DEs and WMs:")
+	print(" ")
+	for _,desktop in pairs(uis) do
+                local name
+                if desktop[3] == false then
+                        name = desktop[1] .. "   (pacman)"
+                elseif desktop[3] == true then
+                        name = desktop[1] .. "   (AUR)"
+                end
+                print(name)
+        end
+end
 
 
+
+--[=[ Software management. ]=]--
+local function software()
+	local packages = ""
+	for _,ag in pairs(arg) do
+		if ag ~= "miz" 
+		and ag ~= "/bin/lua" 
+		and ag ~= "/usr/bin/miz" 
+		and ag ~= "./miz" 
+		and ag ~= "sw" 
+		and ag ~= "fetch" 
+		and ag ~= "update" 
+		and ag ~= "remove" 
+		and ag ~= "-custom" 
+		and ag ~= "-ui" 
+		and ag ~= "-aur" 
+		and ag ~= "neofetch" then
+			packages = packages .. ag .. " "
+		end
+	end
+	if arg[2] == "fetch" then
+		if arg[3] == "-aur" then
+			ypkg(packages)
+		elseif arg[3] == "-custom" then
+			print("not implemented yet")
+		elseif arg[3] == "-ui" then
+			for _,desktop in pairs(uis) do
+                        	if desktop[1] == arg[4] then                                                 
+					if desktop[3] == false then
+                                        	ipkg(desktop[2])
+                                	elseif desktop[3] == true then
+                                        	ypkg(desktop[2])                                               
+					end
+                       		end
+                	end
+		else
+			x("sudo pacman -S " .. packages)
+		end
+	elseif arg[2] == "remove" then
+		if arg[3] == "-aur" then
+			x("yay -Rn " .. packages)
+		elseif arg[3] == "-ui" then
+			for _,desktop in pairs(uis) do
+                                if desktop[1] == arg[4] then  
+					if desktop[3] == false then
+						x("sudo pacman -Rn " .. desktop[2])
+                                        elseif desktop[3] == true then
+                                                x("yay -Rn " .. desktop[2])
+
+                                        end
+                                end
+                        end
+		else
+			x("sudo pacman -Rn " .. packages)
+		end
+	end
+end
+
+
+
+--[=[ Runit command conversion ]=]--
+local function runit()
+	if arg[2] == "link" then
+                        x("sudo ln -s /etc/runit/sv/" .. arg[3] .. " /run/runit/service/")
+        elseif arg[2] == "unlink" then   
+		x("sudo rm /run/runit/service/" .. arg[3])   
+	elseif arg[2] == "disable" then
+		x("sudo touch /run/runit/service/" .. arg[3] .. "/down")  
+	elseif arg[2] == "enable" then
+                x("sudo rm /run/runit/service/" .. arg[3] .. "/down")
+        elseif arg[2] == "start" then
+                x("sudo sv start " .. arg[3])
+        elseif arg[2] == "stop" then         
+		x("sudo sv stop " .. arg[3])
+        elseif arg[2] == "restart" then
+                x("sudo sv restart " .. arg[3])
+        elseif arg[2] == "list" then
+                if arg[3] == "installed" then   
+			x("ls /etc/runit/sv/")
+                elseif arg[3] == "linked" then  
+			x("ls /run/runit/service/")
+                end
+        end
+end
+
+
+
+--[=[ SystemD command conversion. ]=]--
+local function systemd()
+	if arg[2] == "link" then              
+		print("already done")
+        elseif arg[2] == "unlink" then
+                print("brah??")
+        elseif arg[2] == "disable" then
+                x("sudo systemctl disable " .. arg[3])
+        elseif arg[2] == "enable" then
+                x("sudo systemctl enable " .. arg[3])
+        elseif arg[2] == "start" then
+                x("sudo systemctl start " .. arg[3])
+        elseif arg[2] == "stop" then
+                x("sudo systemctl stop " .. arg[3])
+        elseif arg[2] == "restart" then
+                x("sudo systemctl restart " .. arg[3])
+        elseif arg[2] == "list" then
+                if arg[3] == "installed" then      
+			x("systemctl list-units --type=service --all")    
+		elseif arg[3] == "linked" then                              
+			x("systemctl list-units --state=enabled")
+                end
+        end
+end
+
+
+
+--[=[ OpenRC command conversion ]=]--
+local function openrc()
+	if arg[2] == "link" then       
+		print("already done")
+        elseif arg[2] == "unlink" then
+                print("brah??")  
+	elseif arg[2] == "disable" then  
+		x("sudo rc-update del " .. arg[3] .. " default")  
+	elseif arg[2] == "enable" then  
+		x("sudo rc-update add " .. arg[3] .. " default")  
+	elseif arg[2] == "start" then
+                x("sudo rc-service " .. arg[3] .. " start")
+        elseif arg[2] == "stop" then
+                x("sudo rc-service " .. arg[3] .. " stop")
+        elseif arg[2] == "restart" then
+                x("sudo rc-service " .. arg[3] .. " restart")
+        elseif arg[2] == "list" then
+                if arg[3] == "installed" then
+                        x("rc-update show")
+                elseif arg[3] == "linked" then
+                        x("rc-update -v show")
+                end
+        end
+end
+
+
+
+--[=[ Graphics sruff. ]=]--
+local function gfx()
+	if arg[2] == "run" then
+                mgpu()
+        elseif arg[2] == "mode" then 
+		if arg[3] == "i" then
+                        x("supergfxctl --mode integrated")
+                elseif arg[3] == "d" then
+                        x("supergfxctl --mode dedicated")
+                elseif arg[3] == "h" then
+                        x("supergfxctl --mode hybrid")
+                elseif arg[3] == "c" then  
+			x("supergfxctl --mode compute")
+                elseif arg[3] == "v" then
+                        x("supergfxctl --mode vfio")
+                end
+        end
+end
+
+
+
+--[=[ System updater ]=]--
+local function update()
+	io.write("Update mizOS? y/n \n\n> ")
+        if io.read() == "y" then
+                x("sudo rm -rf $HOME/.mizOS/src/mizOS")
+                x("cd $HOME/.mizOS/src && git clone https://github.com/Mizosu97/mizOS")
+                x("sudo rm /usr/bin/miz")
+                x("rm -rf $HOME/.config/youri3backup")
+                x("rm -rf $HOME/.config/yourpicombackup")
+                x("rm -rf $HOME/.config/youralacrittybackup")
+                x("cd $HOME/.mizOS/src/mizOS && ./install")
+        end
+end
+
+
+
+--[=[ Core command proccessor ]=]--
 if arg[1] == "service" then
 	if init == "runit" then
-		if arg[2] == "link" then
-			x("sudo ln -s /etc/runit/sv/" .. arg[3] .. " /run/runit/service/")
-		elseif arg[2] == "unlink" then
-			x("sudo rm /run/runit/service/" .. arg[3])
-		elseif arg[2] == "disable" then
-			x("sudo touch /run/runit/service/" .. arg[3] .. "/down")
-		elseif arg[2] == "enable" then
-			x("sudo rm /run/runit/service/" .. arg[3] .. "/down")
-		elseif arg[2] == "start" then
-			x("sudo sv start " .. arg[3])
-		elseif arg[2] == "stop" then
-			x("sudo sv stop " .. arg[3])
-		elseif arg[2] == "restart" then
-			x("sudo sv restart " .. arg[3])
-		elseif arg[2] == "list" then
-			if arg[3] == "installed" then
-				x("ls /etc/runit/sv/")
-			elseif arg[3] == "linked" then
-				x("ls /run/runit/service/")
-			end
-		end
+		runit()
 	elseif init == "systemd" then
-		if arg[2] == "link" then
-                	print("already done")
-		elseif arg[2] == "unlink" then            
-			print("brah??")
-		elseif arg[2] == "disable" then
-                        x("sudo systemctl disable " .. arg[3])
-                elseif arg[2] == "enable" then
-                        x("sudo systemctl enable " .. arg[3])
-                elseif arg[2] == "start" then
-                        x("sudo systemctl start " .. arg[3])
-		elseif arg[2] == "stop" then
-                        x("sudo systemctl stop " .. arg[3])
-                elseif arg[2] == "restart" then
-			x("sudo systemctl restart " .. arg[3])
-                elseif arg[2] == "list" then  
-			if arg[3] == "installed" then   
-				x("systemctl list-units --type=service --all")
-                        elseif arg[3] == "linked" then    
-				x("systemctl list-units --state=enabled")  
-			end    
-		end
+		systemd()
 	elseif init == "openrc" then
-		if arg[2] == "link" then
-                        print("already done")
-                elseif arg[2] == "unlink" then
-                        print("brah??")
-                elseif arg[2] == "disable" then
-                        x("sudo rc-update del " .. arg[3] .. " default")
-                elseif arg[2] == "enable" then
-                        x("sudo rc-update add " .. arg[3] .. " default")
-                elseif arg[2] == "start" then
-                        x("sudo rc-service " .. arg[3] .. " start")
-                elseif arg[2] == "stop" then
-                        x("sudo rc-service " .. arg[3] .. " stop")
-                elseif arg[2] == "restart" then
-                        x("sudo rc-service " .. arg[3] .. " restart")
-                elseif arg[2] == "list" then
-                        if arg[3] == "installed" then                
-				x("rc-update show")
-                        elseif arg[3] == "linked" then
-                        	x("rc-update -v show")
-                        end
-                end
+		openrc()
 	end
+elseif arg[1] == "sw" then
+	software()
 elseif arg[1] == "gfx" then
 	if arg[2] == "run" then
 		mgpu()
@@ -235,115 +382,24 @@ elseif arg[1] == "gfx" then
 			x("supergfxctl --mode vfio")
 		end
 	end
-elseif arg[1] == "pac" then
-	if arg[2] == "fetch" then
-		if arg[3] == "neofetch" then
-			print("Neofetch is already installed, forcing it to install will most likely break it.")
-		else
-			ipkg(arg[3])
-		end
-	elseif arg[2] == "remove" then
-		x("sudo pacman -R " .. arg[3])
-	elseif arg[2] == "sync" then
-		x("sudo pacman -Sy")
-	elseif arg[2] == "update" then
-		print("STOOOOOOPPPPPPPPP")
-	end
-elseif arg[1] == "aur" then
-	if arg[2] == "fetch" then
-		ypkg(arg[3])
-	elseif arg[2] == "remove" then
-		x("yay -R " .. arg[3])
-	elseif arg[2] == "update" then
-		x("yay -Syu")
-	end
-elseif arg[1] == "desktop" then
-	if arg[2] == "list" then
-		print("List of Desktop Environments:")
-		print(" ")
-		for _,desktop in pairs(des) do
-			local name
-			if desktop[3] == false then
-				name = desktop[1] .. "   (pacman)"
-			elseif desktop[3] == true then
-				name = desktop[1] .. "   (AUR)"
-			end
-			print(name)
-		end
-	elseif arg[2] == "fetch" then
-		for _,desktop in pairs(des) do
-			if desktop[1] == arg[3] then
-				if desktop[3] == false then
-					ipkg(desktop[2])
-				elseif desktop[3] == true then
-					ypkg(desktop[2])
-				end
-			end
-		end
-	end
-elseif arg[1] == "wm" then
-	if arg[2] == "list" then
-		print("List of Window Managers:")
-		print(" ")
-		for _,wm in pairs(wms) do
-			if wm[3] == false then
-				name = wm[1] .. "   (pacman)"
-			elseif wm[3] == true then
-				name = wm[1] .. "   (AUR)"
-			end
-			print(name)
-		end
-	elseif arg[2] == "fetch" then
-		for _,wm in pairs(wms) do
-			if wm[1] == arg[3] then
-				if wm[3] == false then
-					ipkg(wm[2])
-				elseif wm[3] == true then
-					ypkg(wm[2])
-				end
-			end
-		end
-	end
 elseif arg[1] == "info" then
 	if arg[2] == "help" then
 		print(" ")
 		print("https://discord.gg/CzHw7cXKCx")
 		print(" ")
+	elseif arg[2] == "source" then
+		prjnt(" ")
+		print("https://github.com/Mizosu97/mizOS")
 	elseif arg[2] == "creator" then
 		print(" ")
 		print("https://theduat.neocities.org")
 		print(" ")
+	elseif arg[2] == "uilist" then
+                getuilist()
 	end
-elseif arg[1] == "system" then
-	if arg[2] == "update" then
-		print("Update mizOS? Y/N")
-		if io.read() == "Y" then
-			x("sudo rm -rf $HOME/.mizOS/src/mizOS")
-			x("cd $HOME/.mizOS/src && git clone https://github.com/Mizosu97/mizOS")
-			x("sudo rm /usr/bin/miz")
-			x("rm -rf $HOME/.config/youri3backup")
-			x("rm -rf $HOME/.config/yourpicombackup")
-			x("rm -rf $HOME/.config/youralacrittybackup")
-			x("cd $HOME/.mizOS/src/mizOS && ./install")
-		end
-	end
+elseif arg[1] == "update" then
+	update()
 else
 	print("! Error ! Invalid command!")
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

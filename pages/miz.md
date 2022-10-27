@@ -16,19 +16,16 @@ The `miz` script contains a lot of options (arguments). You can read up on how t
 
 
 
-The `miz` script has 8 main arguments. Being `system`, `service`, `gfx`, `pac`, `aur`, `desktop`, `wm`, and `info`.
+The `miz` script has 5 main arguments. Being `update`, `service`, `gfx`, `sw`, and `info`.
 
-- `system` manages mizOS system updates.
-- `service` manages services (runit).
+- `update` manages mizOS system updates.
+- `service` manages services.
 - `gfx` manages GPU and graphics-related things.
-- `pac` manages pacman packages.
-- `aur` manages aur packages (yay).
-- `desktop` manages Desktop Environment installation.
-- `wm` manages Window Manager installation.
+- `sw` manages software installation.
 - `info` displays information about mizOS.
 
-## miz system
-`miz system update` - Updates mizOS.
+## miz update
+`miz update` - Updates mizOS, pacman packages, and AUR packages.
 
 ## miz service
 
@@ -65,32 +62,28 @@ The `miz` script has 8 main arguments. Being `system`, `service`, `gfx`, `pac`, 
 - `h` - Uses both graphics cards for graphics processing.
 - `c` - Enables Nvidia without Xorg. (whatever the fuck that means)
 - `v` - Binds the dedicated GPU to VFIO for VM passthrough.
-## miz pac
-`miz pac fetch <package>` - Installs that package.
 
-`miz pac remove <package>` - Removes that package.
+## miz sw
+`miz sw fetch <package>` - Installs that package.
 
-`miz pac sync` - Syncs the repos. (Arch devs don't like you doing this. Has potential to break a system.)
+`miz sw remove <package>` - Removes that package.
 
-## miz aur
-`miz aur fetch <package>` - Installs that AUR package.
+- Adding the `-aur` flag after `fetch` or `remove` will direct the command to yay instead of pacman, allowing you to install AUR packages.
+**Example:** `miz sw fetch -aur grapejuice-git
 
-`miz aur remove <package>` - Removes that AUR package.
+- Adding the `-ui` flag after `fetch` or `remove` will install packages based on the preset DE/WM list. Currently, you can only install one desktop at a time.
+**Example:** `miz sw fetch -ui kde`
 
-`miz aur update` - Upgrades all AUR packages.
+- Adding the `-custom` flag after `fetch` or `remove` allows you to automatically install custom mizOS packages. This feature is not yet implemented.
 
-## miz desktop
-`miz desktop list` - Lists the Desktop Environments you can install.
 
-`miz desktop fetch <desktop>` - Installs that Desktop Environment.
 
-## miz wm
-`miz wm list` - Lists the Window Managers you can install.
-
-`miz wm fetch <wm>` - Installs that Window Manager.
 
 ## miz info
-`miz info help` - Links you to the GitHub.
+`miz info help` - Links you to the Discord Server.
+
+`miz info source` - Links you to the GitHub.
 
 `miz info creator` - Links you to the sudev website.
 
+`miz info uilist` - Prints the full list of preset DE/WM installs.

@@ -75,6 +75,10 @@ git clone https://aur.archlinux.org/yay-git.git
 cd $HOME/.mizOS/yay-git
 makepkg -si
 
+echo "Updating current AUR packages."
+yay -Syu
+
+
 cd $thisDir
 
 if [ -d "$HOME/.config/i3" ]; then
