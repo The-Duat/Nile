@@ -178,6 +178,48 @@ end
 
 
 
+--[=[ Config stuff. ]=]--
+conf = {
+	{"miz", "/usr/bin/miz", true},
+	{"i3", home .. "/.config/i3/config", false},
+	{"pacman", "/etc/pacman.conf", true},
+	{"xrc", home .. "/.xinitrc", false}
+}
+
+local function getconflist()
+	print("List of available config files:")
+	print(" ")
+	for _,confile in pairs(conf) do
+		local name
+		if checkfile(confile[2]) == true then
+			if confile[3] == true then
+				name = confile[1] .. "   (Requires root)"
+			else
+				name = confile[1]
+			end
+			print(name)
+		end
+	end
+end
+
+local function config()
+	for _,confile in pairs(conf) do
+		if confile[1] == arg[2] then
+			if checkfile(confile[2]) == true then
+				if confile[3] == true then
+					x("sudo nvim " .. confile[2])
+				else
+					x("nvim " .. confile[2])
+				end
+			else
+				print("Config file does not exist.")
+			end
+		end
+	end
+end
+
+
+
 --[=[ Software management. ]=]--
 local function software()
 	local packages = ""
@@ -382,6 +424,8 @@ elseif arg[1] == "gfx" then
 			x("supergfxctl --mode vfio")
 		end
 	end
+elseif arg[1] == "config" then
+	config()
 elseif arg[1] == "info" then
 	if arg[2] == "help" then
 		print(" ")
@@ -396,6 +440,8 @@ elseif arg[1] == "info" then
 		print(" ")
 	elseif arg[2] == "uilist" then
                 getuilist()
+	elseif arg[2] == "configlist" then
+		getconflist()
 	end
 elseif arg[1] == "update" then
 	update()

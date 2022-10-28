@@ -8,6 +8,8 @@ The `miz` script does the following:
 - Manages mizOS system updates
 - Manages AUR packages via `yay`
 - Manages DE and WM installation
+- Gives you more control of your GPUs
+- Enables easy accesibility to config files
 - Displays information about mizOS
 - More to come
 
@@ -16,9 +18,10 @@ The `miz` script contains a lot of options (arguments). You can read up on how t
 
 
 
-The `miz` script has 5 main arguments. Being `update`, `service`, `gfx`, `sw`, and `info`.
+The `miz` script has 6 main arguments. Being `update`, `config`, `service`, `gfx`, `sw`, and `info`.
 
 - `update` manages mizOS system updates.
+- `config` gives easy access to configuration files.
 - `service` manages services.
 - `gfx` manages GPU and graphics-related things.
 - `sw` manages software installation.
@@ -26,6 +29,19 @@ The `miz` script has 5 main arguments. Being `update`, `service`, `gfx`, `sw`, a
 
 ## miz update
 `miz update` - Updates mizOS, pacman packages, and AUR packages.
+
+## miz config
+`miz config <file>` - Automatically opens configuration files for you with the neovim text editor. "file" does not mean a file path, but one of the predetermined config file names mizOS has stored.
+
+**Example:** `miz config i3`
+
+Available config files:
+- `miz`
+- `i3`
+- `pacman`
+- `xrc`
+
+You can now directly edit mizOS source code with `miz config miz`.
 
 ## miz service
 
@@ -89,3 +105,5 @@ The `miz` script has 5 main arguments. Being `update`, `service`, `gfx`, `sw`, a
 `miz info creator` - Links you to the Duat website.
 
 `miz info uilist` - Prints the full list of preset DE/WM installs.
+
+`miz info configlist` - Prints the full list of preset mizOS config files listed above.
