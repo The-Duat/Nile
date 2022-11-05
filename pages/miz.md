@@ -94,6 +94,8 @@ You can now directly edit mizOS source code with `miz config miz`.
 
 - Adding the `-custom` flag after `fetch` or `remove` allows you to automatically install custom mizOS packages. This feature is not yet implemented.
 
+`miz sw cc` - Clears the pacman and AUR cache. Also clears journal logs.
+
 
 
 

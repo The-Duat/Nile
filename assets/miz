@@ -274,6 +274,8 @@ local function software()
 		else
 			x("sudo pacman -Rn " .. packages)
 		end
+	elseif arg[2] == "cc" then
+		x("yay -Scc && journalctl --vacuum-time=21days")
 	end
 end
 
