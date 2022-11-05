@@ -275,7 +275,12 @@ local function software()
 			x("sudo pacman -Rn " .. packages)
 		end
 	elseif arg[2] == "cc" then
-		x("yay -Scc && journalctl --vacuum-time=21days")
+		x("yay -Scc")
+		if init == "systemd" then
+			x("sudo journalctl --vacuum-time=21days")
+		else
+			print("SystemD not found, unable to clear journal logs.")
+		end
 	end
 end
 
