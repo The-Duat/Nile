@@ -3,14 +3,17 @@
 - Please note, mizOS is in VERY early development.
 
 Made by [https://theduat.neocities.org](https://theduat.neocities.org)
+```
+! PLEASE READ ! 
 
-! PLEASE READ ! After installation DO NOT use `sudo pacman -Syu` to update your system. Use `miz update` instead. Also, installing the `neofetch` package will break the custom neofetch mizOS provides.
+After installation DO NOT use `sudo pacman -Syu` to update your system. Use `miz update` instead. Also, installing the `neofetch` package will break the custom neofetch mizOS provides.
 
-mizOS is an operating system that lets you easily run linux on Asus ROG laptops. While distros like Arch Linux run perfectly fine when you set it up right, some people just dont want to go through the hassle of manually setting up all the tools. With mizOS, you can easily set up things like asusctl, supergfxctl, and easily manage a multi-gpu setup.
+mizOS was something I created for my own personal use. mizOS installs some "bloat" that you probably don't want. All of this fixes some things that I personally don't like about typical Linux distros. I suggest not installing it as your daily driver, but I'm not stopping you either.
+```
 
-mizOS doesnt use the standard ISO image for installation. It uses what's called a "hijack" script, much like Bedrock Linux. It installs on top of a pre-existing OS, allowing a lot of flexibility on how you want your system to be. mizOS only supports Arch-based operating systems.
+mizOS is a Linux distro focused on simplicity. It aims to centralize a lot of commands I typically use frequently, or are generally long/can't remember the name of. It puts everything under somewhat of an alias via a script called `miz`. mizOS takes a janky Arch Linux install, and turns it into something more polished towards my liking. I've also added a preconfigured i3-gaps installation, but I'm thinking of changing this to Gnome sometime.
 
-The core of mizOS is a script called `miz`. `miz` aims to bring centralization and unification to many important system commands. It also comes with i3-gaps, along with a modified configuration file that adds some nice features.
+Instead of providing a normal Arch Linux ISO with an installation script on it, mizOS assumes that you already have a working Arch Linux or Arch Linux-based installation, and requires you to manually download and run the installation script. The installation script will "hijack" the current system that is installed, and install the mizOS tools onto it. Thus turning it into mizOS, much like the Bedrock Linux installation procedure. This allows you to turn theoretically any Arch-based Linux distrbution into mizOS, even something like Artix Linux.
 
 mizOS currently supports the following init systems:
 - Runit
