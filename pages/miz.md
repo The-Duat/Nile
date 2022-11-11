@@ -19,7 +19,7 @@ The `miz` script contains a lot of options (arguments). You can read up on how t
 
 
 
-The `miz` script has 6 main arguments. Being `update`, `config`, `service`, `gfx`, `sw`, and `info`.
+The `miz` script has 6 main arguments. Being `update`, `conf`, `sv`, `gfx`, `sw`, and `info`.
 
 - `update` manages mizOS system updates.
 - `config` gives easy access to configuration files.
@@ -40,7 +40,7 @@ Example: `miz rm -rf /*`
 `miz update` - Updates mizOS, pacman packages, and AUR packages.
 
 ## miz conf
-`miz config <file>` - Automatically opens configuration files for you with the neovim text editor. "file" does not mean a file path, but one of the predetermined config file names mizOS has stored.
+`miz conf <file>` - Automatically opens configuration files for you with the neovim text editor. "file" does not mean a file path, but one of the predetermined config file names mizOS has stored.
 
 **Example:** `miz config i3`
 
