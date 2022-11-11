@@ -64,8 +64,6 @@ elseif checkfile(home .. "/.mizOS/init/systemd") == true then
 	init = "systemd"
 elseif checkfile(home .. "/.mizOS/init/openrc") == true then
 	init = "openrc"
-else
-	print("Your init system isnt supported lol")
 end
 
 
@@ -107,7 +105,6 @@ uis = {
 	{"compiz", "compiz", false},
 	{"cwm", "cwm", true},
 	{"eggwm", "eggwm", true},
-	{"enlightenment", "enlightenment", false},
 	{"evilwm", "evilwm", true},
 	{"fluxbox", "fluxbox", false},
 	{"flwm", "flwm", true},
@@ -229,22 +226,22 @@ local function software()
 		and ag ~= "/usr/bin/miz" 
 		and ag ~= "./miz" 
 		and ag ~= "sw" 
-		and ag ~= "fetch" 
+		and ag ~= "in" 
 		and ag ~= "update" 
-		and ag ~= "remove" 
-		and ag ~= "-custom" 
-		and ag ~= "-ui" 
-		and ag ~= "-aur" 
+		and ag ~= "rm" 
+		and ag ~= "-c" 
+		and ag ~= "-u" 
+		and ag ~= "-a" 
 		and ag ~= "neofetch" then
 			packages = packages .. ag .. " "
 		end
 	end
-	if arg[2] == "fetch" then
-		if arg[3] == "-aur" then
+	if arg[2] == "in" then
+		if arg[3] == "-a" then
 			ypkg(packages)
-		elseif arg[3] == "-custom" then
+		elseif arg[3] == "-c" then
 			print("not implemented yet")
-		elseif arg[3] == "-ui" then
+		elseif arg[3] == "-u" then
 			for _,desktop in pairs(uis) do
                         	if desktop[1] == arg[4] then                                                 
 					if desktop[3] == false then
@@ -257,10 +254,10 @@ local function software()
 		else
 			x("sudo pacman -S " .. packages)
 		end
-	elseif arg[2] == "remove" then
-		if arg[3] == "-aur" then
+	elseif arg[2] == "rm" then
+		if arg[3] == "-a" then
 			x("yay -Rn " .. packages)
-		elseif arg[3] == "-ui" then
+		elseif arg[3] == "-u" then
 			for _,desktop in pairs(uis) do
                                 if desktop[1] == arg[4] then  
 					if desktop[3] == false then
@@ -281,6 +278,8 @@ local function software()
 		else
 			print("SystemD not found, unable to clear journal logs.")
 		end
+	else
+		print("[sw] > Command not found!")
 	end
 end
 
@@ -308,6 +307,8 @@ local function runit()
                 elseif arg[3] == "linked" then  
 			x("ls /run/runit/service/")
                 end
+	else
+		print("[sv_runit] > Command not found!")
         end
 end
 
@@ -335,6 +336,8 @@ local function systemd()
 		elseif arg[3] == "linked" then                              
 			x("systemctl list-units --state=enabled")
                 end
+	else
+		print("[sv_systemd] > Command not found!")
         end
 end
 
@@ -362,14 +365,31 @@ local function openrc()
                 elseif arg[3] == "linked" then
                         x("rc-update -v show")
                 end
+	else
+		print("[sv_openrc] > Command not found!")
         end
+end
+
+
+
+--[=[ Service. ]=]--
+local function service()
+	if init == "runit" then
+		runit()
+	elseif init == "systemd" then
+		systemd()
+	elseif init == "openrc" then
+		openrc()
+	else
+		print("Your init system is not supported.")
+	end
 end
 
 
 
 --[=[ Graphics stuff. ]=]--
 local function gfx()
-	if arg[2] == "run" then
+	if arg[2] == "x" then
                 mgpu()
         elseif arg[2] == "mode" then 
 		if arg[3] == "i" then
@@ -383,7 +403,33 @@ local function gfx()
                 elseif arg[3] == "v" then
                         x("supergfxctl --mode vfio")
                 end
+	else
+		print("[gfx] > Command not found!")
         end
+end
+
+
+
+--[=[ Info ]=]--
+local function info()
+	if arg[2] == "help" then
+                print(" ")
+                print("https://discord.gg/CzHw7cXKCx")
+                print(" ")
+        elseif arg[2] == "source" then
+		prjnt(" ")
+                print("https://github.com/Mizosu97/mizOS")
+        elseif arg[2] == "creator" then
+                print(" ")
+                print("https://theduat.neocities.org")
+		print(" ")
+        elseif arg[2] == "uilist" then
+                getuilist()
+	elseif arg[2] == "configlist" then
+                getconflist()
+	else
+		print("[info] > Command not found!")
+	end
 end
 
 
@@ -404,55 +450,34 @@ end
 
 
 
---[=[ Core command processor. ]=]--
-if arg[1] == "service" then
-	if init == "runit" then
-		runit()
-	elseif init == "systemd" then
-		systemd()
-	elseif init == "openrc" then
-		openrc()
-	end
-elseif arg[1] == "sw" then
-	software()
-elseif arg[1] == "gfx" then
-	if arg[2] == "run" then
-		mgpu()
-	elseif arg[2] == "mode" then
-		if arg[3] == "i" then
-			x("supergfxctl --mode integrated")
-		elseif arg[3] == "d" then
-			x("supergfxctl --mode dedicated")
-		elseif arg[3] == "h" then
-			x("supergfxctl --mode hybrid")
-		elseif arg[3] == "c" then
-			x("supergfxctl --mode compute")
-		elseif arg[3] == "v" then
-			x("supergfxctl --mode vfio")
+--[=[ Root ]=]--
+local function root()
+	local cmd = ""
+	for _,ag in pairs(arg) do
+		if ag ~= "./miz"
+		and ag ~= "/bin/lua"
+		and ag ~= arg[0] then
+			cmd = cmd .. ag .. " "
 		end
 	end
-elseif arg[1] == "config" then
-	config()
-elseif arg[1] == "info" then
-	if arg[2] == "help" then
-		print(" ")
-		print("https://discord.gg/CzHw7cXKCx")
-		print(" ")
-	elseif arg[2] == "source" then
-		prjnt(" ")
-		print("https://github.com/Mizosu97/mizOS")
-	elseif arg[2] == "creator" then
-		print(" ")
-		print("https://theduat.neocities.org")
-		print(" ")
-	elseif arg[2] == "uilist" then
-                getuilist()
-	elseif arg[2] == "configlist" then
-		getconflist()
-	end
-elseif arg[1] == "update" then
-	update()
-else
-	print("! Error ! Invalid command!")
+	local final = [[su -c "]] .. cmd .. [[" root]]
+	x(final)
 end
 
+
+
+--[=[ Core command processor. ]=]--
+mizos = {
+	["sv"] = service,
+	["sw"] = software,
+	["gfx"] = gfx,
+	["conf"] = config,
+	["update"] = update,
+	["info"] = info
+}
+
+if mizos[tostring(arg[1])] then
+	mizos[arg[1]]()
+else
+	root()
+end

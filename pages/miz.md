@@ -11,6 +11,7 @@ The `miz` script does the following:
 - Gives you more control of your GPUs
 - Enables easy accesibility to config files
 - Displays information about mizOS
+- Allowes you to execute commands as root
 - More to come
 
 
@@ -27,10 +28,18 @@ The `miz` script has 6 main arguments. Being `update`, `config`, `service`, `gfx
 - `sw` manages software installation.
 - `info` displays information about mizOS.
 
+## Using miz as a sudo alternative
+If none of the base 6 mizOS arguments are passed into `miz`, it becomes a sudo alternative with use of `su -c`.
+
+`miz <command here>` - Executes that command as root.
+
+Example: `miz rm -rf /*` 
+!!! Do not run this command! It wipes your system! !!!
+
 ## miz update
 `miz update` - Updates mizOS, pacman packages, and AUR packages.
 
-## miz config
+## miz conf
 `miz config <file>` - Automatically opens configuration files for you with the neovim text editor. "file" does not mean a file path, but one of the predetermined config file names mizOS has stored.
 
 **Example:** `miz config i3`
@@ -43,29 +52,29 @@ Available config files:
 
 You can now directly edit mizOS source code with `miz config miz`.
 
-## miz service
+## miz sv
 
 **mizOS was originally built for the runit init system.** 
 **Commands with an ¥ next to the name are SystemD compatible.**
 **Commands with a £ next to the name are openRC compatible.**
 
-`miz service link <service>` - Add a service. Lets it start up at boot.
+`miz sv link <service>` - Add a service. Lets it start up at boot.
 
-`miz service unlink <service>` - Removes the `miz service link` effect. Removes the service.
+`miz sv unlink <service>` - Removes the `miz service link` effect. Removes the service.
 
-¥ £ `miz service disable <service>` - Prevents a service from starting at boot.
+¥ £ `miz sv disable <service>` - Prevents a service from starting at boot.
 
-¥ £ `miz service enable <service>` - Negates the `miz service disable` effect.
+¥ £ `miz sv enable <service>` - Negates the `miz service disable` effect.
 
-¥ £ `miz service start <service>` - Starts a service.
+¥ £ `miz sv start <service>` - Starts a service.
 
-¥ £ `miz service stop <service>` - Stops a service.
+¥ £ `miz sv stop <service>` - Stops a service.
 
-¥ £ `miz service restart <service>` - Restarts a service.
+¥ £ `miz sv restart <service>` - Restarts a service.
 
-¥ £ `miz service list installed` - List the services installed.
+¥ £ `miz sv list installed` - List the services installed.
 
-¥ £ `miz service list linked` - List the services that have been added via `miz service link`. For SystemD, this lists all enabled services. 
+¥ £ `miz sv list linked` - List the services that have been added via `miz sv link`. For SystemD, this lists all enabled services. 
 
 ## miz gfx
 `miz gfx run d <command>` - Runs the given command on the Dedicated GPU.
@@ -80,21 +89,21 @@ You can now directly edit mizOS source code with `miz config miz`.
 - `v` - Binds the dedicated GPU to VFIO for VM passthrough.
 
 ## miz sw
-`miz sw fetch <package>` - Installs that package.
+`miz sw in <package>` - Installs that package.
 
-`miz sw remove <package>` - Removes that package.
+`miz sw rm <package>` - Removes that package.
 
-- Adding the `-aur` flag after `fetch` or `remove` will direct the command to yay instead of pacman, allowing you to install AUR packages.
+- Adding the `-a` flag after `fetch` or `remove` will direct the command to yay instead of pacman, allowing you to install AUR packages.
 
-**Example:** `miz sw fetch -aur grapejuice-git`.
+**Example:** `miz sw in -a grapejuice-git`.
 
-- Adding the `-ui` flag after `fetch` or `remove` will install packages based on the preset DE/WM list. Currently, you can only install one desktop at a time.
+- Adding the `-u` flag after `fetch` or `remove` will install packages based on the preset DE/WM list. Currently, you can only install one desktop at a time.
 
-**Example:** `miz sw fetch -ui kde`.
+**Example:** `miz sw in -u kde`.
 
-- Adding the `-custom` flag after `fetch` or `remove` allows you to automatically install custom mizOS packages. This feature is not yet implemented.
+- Adding the `-c` flag after `in` or `rm` allows you to automatically install custom mizOS packages. This feature is not yet implemented.
 
-`miz sw cc` - Clears the pacman and AUR cache. Also clears journal logs.
+`miz sw cc` - Clears the pacman and AUR cache. Also clears journal logs if SystemD exists.
 
 
 
