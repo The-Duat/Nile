@@ -1,8 +1,8 @@
 # mizOS Documentation
+Developed by [The Duat](https://theduat.neocities.org).
 
 - Please note, mizOS is in VERY early development.
 
-Made by [https://theduat.neocities.org](https://theduat.neocities.org)
 ```
 ! PLEASE READ ! 
 
