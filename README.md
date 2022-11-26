@@ -10,6 +10,8 @@ After installation DO NOT use `sudo pacman -Syu` to update your system. Use `miz
 
 mizOS was something I created for my own personal use. mizOS installs some "bloat" that you probably don't want. All of this fixes some things that I personally don't like about typical Linux distros. I suggest not installing it as your daily driver, but I'm not stopping you either.
 ```
+- ISO image coming soon, with the ability to select your init system at install. The ISO will probably be based on the EndeavorOS iso, with a modified archinstall for installation.
+
 
 mizOS is a Linux distro focused on simplicity. It aims to centralize a lot of commands I typically use frequently, or are generally long/can't remember the name of. It puts everything under somewhat of an alias via a script called `miz`. mizOS takes a janky Arch Linux install, and turns it into something more polished towards my liking. I've also added a preconfigured i3-gaps installation, but I'm thinking of changing this to Gnome sometime.
 
