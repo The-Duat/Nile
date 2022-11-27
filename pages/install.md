@@ -32,9 +32,12 @@ The password for both the user and the root account on the live image is "123".
 
 - After selcting "No", follow the password prompts on the screen. The password prompts are talking about the passwords you have set for the installed root and user accounts, not the accounts on the live image.
 
+# Method 2: Hijacking a pre-existing Arch Linux install.
+Hijacking an install gives more flexibilty on how you want your mizOS installation to be. You can even hijack an install with an init system that is not SystemD, as long as it is either Runit or OpenRC.
+
 ## Pre-Installation
 
-- Add the g14 repo to `/etc/pacman.conf`
+- Add the g14 repo to `/etc/pacman.conf`.
 
 ```
 [g14]
@@ -42,10 +45,10 @@ SigLevel = DatabaseNever Optional TrustAll
 Server = https://arch.asus-linux.org
 ```
 
-- Update your system with `sudo pacman -Syu`
-- On an Artix system, you need to enable the Arch Linux repositories. [tutorial here](https://wiki.artixlinux.org/Main/Repositories)
-- Make sure you have the `git` package installed with `sudo pacman -S git`
-- As an added precaution, install the `lua` package with `sudo pacman -S lua`
+- On an Artix system, you need to enable the Arch Linux repositories. [tutorial here](https://wiki.artixlinux.org/Main/Repositories).
+- Update your system with `sudo pacman -Syu`.
+- Make sure you have the `git` package installed with `sudo pacman -S git`.
+- As an added precaution, install the `lua` package with `sudo pacman -S lua`.
 
 ## Install mizOS
 
@@ -55,7 +58,7 @@ Server = https://arch.asus-linux.org
 
 ## Tested Operating Systems
 
-mizOS installation has been officially tested on the following operating systems:
+The mizOS hijack installation has been officially tested on the following operating systems:
 
 - Artix-runit
 - Arch Linux
