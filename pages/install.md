@@ -20,11 +20,15 @@ The password for both the user and the root account on the live image is "123".
 
 - Open a terminal.
 
+- Run the command `mount -o remount,size=2G /run/archiso/cowspace` to increase the storage space for the live ISO image.
+
 - If you are using a wifi connection, start Network Manager with the command `sudo systemctl enable NetworkManager && sudo systemctl start NetworkManager`. Then connect to wifi by either using `nmtui` or `gnome-control-panel`.
+
+- Update the live ISO image's software and repos with `sudo pacman -Syu`.
 
 - Now, you can start the mizOS installation with the command `sudo chmod +x /usr/local/bin/install_mizos && install_mizos`.
 
-
+- **Read the "Important Notes" section below:**
 
 **Important Notes:**
 - In the installation menu, you must select "NetworkManager" as the network, or the installation will fail.
