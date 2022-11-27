@@ -20,7 +20,7 @@ The password for both the user and the root account on the live image is "123".
 
 - Open a terminal.
 
-- Run the command `mount -o remount,size=2G /run/archiso/cowspace` to increase the storage space for the live ISO image.
+- Run the command `sudo mount -o remount,size=2G /run/archiso/cowspace` to increase the storage space for the live ISO image.
 
 - If you are using a wifi connection, start Network Manager with the command `sudo systemctl enable NetworkManager && sudo systemctl start NetworkManager`. Then connect to wifi by either using `nmtui` or `gnome-control-panel`.
 
