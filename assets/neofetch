@@ -5555,18 +5555,21 @@ EOF
 	"mizOS"*)
 		set_colors 4 5
 		read -rd '' ascii_data <<'EOF'
-${c1}                ___________
-            .-=d88888888888b=-.
-        .:d8888${c2}pr"|\|/-\|'rq${c1}8888b.
-      ,:d8888P${c2}^//\-\/_\ /_\/^q${c1}888/b.
-    ,;d88888${c2}/~-/ .-~---~-. |/-q${c1}88888b,
-   //888888${c2}7-\ _/         \\-\/Y${c1}88888b\
-   \=888888${c2}i+\_'           ;\_\u${c1}88888k>
-    \q88888${c2}|- \l           !\_/|${c1}88888p/
-     'q8888l${c2}\-//\         / /\|${c1}!8888P'
-       'q888${c2}\/-| "-,___.-^\/-\/${c1}888P'
-         `=88${c2}\./-/|/ |-/!\/-!/${c1}88='
-	    ^^8${c2}\/.\ /.| \/-!/${c1}98
+${c1}     ,nnxnnxxxnxnxnnx..
+ .,cdk0KKKKK0000KK0000koc,
+.o00kdl/'         '+::ldk0K0ko:,..
+          ......          &cdk00Okxddool;
+     .:oxO0000Okdoccc.        **"""
+    cOK ${c2}WMMMMMMMN ${c1}YkOOko;..
+  ,x0d ${c2}oXMMMMMMM0k ${c1}oKWNK0kxxxddoolllc'
+ dXNOl ${c2}l0WMMMMMW0 ${c1};hxkkOxlcccllllooddxxx:
+ oxmn0NNokhhkkcjkkhxkkdoc"'
+    .dNMWKOKWW0l
+    'kWMNo 'ckXN0o                 dkkx
+     OWMK     'cxKKOnxo             xOkkx
+     lXM0          oxOK0kln         :okl
+      kWO              ookOOkdolcllodd:
+       kl                  ccllllc
 EOF
 
 	;;
