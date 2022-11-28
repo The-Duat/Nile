@@ -1,6 +1,6 @@
 # Installation
 
-There are 2 ways to install mizOS. You can either use the ISO image, or you can "hijack" a current Arch Linux or Arch Linux-based operating system already installed on your device, and convert it into mizOS.                                                                             The ISO image currently only supports SystemD. If you want to use a diffferent init system, you must use the hijack method.
+There are 2 ways to install mizOS. You can either use the ISO image, or you can "hijack" a current Arch Linux or Arch Linux-based operating system already installed on your device, and convert it into mizOS.                                                                             The ISO image currently only supports SystemD. If you want to use a different init system, you must use the hijack method.
 
 # Method 1: Using the ISO image.
 
