@@ -43,7 +43,7 @@ local function mgpu()
 		and ag ~= "d" 
 		and ag ~= "i" 
 		and ag ~= "gfx" 
-		and ag ~= "run" then
+		and ag ~= "x" then
 			gcmd = gcmd .. ag .. " "
 		end
 	end
