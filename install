@@ -110,11 +110,10 @@ if [ -d "$HOME/.config/alacritty" ]; then
 	mv $HOME/.config/alacritty $HOME/.config/youralacrittybackup
 else
 	echo "alacritty config folder not found, creating one"
-	mkdir $HOME/.config/alacritty
 fi
-
+mkdir $HOME/.config/alacritty
 echo "Installing alacritty catppuccin theme"
-cp assets/alacritty.yml $HOME/.config/alacritty
+cp assets/alacritty.yml $HOME/.config/alacritty/
 
 echo "Installing the miz script. finally!! :D"
 
