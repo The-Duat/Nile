@@ -31,7 +31,6 @@ The password for both the user and the root account on the live image is "123".
 - **Read the "Important Notes" section below:**
 
 **Important Notes:**
-- In the installation menu, you must select "NetworkManager" as the network, or the installation will fail.
 - When the menu asks if you want to chroot into the new install, select "No".
 
 - After selcting "No", follow the password prompts on the screen. The password prompts are talking about the passwords you have set for the installed root and user accounts, not the accounts on the live image.
