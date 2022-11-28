@@ -36,6 +36,7 @@ mkdir $HOME/.mizOS/src
 
 echo "Installing custom neofetch."
 echo "Uninstalling normal neofetch, if it exists."
+sudo -S pacman -S neofetch
 sudo -S pacman -R neofetch
 
 if test -f "/usr/bin/neofetch"; then
