@@ -69,11 +69,7 @@ fi
 
 
 
-echo "Installing yay, so you dont have to."
-cd $HOME/.mizOS
-git clone https://aur.archlinux.org/yay-git.git
-cd $HOME/.mizOS/yay-git
-makepkg -si
+
 
 
 
