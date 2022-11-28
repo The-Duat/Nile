@@ -208,5 +208,5 @@ client.unfocused #1e1e2e #000000 #000000 #1e1e2e #1e1e2e
 client.urgent #f38ba8 #000000 #000000 #f38ba8 #f38ba8
 
 bindsym $mod+shift+a exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
-bindsym $mod+shift+m exec picom --experimental-backends
+bindsym $mod+shift+m exec picom 
 bindsym $mod+shift+n exec pkill -fi picom
