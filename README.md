@@ -12,7 +12,7 @@ mizOS was something I created for my own personal use. mizOS installs some "bloa
 ```
 
 
-mizOS is a Linux distro focused on simplicity. It aims to centralize a lot of commands I typically use frequently, or are generally long/can't remember the name of. It puts everything under somewhat of an alias via a script called `miz`. mizOS takes a janky Arch Linux install, and turns it into something more polished towards my liking. mizOS also comes with some features geared more towards gamimg laptops, such as finer GPU management. I've also added a preconfigured i3-gaps installation, but I'm thinking of changing this to Gnome sometime.
+mizOS is a Linux distro focused on simplicity. It aims to centralize a lot of commands I typically use frequently, or are generally long/can't remember the name of. It puts everything under somewhat of an alias via a script called `miz`. mizOS takes a janky Arch Linux install, and turns it into something more polished towards my liking. mizOS also comes with some features geared more towards gaming laptops, such as finer GPU management. I've also added a preconfigured i3-gaps installation, but I'm thinking of changing this to Gnome sometime.
 
 There are 2 ways to install mizOS. You can either use the ISO image, or you can "hijack" a current Arch Linux or Arch Linux-based operating system already installed on your device, and convert it into mizOS.
 
