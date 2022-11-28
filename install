@@ -8,7 +8,7 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing a few dependencies."
-sudo -S pacman -S lua feh alacritty asusctl supergfxctl steam
+sudo -S pacman -S lua feh alacritty asusctl supergfxctl steam firefox neovim
 
 echo "Enabling asusctl and supergfxctl."
 sudo -S systemctl enable --now power-profiles-daemon.service
