@@ -241,12 +241,16 @@ local function package(op)
 			x("cd $HOME/.mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
 			if checkfile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
 				local info = require(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info.lua")
+				local pacpkgs = ""
+				local aurpkgs = ""
 				for _,pacdep in pairs(info.pacman_depends) do
-					ipkg(pacdep)
+					pacpkgs = pacpkgs .. pacdep
 				end
 				for _,aurdep in pairs(info.aur_depends) do
-					ypkg(aurdep)
+					aurpkgs = aurpkgs .. aurdep
 				end
+				ipkg(pacpkgs)
+				ypkg(aurpkgs)
 				x("mkdir $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
 				x("cp $HOME/.mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
 				x("cd $HOME/.mizOS/work/" .. pkgsplit[2] .. " && ./install")
@@ -255,6 +259,40 @@ local function package(op)
 			end
 		end
 	elseif op == "remove" then
+		io.write("\nRemove " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
+		if io.read() == "y" then
+			if checkfile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
+				local info = require(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua")
+				for _,file in pairs(info.files) do
+					x("sudo rm " .. file)
+				end
+				for _,folder in pairs(info.directories) do
+					x("sudo rm -rf " .. folder)
+				end
+				local pacpkgs = ""
+				local aurpkgs = ""
+				for _,pacdep in pairs(info.pacman_depends) do
+					pacpkgs = pacpkgs .. pacdep
+				end
+				for _,aurdep in pairs(info.aur_depends) do
+					aurpkgs = aurpkgs .. aurdep
+				end
+				print("Pacman dependencies:\n")
+				print(pacpkgs)
+				print("\n\nAUR dependencies:\n")
+				print(aurpkgs)
+				io.write("\n\nRemove dependencies for " .. arg[2] .. " ? (y/n)\n\n> ")
+				if io.read() == "y" then
+					x("sudo pacman -R " .. pacpkgs)
+					x("yay -R " .. aurpkgs)
+				end
+				print(arg[2] .. "has been uninstalled.")
+			else
+				print("[Error] - That package is not installed.")
+			end
+		end
+	elseif op == "list" then
+		x("ls $HOME/.mizOS/packages")
 	end
 end
 
@@ -296,7 +334,7 @@ local function software()
 		elseif arg[2] == "-p" then
 			x("sudo pacman -S " .. packages)
 		else
-			x("sudo pacman -S " .. packages)
+			package("install")
 		end
 	elseif arg[1] == "remove" then
 		if arg[2] == "-a" then
@@ -315,15 +353,17 @@ local function software()
 		elseif arg[2] == "-p" then
 			x("sudo pacman -Rn " .. packages)
 		else
-			x("sudo pacman -Rn " .. packages)
+			package("remove")
 		end
-	elseif arg[2] == "cc" then
+	elseif arg[1] == "cc" then
 		x("yay -Scc")
 		if init == "systemd" then
 			x("sudo journalctl --vacuum-time=21days")
 		else
 			print("SystemD not found, unable to clear journal logs.")
 		end
+	elseif arg[1] == "lspkgs" then
+		package("list")
 	else
 		print("[sw] > Command not found!")
 	end
@@ -518,6 +558,7 @@ mizos = {
 	["fetch"] = software,
 	["remove"] = software,
 	["cc"] = software,
+	["lspkgs"] = software,
 	["gfx"] = gfx,
 	["conf"] = config,
 	["update"] = update,
