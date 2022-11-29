@@ -309,7 +309,7 @@ local function software()
 		and ag ~= "fetch" 
 		and ag ~= "update" 
 		and ag ~= "remove" 
-		and ag ~= "-c" 
+		and ag ~= "-p" 
 		and ag ~= "-u" 
 		and ag ~= "-a" 
 		and ag ~= "neofetch" then
