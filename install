@@ -34,6 +34,12 @@ fi
 echo "creating $HOME/.mizOS/src"
 mkdir $HOME/.mizOS/src
 
+echo "Creating package folder."
+mkdir $HOME/.mizOS/packages
+
+echo "creating mizOS work folder."
+mkdir $HOME/.mizOS/work
+
 
 
 echo "Installing custom neofetch."
@@ -70,8 +76,7 @@ elif test -f "/usr/bin/rc-service"; then
 	touch $HOME/.mizOS/init/openrc
 fi
 
-echo "Creating package folder."
-mkdir $HOME/.mizOS/packages
+
 
 
 
