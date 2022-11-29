@@ -237,16 +237,19 @@ local function package(op)
 	if op == "install" then
 		io.write("\nInstall " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
 		if io.read() == "y" then
+			x([[su -c "rm -rf $HOME/.mizOS/work/*" root]])
 			x("cd $HOME/.mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
 			if checkfile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
-				lcoal info = require(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info.lua")
+				local info = require(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info.lua")
 				for _,pacdep in pairs(info.pacman_depends) do
 					ipkg(pacdep)
 				end
 				for _,aurdep in pairs(info.aur_depends) do
 					ypkg(aurdep)
 				end
-				x("cd " .. home .. "/.mizOS/work/" .. pkgsplit[2] .. " && ./install")
+				x("mkdir $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
+				x("cp $HOME/.mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
+				x("cd $HOME/.mizOS/work/" .. pkgsplit[2] .. " && ./install")
 			else
 				print("[Error] - That package either doesn't exist, or was not made correctly.")
 			end
