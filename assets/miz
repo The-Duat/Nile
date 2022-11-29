@@ -21,6 +21,20 @@ end
 
 
 
+---[=[ String split function ]=]--
+local function splitstr(ins, sep)
+	if sep == nil then
+		sep = " "
+	end
+	local t = {}
+	for str in string.gmatch(ins, "([^"..sep.."]+)") do
+		table.insert(t, str)
+	end
+	return t
+end
+
+
+
 --[=[ Check if file exists. ]=]--
 local function checkfile(name)
 	local file = io.open(name, "r")
@@ -217,6 +231,32 @@ end
 
 
 
+--[=[ mizOS package management. ]=]--
+local function package(op)
+	local pkgsplit = splitstr(arg[2], "/")
+	if op == "install" then
+		io.write("\nInstall " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
+		if io.read() == "y" then
+			x("cd $HOME/.mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
+			if checkfile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
+				lcoal info = require(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info.lua")
+				for _,pacdep in pairs(info.pacman_depends) do
+					ipkg(pacdep)
+				end
+				for _,aurdep in pairs(info.aur_depends) do
+					ypkg(aurdep)
+				end
+				x("cd " .. home .. "/.mizOS/work/" .. pkgsplit[2] .. " && ./install")
+			else
+				print("[Error] - That package either doesn't exist, or was not made correctly.")
+			end
+		end
+	elseif op == "remove" then
+	end
+end
+
+
+
 --[=[ Software management. ]=]--
 local function software()
 	local packages = ""
@@ -224,11 +264,10 @@ local function software()
 		if ag ~= "miz" 
 		and ag ~= "/bin/lua" 
 		and ag ~= "/usr/bin/miz" 
-		and ag ~= "./miz" 
-		and ag ~= "sw" 
-		and ag ~= "in" 
+		and ag ~= "./miz"  
+		and ag ~= "fetch" 
 		and ag ~= "update" 
-		and ag ~= "rm" 
+		and ag ~= "remove" 
 		and ag ~= "-c" 
 		and ag ~= "-u" 
 		and ag ~= "-a" 
