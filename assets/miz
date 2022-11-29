@@ -236,14 +236,14 @@ local function software()
 			packages = packages .. ag .. " "
 		end
 	end
-	if arg[2] == "in" then
-		if arg[3] == "-a" then
+	if arg[1] == "fetch" then
+		if arg[2] == "-a" then
 			ypkg(packages)
-		elseif arg[3] == "-c" then
+		elseif arg[2] == "-c" then
 			print("not implemented yet")
-		elseif arg[3] == "-u" then
+		elseif arg[2] == "-u" then
 			for _,desktop in pairs(uis) do
-                        	if desktop[1] == arg[4] then                                                 
+                        	if desktop[1] == arg[3] then                                                 
 					if desktop[3] == false then
                                         	ipkg(desktop[2])
                                 	elseif desktop[3] == true then
@@ -251,15 +251,17 @@ local function software()
 					end
                        		end
                 	end
+		elseif arg[2] == "-p" then
+			x("sudo pacman -S " .. packages)
 		else
 			x("sudo pacman -S " .. packages)
 		end
-	elseif arg[2] == "rm" then
-		if arg[3] == "-a" then
+	elseif arg[1] == "remove" then
+		if arg[2] == "-a" then
 			x("yay -Rn " .. packages)
-		elseif arg[3] == "-u" then
+		elseif arg[2] == "-u" then
 			for _,desktop in pairs(uis) do
-                                if desktop[1] == arg[4] then  
+                                if desktop[1] == arg[3] then  
 					if desktop[3] == false then
 						x("sudo pacman -Rn " .. desktop[2])
                                         elseif desktop[3] == true then
@@ -268,6 +270,8 @@ local function software()
                                         end
                                 end
                         end
+		elseif arg[2] == "-p" then
+			x("sudo pacman -Rn " .. packages)
 		else
 			x("sudo pacman -Rn " .. packages)
 		end
@@ -306,7 +310,7 @@ local function runit()
 			x("ls /etc/runit/sv/")
                 elseif arg[3] == "linked" then  
 			x("ls /run/runit/service/")
-                end
+                endq
 	else
 		print("[sv_runit] > Command not found!")
         end
@@ -428,7 +432,7 @@ local function info()
 	elseif arg[2] == "configlist" then
                 getconflist()
 	else
-		print("[info] > Command not found!")
+		x("neofetch")
 	end
 end
 
@@ -469,7 +473,9 @@ end
 --[=[ Core command processor. ]=]--
 mizos = {
 	["sv"] = service,
-	["sw"] = software,
+	["fetch"] = software,
+	["remove"] = software,
+	["cc"] = software,
 	["gfx"] = gfx,
 	["conf"] = config,
 	["update"] = update,

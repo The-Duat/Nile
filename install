@@ -70,7 +70,8 @@ elif test -f "/usr/bin/rc-service"; then
 	touch $HOME/.mizOS/init/openrc
 fi
 
-
+echo "Creating package folder."
+mkdir $HOME/.mizOS/packages
 
 
 
