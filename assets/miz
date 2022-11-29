@@ -240,7 +240,7 @@ local function package(op)
 			x([[su -c "rm -rf $HOME/.mizOS/work/*" root]])
 			x("cd $HOME/.mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
 			if checkfile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
-				local info = require(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info.lua")
+				local info = require(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info")
 				local pacpkgs = ""
 				local aurpkgs = ""
 				for _,pacdep in pairs(info.pacman_depends) do
@@ -262,7 +262,7 @@ local function package(op)
 		io.write("\nRemove " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
 		if io.read() == "y" then
 			if checkfile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
-				local info = require(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua")
+				local info = require(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info")
 				for _,file in pairs(info.files) do
 					x("sudo rm " .. file)
 				end
