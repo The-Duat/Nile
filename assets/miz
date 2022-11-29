@@ -392,7 +392,7 @@ local function runit()
 			x("ls /etc/runit/sv/")
                 elseif arg[3] == "linked" then  
 			x("ls /run/runit/service/")
-                endq
+                end
 	else
 		print("[sv_runit] > Command not found!")
         end
