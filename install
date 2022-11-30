@@ -8,11 +8,19 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing a few dependencies."
-sudo -S pacman -S lua feh alacritty asusctl supergfxctl steam firefox neovim
+sudo -S pacman -S lua feh alacritty steam firefox neovim
 
+printf "\n\n\nAre you installing SystemD mizOS onto an Asus laptop? (y/n)\n\n> "
+read ans
+
+if [ $ans == "y" ]; then
+sudo -S pacman -S asusctl supergfxctl
 echo "Enabling asusctl and supergfxctl."
 sudo -S systemctl enable --now power-profiles-daemon.service
 sudo -S systemctl enable --now supergfxd
+fi
+
+
 
 echo "Creating $HOME/.mizOS"
 if [ -d "$HOME/.mizOS" ]; then
