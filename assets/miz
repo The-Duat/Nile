@@ -551,7 +551,7 @@ local function update()
                 x("cd $HOME/.mizOS/src/mizOS && ./install")
 		local updatepkgst = capture("ls $HOME/.mizOS/packages")
 		local updatepkgs = splitstr(updatepkgst, " ")
-		for _,pkg in updatepkgs do
+		for _,pkg in pairs(updatepkgs) do
 			splitpkg = splitstr(pkg, "_")
 			finalpkg = splitpkg[1] .. "/" .. splitpkg[2]
 			package("remove", finalpkg)
