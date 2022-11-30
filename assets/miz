@@ -27,8 +27,10 @@ local function splitstr(ins, sep)
 		sep = " "
 	end
 	local t = {}
-	for str in string.gmatch(ins, "([^"..sep.."]+)") do
-		table.insert(t, str)
+	if ins and sep then
+		for str in string.gmatch(ins, "([^"..sep.."]+)") do
+			table.insert(t, str)
+		end
 	end
 	return t
 end
