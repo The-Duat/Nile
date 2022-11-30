@@ -33,6 +33,7 @@ mizOS has its own package manager, which can be used to install packages with th
 
 ###### Other
 - `miz cc` - Clears pacman + AUR cache, and journal logs if they exist.
+- `miz lspkgs` - Lists all installed mizOS packages.
 
 ## Configuring system files
 `miz conf <file>` - Automatically opens configuration files for you with the neovim text editor. "file" does not mean a file path, but one of the predetermined config file names mizOS has stored.
