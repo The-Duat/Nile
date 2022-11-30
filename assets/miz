@@ -233,7 +233,10 @@ end
 
 --[=[ mizOS package management. ]=]--
 local function package(op)
-	local pkgsplit = splitstr(arg[2], "/")
+	local pkgsplit
+	if arg[2] then
+		pkgsplit = splitstr(arg[2], "/")
+	end
 	if op == "install" then
 		io.write("\nInstall " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
 		if io.read() == "y" then
