@@ -261,10 +261,10 @@ local function package(op, thepkg)
 				local pacpkgs = ""
 				local aurpkgs = ""
 				for _,pacdep in pairs(info.pacman_depends) do
-					pacpkgs = pacpkgs .. pacdep
+					pacpkgs = pacpkgs .. pacdep .. " "
 				end
 				for _,aurdep in pairs(info.aur_depends) do
-					aurpkgs = aurpkgs .. aurdep
+					aurpkgs = aurpkgs .. aurdep .. " "
 				end
 				ipkg(pacpkgs)
 				ypkg(aurpkgs)
@@ -289,10 +289,10 @@ local function package(op, thepkg)
 				local pacpkgs = ""
 				local aurpkgs = ""
 				for _,pacdep in pairs(info.pacman_depends) do
-					pacpkgs = pacpkgs .. pacdep
+					pacpkgs = pacpkgs .. pacdep .. " "
 				end
 				for _,aurdep in pairs(info.aur_depends) do
-					aurpkgs = aurpkgs .. aurdep
+					aurpkgs = aurpkgs .. aurdep .. " "
 				end
 				print("Pacman dependencies:\n")
 				print(pacpkgs)
