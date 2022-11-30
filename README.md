@@ -6,23 +6,31 @@ Developed by [The Duat](https://theduat.neocities.org).
 ```
 ! PLEASE READ ! 
 
-After installation DO NOT use `sudo pacman -Syu` to update your system.
-Use `miz update` instead. Also, installing the `neofetch` pacman 
-package will break the custom neofetch mizOS provides.
+I HIGHLY recommend that you don't install mizOS as your
+daily driver. mizOS was made for me to personally use.
+Some aspects of mizOS are generally seen as bad, and 
+have the potential to break. 
 
-mizOS was something I created for my own personal use. mizOS installs
-some "bloat" that you probably don't want. All of this fixes some
-things that I personally don't like about typical Linux distros. I
-suggest not installing it as your daily driver, but I'm not stopping
-you either.
+If you  r e a l l y  want to install mizOS, I won't
+stop you. But just know that what you're getting into 
+might just be hell.
 ```
 
 
-mizOS is a Linux distro focused on simplicity. It aims to centralize a lot of commands I typically use frequently, or are generally long/can't remember the name of. It puts everything under somewhat of an alias via a script called `miz`. mizOS takes a janky Arch Linux install, and turns it into something more polished towards my liking. mizOS also comes with some features geared more towards gaming laptops, such as finer GPU management. mizOS also has some other features, such as a preconfigured i3-gaps installation, and its very own package manager.
+mizOS is a Linux Distro I created to perfectly suit my needs when it comes to how I want to use my system. It has everything I need, and gets additions whenever I feel like I need to add something.
+
+Nearly everything mizOS-related is controlled with a script called `miz`. `miz` is the heart of mizOS.
+
+Some features of mizOS include but are not limited to:
+- Finer hardware control for Asus laptop owners.
+- It's own packaging system + package manager for user-created packages.
+- Standardization of "init system" commands. 
 
 There are 2 ways to install mizOS. You can either use the ISO image, or you can "hijack" a current Arch Linux or Arch Linux-based operating system already installed on your device, and convert it into mizOS.
 
-The ISO image currently only supports SystemD. If you want to use a diffferent init system, you must use the hijack method. 
+- The ISO image currently only supports SystemD. If you want to use a diffferent init system, you must use the hijack method.
+
+- If you want to install mizOS onto an Asus laptop, you MUST use SystemD. `asusctl` and `supergfxctl` are simply not compatible with other init systems.
 
 mizOS currently supports the following init systems:
 - Runit
