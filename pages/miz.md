@@ -76,7 +76,11 @@ You can now directly edit mizOS source code with `miz config miz`.
 
 `miz gfx x i <command>` - Runs the given command on the Integrated GPU.
 
-`miz gfx mode <mode>` - Changes the your GPU setup. Modes are listed below.
+`miz gfx mode <mode>` - Changes your GPU setup.
+
+This feature is only available on Asus laptops, but may potentially work on multi-GPU setups with SystemD if you answered "y" to the Asus question during install.
+
+**gfx Modes:**
 - `i` - Uses your Integrated graphics card for graphics processing.
 - `d` - Uses your Dedicated graphics card for graphics processing.
 - `h` - Uses both graphics cards for graphics processing.
