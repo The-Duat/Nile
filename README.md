@@ -30,4 +30,8 @@ Pages:
 
 [Using the miz script](https://github.com/Mizosu97/mizOS/blob/main/pages/miz.md)
 
+[The mizOS package manager](https://github.com/Mizosu97/mizOS/blob/main/pages/pkg.md)
+
 [How do I use i3-gaps?](https://github.com/Mizosu97/mizOS/blob/main/pages/i3.md)
+
+
