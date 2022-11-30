@@ -35,6 +35,20 @@ end
 
 
 
+--[=[ Get shell command output. ]=]--
+local function capture(cmd, raw)
+	local file = assert(io.popen(cmd, 'r'))
+	local out = assert(file:read('*a'))
+	file:close()
+	if raw then return out end
+	out = string.gsub(out, '^%s+', '')
+	out = string.gsub(out, '%s+$', '')
+	out = string.gsub(out, '[\n\r]+', ' ')
+	return out
+end
+
+
+
 --[=[ Check if file exists. ]=]--
 local function checkfile(name)
 	local file = io.open(name, "r")
@@ -232,9 +246,9 @@ end
 
 
 --[=[ mizOS package management. ]=]--
-local function package(op)
+local function package(op, thepkg)
 	local pkgsplit
-	if arg[2] then
+	if thepkg then
 		pkgsplit = splitstr(arg[2], "/")
 	end
 	if op == "install" then
@@ -289,6 +303,7 @@ local function package(op)
 					x("sudo pacman -R " .. pacpkgs)
 					x("yay -R " .. aurpkgs)
 				end
+				x("sudo rm -rf $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
 				print(arg[2] .. "has been uninstalled.")
 			else
 				print("[Error] - That package is not installed.")
@@ -337,7 +352,7 @@ local function software()
 		elseif arg[2] == "-p" then
 			x("sudo pacman -S " .. packages)
 		else
-			package("install")
+			package("install", arg[2])
 		end
 	elseif arg[1] == "remove" then
 		if arg[2] == "-a" then
@@ -356,7 +371,7 @@ local function software()
 		elseif arg[2] == "-p" then
 			x("sudo pacman -Rn " .. packages)
 		else
-			package("remove")
+			package("remove", arg[2])
 		end
 	elseif arg[1] == "cc" then
 		x("yay -Scc")
@@ -366,7 +381,7 @@ local function software()
 			print("SystemD not found, unable to clear journal logs.")
 		end
 	elseif arg[1] == "lspkgs" then
-		package("list")
+		package("list", nil)
 	else
 		print("[sw] > Command not found!")
 	end
@@ -534,6 +549,14 @@ local function update()
                 x("rm -rf $HOME/.config/yourpicombackup")
                 x("rm -rf $HOME/.config/youralacrittybackup")
                 x("cd $HOME/.mizOS/src/mizOS && ./install")
+		local updatepkgst = capture("ls $HOME/.mizOS/packages")
+		local updatepkgs = splitstr(updatepkgst, " ")
+		for _,pkg in updatepkgs do
+			splitpkg = splitstr(pkg, "_")
+			finalpkg = splitpkg[1] .. "/" .. splitpkg[2]
+			package("remove", finalpkg)
+			package("install", finalpkg)
+		end
         end
 end
 
