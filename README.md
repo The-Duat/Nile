@@ -40,12 +40,12 @@ mizOS currently supports the following init systems:
 
 **Pages:**
 
-\\ [Installing mizOS](https://github.com/Mizosu97/mizOS/blob/main/pages/install.md)
+\\\ [Installing mizOS](https://github.com/Mizosu97/mizOS/blob/main/pages/install.md)
 
-\\ [Using the miz Script](https://github.com/Mizosu97/mizOS/blob/main/pages/miz.md)
+\\\ [Using the miz Script](https://github.com/Mizosu97/mizOS/blob/main/pages/miz.md)
 
-\\ [The mizOS Package Manager](https://github.com/Mizosu97/mizOS/blob/main/pages/pkg.md)
+\\\ [The mizOS Package Manager](https://github.com/Mizosu97/mizOS/blob/main/pages/pkg.md)
 
-\\ [How Do I Use i3-gaps?](https://github.com/Mizosu97/mizOS/blob/main/pages/i3.md)
+\\\ [How Do I Use i3-gaps?](https://github.com/Mizosu97/mizOS/blob/main/pages/i3.md)
 
 
