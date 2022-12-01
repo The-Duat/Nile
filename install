@@ -48,7 +48,8 @@ mkdir $HOME/.mizOS/packages
 echo "creating mizOS work folder."
 mkdir $HOME/.mizOS/work
 
-
+echo "Copying pkgsecurity"
+cp assets/pkgsecurity $HOME/.mizOS/
 
 echo "Installing custom neofetch."
 echo "Uninstalling normal neofetch, if it exists."

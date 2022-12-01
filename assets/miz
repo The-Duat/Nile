@@ -62,6 +62,17 @@ end
 
 
 
+--[=[ Read file contents ]=]--
+local function readfile(file)
+	local contents = ""
+	if checkfile(file) == true then
+		contents = capture("cat " .. file)
+	end
+	return contents
+end
+
+
+
 --[=[ https://github.com/Mizosu97/mgpu ]=]--
 local function mgpu()
 	local gcmd = ""
@@ -189,6 +200,11 @@ uis = {
 	{"xmonad", "xmonad", false}
 }
 
+local officialpkgs = {
+	"mizosu97/mizospkgtemplate",
+	"mizosu97/grapejuice"
+}
+
 local function getuilist()
 	print("List of DEs and WMs:")
 	print(" ")
@@ -314,6 +330,20 @@ local function package(op, thepkg)
 	elseif op == "list" then
 		x("ls $HOME/.mizOS/packages")
 	end
+end
+
+
+
+--[=[ Package Security ]=]--
+local function pkgsec()
+	if arg[2] == "disable" then
+		x([[echo "no" > $HOME/.mizOS/pkgsecurity]])
+	elseif arg[2] == "enable" then
+		x([[echo "yes" > $HOME/.mizOS/pkgsecurity]])
+	end
+end
+
+local function seccheck()
 end
 
 
