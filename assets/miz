@@ -197,7 +197,8 @@ uis = {
 	{"spectrwm", "spectrwm", false},
 	{"sway", "sway", false},
 	{"qtile", "qtile", false},
-	{"xmonad", "xmonad", false}
+	{"xmonad", "xmonad", false},
+	{"hyprland", "hyprland", true}
 }
 
 local officialpkgs = {
