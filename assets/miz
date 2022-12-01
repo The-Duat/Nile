@@ -202,7 +202,6 @@ uis = {
 }
 
 local officialpkgs = {
-	"mizosu97/mizospkgtemplate",
 	"mizosu97/grapejuice"
 }
 
