@@ -9,7 +9,7 @@ rm -rf $HOME/.confg/yourpicombackup
 echo "Removing HOME/.config/youri3backup"
 rm -rf $HOME/.config/youri3backup
 echo "Removing /usr/bin/miz"
-sufo rm /usr/bin/miz
+sudo rm /usr/bin/miz
 echo "Removing /usr/bin/neofetch"
 sudo rm /usr/bin/neofetch
 
