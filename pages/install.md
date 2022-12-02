@@ -35,6 +35,11 @@ The password for both the user and the root account on the live image is "123".
 
 - After selcting "No", follow the password prompts on the screen. The password prompts are asking for the passwords you have set for the installed root and user accounts, not the accounts on the live image.
 
+## Post Installation (Asus laptops only)
+**This only applies to ISO image installs.**
+
+After you install mizOS, and boot into it for the frst time, you need to run `miz gfx setup` to automatically set up asusctl and supergfxctl.
+
 # Method 2: Hijacking a pre-existing Arch Linux install.
 Hijacking an install gives more flexibilty on how you want your mizOS installation to be. You can even hijack an install with an init system that is not SystemD, as long as it is either Runit or OpenRC.
 
