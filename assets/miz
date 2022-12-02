@@ -343,7 +343,14 @@ local function pkgsec()
 	end
 end
 
-local function seccheck()
+local function secfetch()
+	print("mizOS package security is enabled. You'll only be able to install official packages.")
+	for _,pkg in pairs(officialpkgs) do
+		if arg[2] == pkg then
+			package("install", arg[2])
+		end
+	end
+	
 end
 
 
@@ -384,7 +391,11 @@ local function software()
 		elseif arg[2] == "-p" then
 			x("sudo pacman -S " .. packages)
 		else
-			package("install", arg[2])
+			if readfile("$HOME/.mizOS/pkgsecurity") == "yes" then
+				secfetch(arg[2])
+			else
+				package("install", arg[2])
+			end
 		end
 	elseif arg[1] == "remove" then
 		if arg[2] == "-a" then
