@@ -539,6 +539,8 @@ local function gfx()
                 elseif arg[3] == "v" then
                         x("supergfxctl --mode vfio")
                 end
+	elseif arg[2] == "setup" then
+		x("sudo systemctl enable --now power-profiles-daemon.service && sudo systemctl enable --now supergfxd")
 	else
 		print("[gfx] > Command not found!")
         end
