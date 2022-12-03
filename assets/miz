@@ -269,66 +269,68 @@ local function package(op, thepkg)
 	if thepkg then
 		pkgsplit = splitstr(arg[2], "/")
 	end
-	if op == "install" then
-		io.write("\nInstall " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
-		if io.read() == "y" then
-			x([[su -c "rm -rf $HOME/.mizOS/work/*" root]])
-			x("cd $HOME/.mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
-			if checkfile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
-				local info = dofile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info.lua")
-				local pacpkgs = ""
-				local aurpkgs = ""
-				for _,pacdep in pairs(info.pacman_depends) do
-					pacpkgs = pacpkgs .. pacdep .. " "
+	if pkgsplit[1] and pkgsplit[2] then
+		if op == "install" then
+			io.write("\nInstall " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
+			if io.read() == "y" then
+				x([[su -c "rm -rf $HOME/.mizOS/work/*" root]])
+				x("cd $HOME/.mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
+				if checkfile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
+					local info = dofile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info.lua")
+					local pacpkgs = ""
+					local aurpkgs = ""
+					for _,pacdep in pairs(info.pacman_depends) do
+						pacpkgs = pacpkgs .. pacdep .. " "
+					end
+					for _,aurdep in pairs(info.aur_depends) do
+						aurpkgs = aurpkgs .. aurdep .. " "
+					end
+					ipkg(pacpkgs)
+					ypkg(aurpkgs)
+					x("mkdir $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
+					x("cp $HOME/.mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
+					x("cd $HOME/.mizOS/work/" .. pkgsplit[2] .. " && ./install")
+				else
+					print("[Error] - That package either doesn't exist, or was not made correctly.")
 				end
-				for _,aurdep in pairs(info.aur_depends) do
-					aurpkgs = aurpkgs .. aurdep .. " "
-				end
-				ipkg(pacpkgs)
-				ypkg(aurpkgs)
-				x("mkdir $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-				x("cp $HOME/.mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
-				x("cd $HOME/.mizOS/work/" .. pkgsplit[2] .. " && ./install")
-			else
-				print("[Error] - That package either doesn't exist, or was not made correctly.")
 			end
-		end
-	elseif op == "remove" then
-		io.write("\nRemove " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
-		if io.read() == "y" then
-			if checkfile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
-				local info = dofile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua")
-				for _,file in pairs(info.files) do
-					x("sudo rm " .. file)
+		elseif op == "remove" then
+			io.write("\nRemove " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
+			if io.read() == "y" then
+				if checkfile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
+					local info = dofile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua")
+					for _,file in pairs(info.files) do
+						x("sudo rm " .. file)
+					end
+					for _,folder in pairs(info.directories) do
+						x("sudo rm -rf " .. folder)
+					end
+					local pacpkgs = ""
+					local aurpkgs = ""
+					for _,pacdep in pairs(info.pacman_depends) do
+						pacpkgs = pacpkgs .. pacdep .. " "
+					end
+					for _,aurdep in pairs(info.aur_depends) do
+						aurpkgs = aurpkgs .. aurdep .. " "
+					end
+					print("Pacman dependencies:\n")
+					print(pacpkgs)
+					print("\n\nAUR dependencies:\n")
+					print(aurpkgs)
+					io.write("\n\nRemove dependencies for " .. arg[2] .. " ? (y/n)\n\n> ")
+					if io.read() == "y" then
+						x("sudo pacman -R " .. pacpkgs)
+						x("yay -R " .. aurpkgs)
+					end
+					x("sudo rm -rf $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
+					print(arg[2] .. "has been uninstalled.")
+				else
+					print("[Error] - That package is not installed.")
 				end
-				for _,folder in pairs(info.directories) do
-					x("sudo rm -rf " .. folder)
-				end
-				local pacpkgs = ""
-				local aurpkgs = ""
-				for _,pacdep in pairs(info.pacman_depends) do
-					pacpkgs = pacpkgs .. pacdep .. " "
-				end
-				for _,aurdep in pairs(info.aur_depends) do
-					aurpkgs = aurpkgs .. aurdep .. " "
-				end
-				print("Pacman dependencies:\n")
-				print(pacpkgs)
-				print("\n\nAUR dependencies:\n")
-				print(aurpkgs)
-				io.write("\n\nRemove dependencies for " .. arg[2] .. " ? (y/n)\n\n> ")
-				if io.read() == "y" then
-					x("sudo pacman -R " .. pacpkgs)
-					x("yay -R " .. aurpkgs)
-				end
-				x("sudo rm -rf $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-				print(arg[2] .. "has been uninstalled.")
-			else
-				print("[Error] - That package is not installed.")
 			end
+		elseif op == "list" then
+			x("ls $HOME/.mizOS/packages")
 		end
-	elseif op == "list" then
-		x("ls $HOME/.mizOS/packages")
 	end
 end
 
