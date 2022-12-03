@@ -319,8 +319,8 @@ local function package(op, thepkg)
 					print(aurpkgs)
 					io.write("\n\nRemove dependencies for " .. thepkg .. " ? (y/n)\n\n> ")
 					if io.read() == "y" then
-						x("sudo pacman -R " .. pacpkgs)
-						x("yay -R " .. aurpkgs)
+						x("sudo pacman -Rn " .. pacpkgs)
+						x("yay -Rn " .. aurpkgs)
 					end
 					x("sudo rm -rf $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
 					print(thepkg .. "has been uninstalled.")
