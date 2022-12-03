@@ -267,7 +267,7 @@ end
 local function package(op, thepkg)
 	local pkgsplit
 	if thepkg then
-		pkgsplit = splitstr(arg[2], "/")
+		pkgsplit = splitstr(thepkg, "/")
 	end
 	if pkgsplit[1] and pkgsplit[2] then
 		if op == "install" then
