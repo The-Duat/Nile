@@ -274,7 +274,7 @@ local function package(op, thepkg)
 			io.write("\nInstall " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
 			if io.read() == "y" then
 				if string.lower(pkgsplit[1]) ~= "mizosu97" then
-					io.write([[\n\n\nTHIS IS NOT AN OFFICIAL mizOS PACKAGE!!!\n\nThis package contains code not moderated by the mizOS developers.\n\nThis package may cause harm to your system.\n\nIf you want to install this package, type "Yes, do as I say!"\n\n> ]])
+					io.write("\n\n\nTHIS IS NOT AN OFFICIAL mizOS PACKAGE!!!\n\nThis package contains code not moderated by the mizOS developers.\n\nThis package may cause harm to your system.\n\nIf you want to install this package, type < Yes, do as I say! > \n\n> ")
 					if io.read() ~= "Yes, do as I say!" then
 						return
 					end
