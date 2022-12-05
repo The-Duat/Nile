@@ -1,137 +1,151 @@
 #!/bin/bash
 
-thisDir=$(pwd)
-
-mkdir $HOME/.config
 
 echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing a few dependencies."
-sudo -S pacman -S lua feh alacritty steam firefox neovim
-
-printf "\n\n\nAre you installing SystemD mizOS onto an Asus laptop? (y/n)\n\n> "
-read ans
-
-if [ $ans == "y" ]; then
-sudo -S pacman -S asusctl supergfxctl
-echo "Enabling asusctl and supergfxctl."
-sudo -S systemctl enable --now power-profiles-daemon.service
-sudo -S systemctl enable --now supergfxd
-fi
+sudo -S pacman -S lua feh i3-gaps i3status dmenu xclip maim alacritty steam firefox neovim neofetch
 
 
-
-echo "Creating $HOME/.mizOS"
 if [ -d "$HOME/.mizOS" ]; then
-	echo "already made"
+	echo "mizOS is already installed, skippimg base system installation."
 else
+	printf "\n\n\nAre you installing SystemD mizOS onto an Asus laptop? (y/n)\n\n> "
+	read ans
+
+	if [ $ans == "y" ]; then
+		echo "Installing Asus laptop utilities."
+		sudo -S pacman -S asusctl supergfxctl
+		echo "Enabling asusctl and supergfxctl."
+		printf "\n\n\n Are you using the ISO image? (y/n)"
+		read ans
+		if [ $ans == "y" ]; then
+			echo "After installation, run miz gfx setup."
+		else
+			sudo -S systemctl enable --now power-profiles-daemon.service
+			sudo -S systemctl enable --now supergfxd
+		fi
+	fi
+
+	if [ -d "$HOME/.config" ]; then
+		echo ".config already exists."
+	else
+		mkdir $HOME/.config
+	fi
+
+	echo "Creating $HOME/.mizOS"
 	mkdir $HOME/.mizOS
 fi
 
 
-echo "Creating $HOME/.mizOS/wallpaper"
-if [ -d "$HOME/.mizOS/wallpaper" ]; then
-	rm -rf $HOME/.mizOS/wallpaper
-	mkdir $HOME/.mizOS/wallpaper
+
+
+if [ -d "$HOME/.mizOS/config" ]; then
+	echo "config folder present."
 else
+	echo "Creating $HOME/.mizOS/config"
+	mkdir $HOME/.mizOS/config
+fi
+
+
+if [ -d "$HOME/.mizOS/backup" ]; then
+	echo "backup folder present."
+else
+	echo "Creating $HOME/.mizOS/backup."
+	mkdir $HOME/.mizOS/backup
+fi
+
+
+if [ -d "$HOME/.mizOS/wallpaper" ]; then
+	echo "wallpaper folder present."
+else
+	echo "Creating $HOME/.mizOS/wallpaper"
 	mkdir $HOME/.mizOS/wallpaper
 fi
 
 
-echo "creating $HOME/.mizOS/src"
-mkdir $HOME/.mizOS/src
-
-echo "Creating package folder."
-mkdir $HOME/.mizOS/packages
-
-echo "creating mizOS work folder."
-mkdir $HOME/.mizOS/work
-
-echo "Copying pkgsecurity"
-cp assets/pkgsecurity $HOME/.mizOS/
-
-echo "Installing custom neofetch."
-echo "Uninstalling normal neofetch, if it exists."
-sudo -S pacman -S neofetch
-sudo -S pacman -R neofetch
-
-if test -f "/usr/bin/neofetch"; then
-	echo "Custom neofetch already installed, removing."
+if [ -d "$HOME/.mizOS/src" ]; then
+	echo "src folder present."
+else
+	echo "creating $HOME/.mizOS/src"
+	mkdir $HOME/.mizOS/src
 fi
 
+
+if [ -d "$HOME/.mizOS/packages" ]; then
+	echo "packages folder present."
+else
+	echo "Creating $HOME/.mizOS/packages"
+	mkdir $HOME/.mizOS/packages
+else
+
+
+if [ -d "$HOME/.mizOS/work" ]; then
+	echo "work folder present."
+else
+	echo "creating $HOME/.mizOS/work"
+	mkdir $HOME/.mizOS/work
+fi
+
+
+if [ -d $HOME/.mizOS/init ]; then
+	echo "init folder present."
+else
+	echo "Detecting init system."
+	mkdir $HOME/.mizOS/init
+	if test -f "/usr/bin/sv"; then
+		echo "Runit detected"
+		sudo -S touch /etc/mizOS/init/runit
+	elif test -f "/usr/bin/systemctl"; then
+		echo "SystemD detected"
+		sudo -S touch /etc/mizOS/init/systemd
+	elif test -f "/usr/bin/rc-service"; then
+		echo "openRC detected"
+		sudo -S touch /etc/mizOS/init/openrc
+	fi
+fi
+
+
+echo "Replacing original neofetch file."
 sudo -S rm /usr/bin/neofetch
-echo "Adding custom neofetch."
 sudo -S cp assets/neofetch /usr/bin
+
 
 echo "Adding that amazing wallpaper to $HOME/.mizOS/wallpaper."
 cp assets/wallpaper.png $HOME/.mizOS/wallpaper/
 
-if [ -d "$HOME/.mizOS/yay-git" ]; then
-	echo "yay build files found, removing"
-	rm -rf $HOME/.mizOS/yay-git
-fi
-
-echo "Detecting init."
-mkdir $HOME/.mizOS/init
-if test -f "/usr/bin/sv"; then
-	echo "Runit detected"
-	touch $HOME/.mizOS/init/runit
-elif test -f "/usr/bin/systemctl"; then
-	echo "SystemD detected"
-	touch $HOME/.mizOS/init/systemd
-elif test -f "/usr/bin/rc-service"; then
-	echo "openRC detected"
-	touch $HOME/.mizOS/init/openrc
-fi
+echo "mizOS is about to install configuration files for i3-gaps, picom, and alacritty. If you already have configuration files for these programs, they will be backed up to $HOME/.mizOS/backup."
 
 
-
-
-
-
-
-cd $thisDir
 
 if [ -d "$HOME/.config/i3" ]; then
-	echo "You already have an i3 config folder, were backing that up to HOME/.config/youri3backup."
-	mkdir $HOME/.config/youri3backup
-	mv $HOME/.config/i3/ $HOME/.config/youri3backup
+	echo "i3 folder present."
+	mv $HOME/.config/i3 $HOME/.mizOS/backup
 	mkdir $HOME/.config/i3
-	cp assets/i3/config $HOME/.config/i3/
-else 
-	echo "i3-gaps is not installed on this system, were fixing that."
-	sudo -S pacman -S i3-gaps i3status dmenu xclip maim
-	rm -rf $HOME/.config/i3
+else
+	echo "Creating $HOME/.config/i3"
 	mkdir $HOME/.config/i3
-	cp assets/i3/config $HOME/.config/i3/
 fi
 
-if test -f "$HOME/.config/picom.conf"; then
-	echo "You already have a picom config file, were backing that up to HOME/.config/yourpicombackup."
-	mkdir $HOME/.config/yourpicombackup
-	mv $HOME/.config/picom.conf $HOME/.config/yourpicombackup
-	cp assets/picom.conf $HOME/.config
-else
-	echo "Picom doesnt seem to be installed, fixing that now."
-	sudo -S pacman -S picom
-	rm $HOME/.config/picom.conf
-	cp assets/picom.conf $HOME/.config
-fi
 
-if [ -d "$HOME/.config/alacritty" ]; then
-	echo "alacritty config folder found. Backing it up to $HOME/.config/youralacrittybackup"
-	mkdir $HOME/.config/youralacrittybackup
-	mv $HOME/.config/alacritty $HOME/.config/youralacrittybackup
-else
-	echo "alacritty config folder not found, creating one"
-fi
+
+echo "Installing the i3 configuration file."
+cp assets/i3/config $HOME/.config/i3/
+
+
+echo "Installing the Picom configuration file."
+cp assets/picom.conf $HOME/.config
+
+
+echo "Installing the Alacritty config file."
 mkdir $HOME/.config/alacritty
-echo "Installing alacritty catppuccin theme"
-cp assets/alacritty.yml $HOME/.config/alacritty/
+cp assets/alacritty.yml $HOME/.config/alacritty
 
-echo "Installing the miz script. finally!! :D"
+echo "Configuration files added."
 
+
+echo "Installing the miz script."
 chmod +x assets/miz
 sudo -S cp assets/miz /usr/bin
 
@@ -140,6 +154,7 @@ echo "Changing your os-release file."
 sudo -S rm /etc/os-release
 sudo -S cp assets/os-release /etc
 
+
 echo "Changing your lsb-release file."
 sudo -S rm /etc/lsb-release
 sudo -S cp assets/lsb-release /etc
@@ -147,7 +162,6 @@ sudo -S cp assets/lsb-release /etc
 
 echo "My work here is done! You should probably reboot."
 echo "  "
-
 echo "If you are currently using i3-gaps, reload with MOD+shift+c, then press MOD+shift+n then MOD+shift+m to see theming changes."
 echo " "
 echo "! WARNING ! PLEASE REFRAIN FROM USING sudo pacman -Syu to update, instead, PLEASE use miz update"
