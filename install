@@ -78,7 +78,7 @@ if [ -d "$HOME/.mizOS/packages" ]; then
 else
 	echo "Creating $HOME/.mizOS/packages"
 	mkdir $HOME/.mizOS/packages
-else
+fi
 
 
 if [ -d "$HOME/.mizOS/work" ]; then
