@@ -148,7 +148,7 @@ echo "Installing the Alacritty config file."
 mkdir $HOME/.config/alacritty
 mkdir $HOME/.mizOS/config/alacritty
 cp assets/alacritty.yml $HOME/.config/alacritty
-cp assets/alacritty.yml $HOME/.mizOS/config
+cp assets/alacritty.yml $HOME/.mizOS/config/alacritty
 
 echo "Installing the Picom configuration file."
 cp assets/picom.conf $HOME/.config
