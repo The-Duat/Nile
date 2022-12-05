@@ -335,7 +335,7 @@ local function package(op, thepkg)
 				end
 			end
 		elseif op == "update" then
-			if checkfile(home .. "/.mizOS/packages" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
+			if checkfile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
 				io.write("\nUpdate " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
 				if io.read() == "y" then
 					if string.lower(pkgsplit[1]) ~= "mizosu97" then
