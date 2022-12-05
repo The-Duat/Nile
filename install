@@ -107,6 +107,7 @@ else
 fi
 
 
+
 echo "Replacing original neofetch file."
 sudo -S rm /usr/bin/neofetch
 sudo -S cp assets/neofetch /usr/bin
@@ -115,34 +116,47 @@ sudo -S cp assets/neofetch /usr/bin
 echo "Adding that amazing wallpaper to $HOME/.mizOS/wallpaper."
 cp assets/wallpaper.png $HOME/.mizOS/wallpaper/
 
+
+
 echo "mizOS is about to install configuration files for i3-gaps, picom, and alacritty. If you already have configuration files for these programs, they will be backed up to $HOME/.mizOS/backup."
 
-
-
 if [ -d "$HOME/.config/i3" ]; then
-	echo "i3 folder present."
+	echo "Backing up current i3 configuration."
 	mv $HOME/.config/i3 $HOME/.mizOS/backup
-	mkdir $HOME/.config/i3
-else
-	echo "Creating $HOME/.config/i3"
-	mkdir $HOME/.config/i3
 fi
 
 
+if [ -d "$HOME/.config/alacritty" ]; then
+	echo "Backing current alacritty configuration."
+	mv $HOME/.config/alacritty $HOME/.mizOS/backup
+fi
+
+
+if [ test -f "$HOME/.config/picom.conf" ]; then
+	echo "Backing up current picom configuration."
+	mv $HOME/.config/picom.conf $HOME/.mizOS/backup
+fi
+
 
 echo "Installing the i3 configuration file."
+mkdir $HOME/.config/i3
 cp assets/i3/config $HOME/.config/i3/
-
-
-echo "Installing the Picom configuration file."
-cp assets/picom.conf $HOME/.config
+cp -r assets/i3 $HOME/.mizOS/config
 
 
 echo "Installing the Alacritty config file."
 mkdir $HOME/.config/alacritty
+mkdir $HOME/.mizOS/config/alacritty
 cp assets/alacritty.yml $HOME/.config/alacritty
+cp assets/alacritty.yml $HOME/.mizOS/config
+
+echo "Installing the Picom configuration file."
+cp assets/picom.conf $HOME/.config
+cp assets/picom.conf $HOME/.mizOS/config
+
 
 echo "Configuration files added."
+
 
 
 echo "Installing the miz script."
@@ -158,6 +172,7 @@ sudo -S cp assets/os-release /etc
 echo "Changing your lsb-release file."
 sudo -S rm /etc/lsb-release
 sudo -S cp assets/lsb-release /etc
+
 
 
 echo "My work here is done! You should probably reboot."
