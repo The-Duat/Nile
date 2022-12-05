@@ -132,7 +132,7 @@ if [ -d "$HOME/.config/alacritty" ]; then
 fi
 
 
-if [ test -f "$HOME/.config/picom.conf" ]; then
+if [ -f "$HOME/.config/picom.conf" ]; then
 	echo "Backing up current picom configuration."
 	mv $HOME/.config/picom.conf $HOME/.mizOS/backup
 fi
