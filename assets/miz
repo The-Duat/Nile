@@ -273,6 +273,12 @@ local function package(op, thepkg)
 		if op == "install" then
 			io.write("\nInstall " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
 			if io.read() == "y" then
+				if string.lower(pkgsplit[1]) ~= "mizosu97" then
+					io.write([[\n\n\nTHIS IS NOT AN OFFICIAL mizOS PACKAGE!!!\n\nThis package contains code not moderated by the mizOS developers.\n\nThis package may cause harm to your system.\n\nIf you want to install this package, type "Yes, do as I say!"\n\n> ]])
+					if io.read() ~= "Yes, do as I say!" then
+						return
+					end
+				end
 				x([[su -c "rm -rf $HOME/.mizOS/work/*" root]])
 				x("cd $HOME/.mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
 				if checkfile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
@@ -336,27 +342,6 @@ end
 
 
 
---[=[ Package Security ]=]--
-local function pkgsec()
-	if arg[2] == "disable" then
-		x([[echo "no" > $HOME/.mizOS/pkgsecurity]])
-	elseif arg[2] == "enable" then
-		x([[echo "yes" > $HOME/.mizOS/pkgsecurity]])
-	end
-end
-
-local function secfetch()
-	print("mizOS package security is enabled. You'll only be able to install official packages.")
-	for _,pkg in pairs(officialpkgs) do
-		if arg[2] == pkg then
-			package("install", arg[2])
-		end
-	end
-	
-end
-
-
-
 --[=[ Software management. ]=]--
 local function software()
 	local packages = ""
@@ -393,11 +378,7 @@ local function software()
 		elseif arg[2] == "-p" then
 			x("sudo pacman -S " .. packages)
 		else
-			if readfile("$HOME/.mizOS/pkgsecurity") == "yes" then
-				secfetch(arg[2])
-			else
-				package("install", arg[2])
-			end
+			package("install", arg[2])
 		end
 	elseif arg[1] == "remove" then
 		if arg[2] == "-a" then
