@@ -612,7 +612,6 @@ local function update()
 		local updatepkgs = splitstr(updatepkgst, " ")
 		print("\n Updating mizOS packages: \n")
 		for _,pkg in pairs(updatepkgs) do
-			print(pkg)
 			local splitpkg = splitstr(pkg, "_")
 			if splitpkg[1] and splitpkg[2] then
 				print(splitpkg[1] .. "/" .. splitpkg[2])
