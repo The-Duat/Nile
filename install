@@ -5,7 +5,7 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing a few dependencies."
-sudo -S pacman -S lua feh i3-gaps i3status dmenu xclip maim alacritty steam firefox neovim neofetch
+sudo -S pacman -S lua feh i3-gaps i3status dmenu xclip maim alacritty firefox neovim neofetch
 
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS
@@ -32,14 +32,15 @@ else
 		fi
 	fi
 
-	if [ -d "$HOME/.config" ]; then
+	if [ -d "/.config" ]; then
 		echo ".config already exists."
 	else
 		mkdir $HOME/.config
 	fi
 
 	echo "Creating /var/mizOS"
-	mkdir /var/mizOS
+	sudo mkdir /var/mizOS
+	sudo chmod 777 /var/mizOS
 fi
 
 
