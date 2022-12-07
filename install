@@ -33,7 +33,7 @@ else
 		fi
 	fi
 
-	if [ -d "/.config" ]; then
+	if [ -d "$HOME/.config" ]; then
 		echo ".config already exists."
 	else
 		mkdir $HOME/.config
