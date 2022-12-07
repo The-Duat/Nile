@@ -129,7 +129,7 @@ rm -rf /var/mizOS/backup/*
 echo "Cleaning old config files, if any."
 rm -rf /var/mizOS/config/*
 
-echo "mizOS is about to install configuration files for i3-gaps, picom, and alacritty. If you already have configuration files for these programs, they will be backed up to /varmizOS/backup."
+echo "mizOS is about to install configuration files for i3-gaps, picom, and alacritty. If you already have configuration files for these programs, they will be backed up to /var/mizOS/backup."
 
 if [ -d "$HOME/.config/i3" ]; then
 	echo "Backing up current i3 configuration."
