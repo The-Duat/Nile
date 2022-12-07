@@ -99,11 +99,11 @@ end
 
 --[=[ Detect init system. ]=]--
 local init
-if checkfile(home .. "/.mizOS/init/runit") == true then
+if checkfile("/var/mizOS/init/runit") == true then
 	init = "runit"
-elseif checkfile(home .. "/.mizOS/init/systemd") == true then
+elseif checkfile("/var/mizOS/init/systemd") == true then
 	init = "systemd"
-elseif checkfile(home .. "/.mizOS/init/openrc") == true then
+elseif checkfile("/var/mizOS/init/openrc") == true then
 	init = "openrc"
 end
 
@@ -279,10 +279,10 @@ local function package(op, thepkg)
 						return
 					end
 				end
-				x([[su -c "rm -rf $HOME/.mizOS/work/*" root]])
-				x("cd $HOME/.mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
-				if checkfile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
-					local info = dofile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info.lua")
+				x([[su -c "rm -rf /var/mizOS/work/*" root]])
+				x("cd /var/mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
+				if checkfile("/var/mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
+					local info = dofile("/var/mizOS/work/" .. pkgsplit[2] .. "/info.lua")
 					local pacpkgs = ""
 					local aurpkgs = ""
 					for _,pacdep in pairs(info.pacman_depends) do
@@ -294,8 +294,8 @@ local function package(op, thepkg)
 					ipkg(pacpkgs)
 					ypkg(aurpkgs)
 					x("mkdir $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-					x("cp $HOME/.mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
-					x("cd $HOME/.mizOS/work/" .. pkgsplit[2] .. " && ./install")
+					x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
+					x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./install")
 				else
 					print("[Error] - That package either doesn't exist, or was not made correctly.")
 				end
@@ -303,8 +303,8 @@ local function package(op, thepkg)
 		elseif op == "remove" then
 			io.write("\nRemove " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
 			if io.read() == "y" then
-				if checkfile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
-					local info = dofile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua")
+				if checkfile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
+					local info = dofile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua")
 					for _,file in pairs(info.files) do
 						x("sudo rm " .. file)
 					end
@@ -328,14 +328,14 @@ local function package(op, thepkg)
 						x("sudo pacman -Rn " .. pacpkgs)
 						x("yay -Rn " .. aurpkgs)
 					end
-					x("sudo rm -rf $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
+					x("sudo rm -rf /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
 					print(thepkg .. "has been uninstalled.")
 				else
 					print("[Error] - That package is not installed.")
 				end
 			end
 		elseif op == "update" then
-			if checkfile(home .. "/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
+			if checkfile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
 				io.write("\nUpdate " .. pkgsplit[2] .. " by " .. pkgsplit[1] .. "? (y/n)\n\n> ")
 				if io.read() == "y" then
 					if string.lower(pkgsplit[1]) ~= "mizosu97" then
@@ -344,11 +344,11 @@ local function package(op, thepkg)
 							return
 						end
 					end
-					x("rm -rf $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-					x([[su -c "rm -rf $HOME/.mizOS/work/*" root]])
-					x("cd $HOME/.mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
-					if checkfile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
-						local info = dofile(home .. "/.mizOS/work/" .. pkgsplit[2] .. "/info.lua")
+					x("rm -rf /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
+					x([[su -c "rm -rf /var/mizOS/work/*" root]])
+					x("cd /var/mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
+					if checkfile("/var/mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
+						local info = dofile("/var/mizOS/work/" .. pkgsplit[2] .. "/info.lua")
 						local pacpkgs = ""
 						local aurpkgs = ""
 						for _,pacdep in pairs(info.pacman_depends) do
@@ -359,16 +359,16 @@ local function package(op, thepkg)
 						end
 						ipkg(pacpkgs)
 						ypkg(aurpkgs)
-						x("mkdir $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-						x("cp $HOME/.mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
-						x("cd $HOME/.mizOS/work/" .. pkgsplit[2] .. " && ./update")
+						x("mkdir /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
+						x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
+						x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./update")
 					else
 						print("[Error] - That package either doesn't exist, or was not made correctly.")
 					end
 				end
 			end
 		elseif op == "list" then
-			x("ls $HOME/.mizOS/packages")
+			x("ls /var/mizOS/packages")
 		end
 	end
 end
@@ -582,7 +582,7 @@ local function info()
                 print("https://discord.gg/CzHw7cXKCx")
                 print(" ")
         elseif arg[2] == "source" then
-		prjnt(" ")
+		print(" ")
                 print("https://github.com/Mizosu97/mizOS")
         elseif arg[2] == "creator" then
                 print(" ")
@@ -603,12 +603,12 @@ end
 local function update()
 	io.write("Update mizOS? y/n \n\n> ")
         if io.read() == "y" then
-                x("sudo rm -rf $HOME/.mizOS/src/mizOS")
-                x("cd $HOME/.mizOS/src && git clone https://github.com/Mizosu97/mizOS")
+                x("sudo rm -rf /var/mizOS/src/mizOS")
+                x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS")
                 x("sudo rm /usr/bin/miz")
-		x("rm -rf $HOME/.mizOS/backup/* && rm -rf $HOME/.mizOS/config/*")
-                x("cd $HOME/.mizOS/src/mizOS && ./install")
-		local updatepkgst = capture("ls $HOME/.mizOS/packages")
+		x("rm -rf /var/mizOS/backup/* && rm -rf /var/mizOS/config/*")
+                x("cd /var/mizOS/src/mizOS && ./install")
+		local updatepkgst = capture("ls /var/mizOS/packages")
 		local updatepkgs = splitstr(updatepkgst, " ")
 		print("\n Updating mizOS packages: \n")
 		for _,pkg in pairs(updatepkgs) do

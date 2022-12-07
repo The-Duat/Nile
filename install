@@ -7,9 +7,13 @@ sudo -S pacman -Syu
 echo "Installing a few dependencies."
 sudo -S pacman -S lua feh i3-gaps i3status dmenu xclip maim alacritty steam firefox neovim neofetch
 
-
 if [ -d "$HOME/.mizOS" ]; then
-	echo "mizOS is already installed, skippimg base system installation."
+	mv $HOME/.mizOS $HOME/mizOS
+	mv $HOME/mizOS /var/
+fi
+
+if [ -d "/var/mizOS" ]; then
+	echo "mizOS is already installed, skipping base system installation."
 else
 	printf "\n\n\nAre you installing SystemD mizOS onto an Asus laptop? (y/n)\n\n> "
 	read ans
@@ -34,75 +38,75 @@ else
 		mkdir $HOME/.config
 	fi
 
-	echo "Creating $HOME/.mizOS"
-	mkdir $HOME/.mizOS
+	echo "Creating /var/mizOS"
+	mkdir /var/mizOS
 fi
 
 
 
 
-if [ -d "$HOME/.mizOS/config" ]; then
+if [ -d "/var/mizOS/config" ]; then
 	echo "config folder present."
 else
-	echo "Creating $HOME/.mizOS/config"
-	mkdir $HOME/.mizOS/config
+	echo "Creating /var/mizOS/config"
+	mkdir /var/mizOS/config
 fi
 
 
-if [ -d "$HOME/.mizOS/backup" ]; then
+if [ -d "/var/mizOS/backup" ]; then
 	echo "backup folder present."
 else
-	echo "Creating $HOME/.mizOS/backup."
-	mkdir $HOME/.mizOS/backup
+	echo "Creating /var/mizOS/backup."
+	mkdir /var/mizOS/backup
 fi
 
 
-if [ -d "$HOME/.mizOS/wallpaper" ]; then
+if [ -d "/var/mizOS/wallpaper" ]; then
 	echo "wallpaper folder present."
 else
-	echo "Creating $HOME/.mizOS/wallpaper"
-	mkdir $HOME/.mizOS/wallpaper
+	echo "Creating /var/mizOS/wallpaper"
+	mkdir /var/mizOS/wallpaper
 fi
 
 
-if [ -d "$HOME/.mizOS/src" ]; then
+if [ -d "/var/mizOS/src" ]; then
 	echo "src folder present."
 else
-	echo "creating $HOME/.mizOS/src"
-	mkdir $HOME/.mizOS/src
+	echo "creating /var/mizOS/src"
+	mkdir /var/mizOS/src
 fi
 
 
-if [ -d "$HOME/.mizOS/packages" ]; then
+if [ -d "/var/mizOS/packages" ]; then
 	echo "packages folder present."
 else
-	echo "Creating $HOME/.mizOS/packages"
-	mkdir $HOME/.mizOS/packages
+	echo "Creating /var/mizOS/packages"
+	mkdir /var/mizOS/packages
 fi
 
 
-if [ -d "$HOME/.mizOS/work" ]; then
+if [ -d "/var/mizOS/work" ]; then
 	echo "work folder present."
 else
-	echo "creating $HOME/.mizOS/work"
-	mkdir $HOME/.mizOS/work
+	echo "creating /var/mizOS/work"
+	mkdir /var/mizOS/work
 fi
 
 
-if [ -d $HOME/.mizOS/init ]; then
+if [ -d /var/mizOS/init ]; then
 	echo "init folder present."
 else
 	echo "Detecting init system."
-	mkdir $HOME/.mizOS/init
+	mkdir /var/mizOS/init
 	if test -f "/usr/bin/sv"; then
 		echo "Runit detected"
-		sudo -S touch /etc/mizOS/init/runit
+		touch /var/mizOS/init/runit
 	elif test -f "/usr/bin/systemctl"; then
 		echo "SystemD detected"
-		sudo -S touch /etc/mizOS/init/systemd
+		touch /var/mizOS/init/systemd
 	elif test -f "/usr/bin/rc-service"; then
 		echo "openRC detected"
-		sudo -S touch /etc/mizOS/init/openrc
+		touch /var/mizOS/init/openrc
 	fi
 fi
 
@@ -113,46 +117,46 @@ sudo -S rm /usr/bin/neofetch
 sudo -S cp assets/neofetch /usr/bin
 
 
-echo "Adding that amazing wallpaper to $HOME/.mizOS/wallpaper."
-cp assets/wallpaper.png $HOME/.mizOS/wallpaper/
+echo "Adding that amazing wallpaper to /var/mizOS/wallpaper."
+cp assets/wallpaper.png /var/mizOS/wallpaper/
 
 
 
-echo "mizOS is about to install configuration files for i3-gaps, picom, and alacritty. If you already have configuration files for these programs, they will be backed up to $HOME/.mizOS/backup."
+echo "mizOS is about to install configuration files for i3-gaps, picom, and alacritty. If you already have configuration files for these programs, they will be backed up to /varmizOS/backup."
 
 if [ -d "$HOME/.config/i3" ]; then
 	echo "Backing up current i3 configuration."
-	mv $HOME/.config/i3 $HOME/.mizOS/backup
+	mv $HOME/.config/i3 /var/mizOS/backup
 fi
 
 
 if [ -d "$HOME/.config/alacritty" ]; then
 	echo "Backing current alacritty configuration."
-	mv $HOME/.config/alacritty $HOME/.mizOS/backup
+	mv $HOME/.config/alacritty /var/mizOS/backup
 fi
 
 
 if [ -f "$HOME/.config/picom.conf" ]; then
 	echo "Backing up current picom configuration."
-	mv $HOME/.config/picom.conf $HOME/.mizOS/backup
+	mv $HOME/.config/picom.conf /var/mizOS/backup
 fi
 
 
 echo "Installing the i3 configuration file."
 mkdir $HOME/.config/i3
 cp assets/i3/config $HOME/.config/i3/
-cp -r assets/i3 $HOME/.mizOS/config
+cp -r assets/i3 /var/mizOS/config
 
 
 echo "Installing the Alacritty config file."
 mkdir $HOME/.config/alacritty
-mkdir $HOME/.mizOS/config/alacritty
+mkdir /var/mizOS/config/alacritty
 cp assets/alacritty.yml $HOME/.config/alacritty
-cp assets/alacritty.yml $HOME/.mizOS/config/alacritty
+cp assets/alacritty.yml /var/mizOS/config/alacritty
 
 echo "Installing the Picom configuration file."
 cp assets/picom.conf $HOME/.config
-cp assets/picom.conf $HOME/.mizOS/config
+cp assets/picom.conf /var/mizOS/config
 
 
 echo "Configuration files added."
