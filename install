@@ -10,6 +10,7 @@ sudo -S pacman -S lua feh i3-gaps i3status dmenu xclip maim alacritty firefox ne
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS
 	mv $HOME/mizOS /var/
+	sudo chmod 777 /var/mizOS
 fi
 
 if [ -d "/var/mizOS" ]; then
@@ -122,6 +123,11 @@ echo "Adding that amazing wallpaper to /var/mizOS/wallpaper."
 cp assets/wallpaper.png /var/mizOS/wallpaper/
 
 
+echo "Cleaning old backups, if any."
+rm -rf /var/mizOS/backup/*
+
+echo "Cleaning old config files, if any."
+rm -rf /var/mizOS/config/*
 
 echo "mizOS is about to install configuration files for i3-gaps, picom, and alacritty. If you already have configuration files for these programs, they will be backed up to /varmizOS/backup."
 
@@ -165,6 +171,9 @@ echo "Configuration files added."
 
 
 echo "Installing the miz script."
+if [ -f "/usr/bin/miz" ]; then
+	sudo rm /usr/bin/miz
+fi
 chmod +x assets/miz
 sudo -S cp assets/miz /usr/bin
 
@@ -179,9 +188,14 @@ sudo -S rm /etc/lsb-release
 sudo -S cp assets/lsb-release /etc
 
 
+if [ -d "/var/mizOS/src/mizOS" ]; then
+	echo "Cleaning source folder"
+	rm -rf /var/mizOS/src/mizOS
+fi
+
 
 echo "My work here is done! You should probably reboot."
 echo "  "
-echo "If you are currently using i3-gaps, reload with MOD+shift+c, then press MOD+shift+n then MOD+shift+m to see theming changes."
+echo "If you are currently using i3-gaps, reload with MOD+shift+c to see theming changes."
 echo " "
 echo "! WARNING ! PLEASE REFRAIN FROM USING sudo pacman -Syu to update, instead, PLEASE use miz update"
