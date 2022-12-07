@@ -603,11 +603,7 @@ end
 local function update()
 	io.write("Update mizOS? y/n \n\n> ")
         if io.read() == "y" then
-                x("sudo rm -rf /var/mizOS/src/mizOS")
-                x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS")
-                x("sudo rm /usr/bin/miz")
-		x("rm -rf /var/mizOS/backup/* && rm -rf /var/mizOS/config/*")
-                x("cd /var/mizOS/src/mizOS && ./install")
+                print("Updating mizOS packages.")
 		local updatepkgst = capture("ls /var/mizOS/packages")
 		local updatepkgs = splitstr(updatepkgst, " ")
 		print("\n Updating mizOS packages: \n")
@@ -619,6 +615,10 @@ local function update()
 				package("update", finalpkg)
 			end
 		end
+		print("Downloading mizOS source code.")
+		x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS")
+		print("Performing system update.")
+                x("cd /var/mizOS/src/mizOS && ./install")
         end
 end
 
