@@ -189,7 +189,7 @@ sudo -S cp assets/lsb-release /etc
 
 
 if [ -d "/var/mizOS/src/mizOS" ]; then
-	echo "Cleaning source folder"
+	echo "Cleaning source folder."
 	rm -rf /var/mizOS/src/mizOS
 fi
 
