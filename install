@@ -151,19 +151,19 @@ fi
 
 echo "Installing the i3 configuration file."
 mkdir $HOME/.config/i3
-cp assets/i3/config $HOME/.config/i3/
-cp -r assets/i3 /var/mizOS/config
+cp assets/config/i3/config $HOME/.config/i3/
+cp -r assets/config/i3 /var/mizOS/config
 
 
 echo "Installing the Alacritty config file."
 mkdir $HOME/.config/alacritty
 mkdir /var/mizOS/config/alacritty
-cp assets/alacritty.yml $HOME/.config/alacritty
-cp assets/alacritty.yml /var/mizOS/config/alacritty
+cp assets/config/alacritty.yml $HOME/.config/alacritty
+cp assets/config/alacritty.yml /var/mizOS/config/alacritty
 
 echo "Installing the Picom configuration file."
-cp assets/picom.conf $HOME/.config
-cp assets/picom.conf /var/mizOS/config
+cp assets/config/picom.conf $HOME/.config
+cp assets/config/picom.conf /var/mizOS/config
 
 
 echo "Configuration files added."
@@ -174,18 +174,18 @@ echo "Installing the miz script."
 if [ -f "/usr/bin/miz" ]; then
 	sudo rm /usr/bin/miz
 fi
-chmod +x assets/miz
-sudo -S cp assets/miz /usr/bin
+chmod +x assets/os/miz
+sudo -S cp assets/os/miz /usr/bin
 
 
 echo "Changing your os-release file."
 sudo -S rm /etc/os-release
-sudo -S cp assets/os-release /etc
+sudo -S cp assets/details/os-release /etc
 
 
 echo "Changing your lsb-release file."
 sudo -S rm /etc/lsb-release
-sudo -S cp assets/lsb-release /etc
+sudo -S cp assets/details/lsb-release /etc
 
 
 if [ -d "/var/mizOS/src/mizOS" ]; then

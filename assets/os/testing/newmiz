@@ -1,0 +1,20 @@
+#!/bin/lua
+
+local mizOS = dofile("mizOS.lua")
+
+local basecommands = {
+	["sv"] = mizOS.service,
+	["fetch"] = mizOS.software,
+	["cc"] = mizOS.software,
+	["lspkgs"] = mizOS.software,
+	["gfx"] = mizOS.gfx,
+	["conf"] = mizOS.config,
+	["update"] = mizOS.update,
+	["info"] = mizOS.info
+}
+
+if basecommands[arg[1]] then
+	basecommands[arg[1]](arg)
+else
+	mizOS.root(arg)
+end
