@@ -1,5 +1,0 @@
-#!/bin/lua
-
-for _,v in pairs(arg) do
-	print(v)
-end

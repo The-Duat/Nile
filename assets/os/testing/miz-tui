@@ -1,0 +1,81 @@
+#!/bin/lua
+
+local mizos = dofile("/data/data/com.termux/files/home/mizos/assets/os/testing/mizOS.lua")
+
+local function key()
+	os.execute("stty cbreak </dev/tty >/dev/tty 2>&1")
+	local key = io.read(1)
+	os.execute("stty -cbreak </dev/tty >/dev/tty 2>&1");
+	return(key);    
+end
+
+
+
+local function cmenu(menu)
+	os.execute("clear")
+	local id = 1
+	for _,listing in pairs(menu) do
+		local prefix = "\x1b[38;2;255;255;255m"
+		local postfix = "\x1b[38;2;255;255;255m"
+		if listing[3] == true then
+			prefix = "\x1b[38;2;0;0;255m"
+		end
+		if listing[2] == id then
+			print(prefix .. listing[1] .. postfix)
+			id = id + 1
+		end
+	end
+end
+
+
+local main = {
+		{"Clone repo", 1, true},
+		{"Edit repo", 2, false},
+		{"Push repo", 3, false}
+}
+
+
+
+
+
+local currentmenu = main
+
+
+
+local function move(con)
+	local currentdir 
+	local todir
+	local controls = {
+		["^[[A"] = "up",
+		["^[[B"] = "down"
+	}
+
+	for _,listing in pairs(currentmenu) do
+		if listing[3] == true then
+			currentdir = listing[2]
+		end
+		currentmenu[listing[3]] = false
+	end
+
+	if controls[con] == "up" then
+		todir = currentdir - 1
+	elseif controls[con] == "down" then
+		todir = currentdir + 1
+	end
+	for _,listing in pairs(currentmenu) do
+		if listing[1] == todir then
+			currentmenu[listing[2]] = true
+		end
+	end
+	cmenu(currentmenu)
+end
+
+cmenu(currentmenu)
+
+while true do
+	k = key()
+	if k ~= "function: 0xb4000078ada06450" then
+		move(con)
+	end
+end
+
