@@ -5,7 +5,7 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing a few dependencies."
-sudo -S pacman -S lua feh i3-gaps i3status dmenu xclip maim alacritty firefox neovim neofetch
+sudo -S pacman -S lua feh i3-gaps i3status dmenu xclip maim alacritty firefox neovim neofetch fish
 
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS
@@ -42,6 +42,8 @@ else
 	echo "Creating /var/mizOS"
 	sudo mkdir /var/mizOS
 	sudo chmod 777 /var/mizOS
+	echo "Enabling fish."
+	echo "fish" >> $HOME/.bashrc
 fi
 
 
@@ -155,6 +157,10 @@ if [ -f "$HOME/.config/picom.conf" ]; then
 	mv $HOME/.config/picom.conf /var/mizOS/backup
 fi
 
+if [ -f "$HOME/.config/fish/config.fish" ]; then
+	echo "Backing up current fish configuration."
+	mv $HOME/.config/fish/config.fish /var/mizOS/backup
+fi
 
 echo "Installing the i3 configuration file."
 mkdir $HOME/.config/i3
@@ -167,6 +173,10 @@ mkdir $HOME/.config/alacritty
 mkdir /var/mizOS/config/alacritty
 cp assets/config/alacritty.yml $HOME/.config/alacritty
 cp assets/config/alacritty.yml /var/mizOS/config/alacritty
+
+echo "Installing the fish configuration file."
+cp assets/config/config.fish $HOME/.config/fish
+cp assets/config/config.fish /var/mizOS/config
 
 echo "Installing the Picom configuration file."
 cp assets/config/picom.conf $HOME/.config

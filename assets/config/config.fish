@@ -3,7 +3,7 @@ if status is-interactive
 	end
 
 	function fish_prompt
-		echo -e "\x1b[38;2;186;194;222m┌──(\x1b[38;2$(whoami)@$hostname)─[$PWD]"
+		echo -e "\x1b[38;2;186;194;222m┌──(\x1b[38;2;245;194;231m$(whoami)@$hostname\x1b[38;2;186;194;222m)─[\x1b[38;2;245;194;231m$PWD\x1b[38;2;186;194;222m]"
 		echo -e "└─\\ "
 	end
 end
