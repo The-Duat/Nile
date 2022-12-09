@@ -1,9 +1,8 @@
-# miz Script Documentation
+# miz Frontend Documentation
 
-The core of mizOS is a script called `miz`.
+The `miz` frontend is the official frontend for interacting with mizOS. It is generally recommended to use the `miz` frontend as opposed to other frontends, as it is the most up-to-date, and has the most features.
 
-The `miz` script contains a lot of options (arguments). You can read up on how to use the `miz` script below.
-
+- Fun fact, the mizOS backend was originally hardcoded into the `miz` frontend. The decision to split mizOS into a frontend and backend was made on December 8th, 2022, with the update being pushed the next day.
 
 ## Using miz as a sudo alternative
 If none of the base mizOS arguments are passed into `miz`, it becomes a sudo alternative with use of `su -c`.
