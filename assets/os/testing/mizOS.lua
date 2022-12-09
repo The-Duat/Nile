@@ -8,8 +8,18 @@
 local system = {}
 
 
+
+
+
 --[=[--[=[ GENERAL PURPOSE FUNCTIONS. ]=]--]=]--
+
+
+
+
+
 local home = os.getenv("HOME")
+
+
 
 --[=[ Command shorteners. ]=]--
 local function x(cmd)
@@ -78,45 +88,14 @@ end
 
 
 
+
+
 --[=[--[=[ MIZOS SYSTEM ]=]--]=]--
 
---[=[ https://github.com/Mizosu97/mgpu ]=]--
-local function mgpu(arguments)
-	local gcmd = ""
-	for _,ag in pairs(arguments) do
-		if ag ~= "miz" 
-		and ag ~= "/bin/lua" 
-		and ag ~= "/usr/bin/miz" 
-		and ag ~= "./miz" 
-		and ag ~= "d" 
-		and ag ~= "i" 
-		and ag ~= "gfx" 
-		and ag ~= "x" then
-			gcmd = gcmd .. ag .. " "
-		end
-	end
-	if arguments[3] == "d" then
-		x("export DRI_PRIME=1 && exec " .. gcmd)
-	elseif arguments[3] == "i" then
-		x("export DRI_PRIME=0 && exec " .. gcmd)
-	end
-end
 
 
 
---[=[ Detect init system. ]=]--
-local init
-if checkfile("/var/mizOS/init/runit") == true then
-	init = "runit"
-elseif checkfile("/var/mizOS/init/systemd") == true then
-	init = "systemd"
-elseif checkfile("/var/mizOS/init/openrc") == true then
-	init = "openrc"
-end
-
-
-
---[=[ Preset list of Desktop Environments and Window Managers. ]=]--
+--[=[ User Interface Data ]=]--
 uis = { 
 	{"budgie", "budgie-desktop", false},
 	{"cinnamon", "cinnamon", false},
@@ -208,6 +187,58 @@ uis = {
 	{"hyprland", "hyprland", true}
 }
 
+
+
+--[=[ Configuration file data. ]=]--
+conf = {
+	{"miz", "/usr/bin/miz", true},
+	{"i3", home .. "/.config/i3/config", false},
+	{"pacman", "/etc/pacman.conf", true},
+	{"xrc", home .. "/.xinitrc", false}
+	{"bashrc", home .. "/.bashrc", false}
+}
+
+
+
+--[=[ Detect init system. ]=]--
+local init
+if checkfile("/var/mizOS/init/runit") == true then
+	init = "runit"
+elseif checkfile("/var/mizOS/init/systemd") == true then
+	init = "systemd"
+elseif checkfile("/var/mizOS/init/openrc") == true then
+	init = "openrc"
+end
+
+
+
+--[=[ https://github.com/Mizosu97/mgpu ]=]--
+local function mgpu(arguments)
+	local gcmd = ""
+	for _,ag in pairs(arguments) do
+		if ag ~= "miz" 
+		and ag ~= "/bin/lua" 
+		and ag ~= "/usr/bin/miz" 
+		and ag ~= "./miz" 
+		and ag ~= "d" 
+		and ag ~= "i" 
+		and ag ~= "gfx" 
+		and ag ~= "x" then
+			gcmd = gcmd .. ag .. " "
+		end
+	end
+	if arguments[3] == "d" then
+		x("export DRI_PRIME=1 && exec " .. gcmd)
+	elseif arguments[3] == "i" then
+		x("export DRI_PRIME=0 && exec " .. gcmd)
+	end
+end
+
+
+
+--[=[ Preset list of Desktop Environments and Window Managers. ]=]--
+
+
 local officialpkgs = {
 	"mizosu97/grapejuice"
 }
@@ -229,12 +260,7 @@ end
 
 
 --[=[ Configuration file editor. ]=]--
-conf = {
-	{"miz", "/usr/bin/miz", true},
-	{"i3", home .. "/.config/i3/config", false},
-	{"pacman", "/etc/pacman.conf", true},
-	{"xrc", home .. "/.xinitrc", false}
-}
+
 
 local function getconflist()
 	print("List of available config files:")
