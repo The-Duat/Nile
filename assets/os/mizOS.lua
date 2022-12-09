@@ -1,4 +1,4 @@
--m- Made by https://theduat.neocities.org
+-- Made by https://theduat.neocities.org
 
 
 --[=[--[=[--[=[ THIS SCRIPT STORES THE CORE SOURCE CODE OF MIZOS. ONLY EDIT IF YOU KNOW WHAT YOU ARE DOING ]=]--]=]--]=]--
