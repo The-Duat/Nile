@@ -15,7 +15,7 @@ local basecommands = {
 
 local arguments = {}
 for _,v in pairs(arg) do
-	if v ~= "/bin/lua" and v ~= "newmiz" and v ~= "/home/mizosu/Development/mizos/assets/os/testing/newmiz" then
+	if v ~= "/bin/lua" and v ~= "newmiz" and v ~= "/home/mizosu/Development/mizos/assets/os/testing/newmiz" and basecommands[v] ~= true then
 		table.insert(arguments, v)
 	end
 end
