@@ -116,11 +116,11 @@ fi
 
 echo "Replacing original neofetch file."
 sudo -S rm /usr/bin/neofetch
-sudo -S cp assets/neofetch /usr/bin
+sudo -S cp assets/details/neofetch /usr/bin
 
 
 echo "Adding that amazing wallpaper to /var/mizOS/wallpaper."
-cp assets/wallpaper.png /var/mizOS/wallpaper/
+cp assets/config/wallpaper.png /var/mizOS/wallpaper/
 
 
 echo "Cleaning old backups, if any."
