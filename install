@@ -46,6 +46,13 @@ fi
 
 
 
+if [ -d "/var/mizOS/core" ]; then
+	echo "core folder present."
+else
+	echo "Creating /var/mizOS/core"
+	mkdir /var/mizOS/core
+fi
+
 
 if [ -d "/var/mizOS/config" ]; then
 	echo "config folder present."
@@ -170,7 +177,14 @@ echo "Configuration files added."
 
 
 
-echo "Installing the miz script."
+
+echo "Installing the mizOS.lua backend."
+if [ -f "/var/mizOS/core/mizOS.lua" ]; then
+	rm /var/mizOS/core/mizOS.lua
+fi
+cp assets/os/mizOS.lua /var/mizOS/core
+
+echo "Installing the miz frontend."
 if [ -f "/usr/bin/miz" ]; then
 	sudo rm /usr/bin/miz
 fi

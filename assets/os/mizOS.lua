@@ -194,7 +194,7 @@ conf = {
 	{"miz", "/usr/bin/miz", true},
 	{"i3", home .. "/.config/i3/config", false},
 	{"pacman", "/etc/pacman.conf", true},
-	{"xrc", home .. "/.xinitrc", false}
+	{"xrc", home .. "/.xinitrc", false},
 	{"bashrc", home .. "/.bashrc", false}
 }
 
