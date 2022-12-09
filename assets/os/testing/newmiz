@@ -13,8 +13,16 @@ local basecommands = {
 	["info"] = mizOS.info
 }
 
-if basecommands[arg[1]] then
-	basecommands[arg[1]](arg)
+local arguments = {}
+for _,v in pairs(arg) do
+	if v ~= "/bin/lua" and v ~= "newmiz" and v ~= "/home/mizosu/Development/mizos/assets/os/testing/newmiz" then
+		table.insert(arguments, v)
+	end
+end
+
+
+if basecommands[arguments[1]] then
+	basecommands[arguments[1]](arguments)
 else
-	mizOS.root(arg)
+	mizOS.root(arguments)
 end
