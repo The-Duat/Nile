@@ -5,6 +5,7 @@ local mizOS = dofile("/var/mizOS/core/mizOS.lua")
 local basecommands = {
 	["sv"] = mizOS.service,
 	["fetch"] = mizOS.software,
+	["remove"] = mizOS.software,
 	["cc"] = mizOS.software,
 	["lspkgs"] = mizOS.software,
 	["gfx"] = mizOS.gfx,
