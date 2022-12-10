@@ -17,21 +17,18 @@ local function cmenu(menu)
 	for _,listing in pairs(menu) do
 		local prefix = "\x1b[38;2;255;255;255m"
 		local postfix = "\x1b[38;2;255;255;255m"
-		if listing[3] == true then
+		if listing["val"] == true then
 			prefix = "\x1b[38;2;0;0;255m"
 		end
-		if listing[2] == id then
-			print(prefix .. listing[1] .. postfix)
-			id = id + 1
-		end
+		print(prefix .. listing["name"] .. postfix)
 	end
 end
 
 
 local main = {
-		{"Clone repo", 1, true},
-		{"Edit repo", 2, false},
-		{"Push repo", 3, false}
+		[1] = {["name"] = "Service management", ["val"] = true},
+		[2] = {["name"] = "Edit repo", ["val"] = false},
+		[3] = {["name"] = "Push repo", ["val"] = false}
 }
 
 
@@ -43,30 +40,29 @@ local currentmenu = main
 
 
 local function move(con)
-	local currentdir 
-	local todir
+	local currentdir = 1
+	local todir = 0
 	local controls = {
 		["^[[A"] = "up",
 		["^[[B"] = "down"
 	}
-
+	
 	for _,listing in pairs(currentmenu) do
-		if listing[3] == true then
-			currentdir = listing[2]
+		if listing["val"] ~= true then
+			currentdir = currentdir + 1
+		else
+			listing["val"] = false
 		end
-		currentmenu[listing[3]] = false
 	end
-
-	if controls[con] == "up" then
+	
+	if con == "up" then
 		todir = currentdir - 1
-	elseif controls[con] == "down" then
+	elseif con == "down" then
 		todir = currentdir + 1
 	end
-	for _,listing in pairs(currentmenu) do
-		if listing[1] == todir then
-			currentmenu[listing[2]] = true
-		end
-	end
+	
+	print(todir)
+	currentmenu[todir]["val"] = true
 	cmenu(currentmenu)
 end
 

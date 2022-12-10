@@ -1,6 +1,6 @@
 #!/bin/lua
 
-local mizOS = dofile("/var/mizOS/core/mizOS.lua")
+local mizOS = dofile("/data/data/com.termux/files/home/mizos/assets/os/testing/mizOS.lua")
 
 local basecommands = {
 	["sv"] = mizOS.service,
