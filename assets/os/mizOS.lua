@@ -213,23 +213,22 @@ end
 
 
 --[=[ https://github.com/Mizosu97/mgpu ]=]--
-local function mgpu(arguments)
+local function mgpu(gpu, arguments)
 	local gcmd = ""
 	for _,ag in pairs(arguments) do
 		if ag ~= "miz" 
 		and ag ~= "/bin/lua" 
 		and ag ~= "/usr/bin/miz" 
 		and ag ~= "./miz" 
-		and ag ~= "d" 
-		and ag ~= "i" 
-		and ag ~= "gfx" 
-		and ag ~= "x" then
+		and ag ~= "xd" 
+		and ag ~= "xi" 
+		and ag ~= "gfx" then
 			gcmd = gcmd .. ag .. " "
 		end
 	end
-	if arguments[3] == "d" then
+	if gpu == "xd" then
 		x("export DRI_PRIME=1 && exec " .. gcmd)
-	elseif arguments[3] == "i" then
+	elseif gpu == "xi" then
 		x("export DRI_PRIME=0 && exec " .. gcmd)
 	end
 end
@@ -585,8 +584,8 @@ end
 
 --[=[ Graphics stuff. ]=]--
 system.gfx = function(arguments)
-	if arguments[2] == "x" then
-                mgpu(arguments)
+	if arguments[2] == "xi" or arguments[2] == "xd" then
+                mgpu(arguments[2], arguments)
         elseif arguments[2] == "mode" then 
 		if arguments[3] == "i" then
                         x("supergfxctl --mode integrated")

@@ -71,13 +71,13 @@ You can now directly edit mizOS source code with `miz config miz`.
 ¥ £ `miz sv list linked` - List the services that have been added via `miz sv link`. For SystemD, this lists all enabled services. 
 
 ## Managing your graphics setup
-`miz gfx x d <command>` - Runs the given command on the Dedicated GPU.
+`miz gfx xd <command>` - Runs the given command on the Dedicated GPU.
 
-`miz gfx x i <command>` - Runs the given command on the Integrated GPU.
+`miz gfx xi <command>` - Runs the given command on the Integrated GPU.
 
 `miz gfx mode <mode>` - Changes your GPU setup.
 
-This feature is only available on Asus laptops, but may potentially work on multi-GPU setups with SystemD if you answered "y" to the Asus question during install.
+- `miz gfx mode` is only available on Asus laptops, but may potentially work on multi-GPU setups with SystemD if you answered "y" to the Asus question during install.
 
 **gfx Modes:**
 - `i` - Uses your Integrated graphics card for graphics processing.
