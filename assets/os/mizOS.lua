@@ -326,7 +326,7 @@ local function package(op, thepkg)
 					ipkg(pacpkgs)
 					ypkg(aurpkgs)
 					x("mkdir /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-					x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
+					x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
 					x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./install")
 				else
 					print("[Error] - That package either doesn't exist, or was not made correctly.")
