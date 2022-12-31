@@ -26,3 +26,8 @@ if basecommands[arguments[1]] then
 else
 	mizOS.root(arguments)
 end
+
+
+if basecommands[arg[2]] then
+	print("exists")
+end
