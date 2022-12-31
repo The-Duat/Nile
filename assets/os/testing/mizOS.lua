@@ -283,10 +283,10 @@ local function package(op, thepkg)
 				ipkg(pacpkgs)
 				ypkg(aurpkgs)
 				x("mkdir /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-				x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
+				x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
 				x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./install")
 			else
-				return "[Error] - That package either doesn't exist, or was not made correctly."
+				return "error - That package either doesn't exist, or was not made correctly."
 			end
 		elseif op == "remove" then
 			if checkfile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
@@ -340,7 +340,7 @@ local function package(op, thepkg)
 					x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
 					x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./update")
 				else
-					return "[Error] - That package either doesn't exist, or was not made correctly."
+					return "error - That package either doesn't exist, or was not made correctly."
 				end
 			end
 		elseif op == "list" then
@@ -352,20 +352,10 @@ end
 
 
 --[=[ Software management. ]=]--
-system.software = function(op, pkgs, channel)
+system.software = function(op, channel, pkgs)
 	local packages = ""
 	for _,ag in pairs(pkgs) do
-		if ag ~= "miz" 
-		and ag ~= "/bin/lua" 
-		and ag ~= "/usr/bin/miz" 
-		and ag ~= "./miz"  
-		and ag ~= "fetch" 
-		and ag ~= "update" 
-		and ag ~= "remove" 
-		and ag ~= "-p" 
-		and ag ~= "-u" 
-		and ag ~= "-a" 
-		and ag ~= "neofetch" then
+		if ag ~= "neofetch" then
 			packages = packages .. ag .. " "
 		end
 	end
