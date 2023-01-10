@@ -7,7 +7,10 @@
 
 local system = {}
 
+-- If you are writing software that interacts with the mizOS backend, please note that 
 
+--Data types:
+--error, output, warning, info, command
 
 
 
@@ -252,7 +255,7 @@ system.config = function(file)
 					x("nvim " .. confile[2])
 				end
 			else
-				return "error∆Config file does not exist."
+				return {"error", "Config file does not exist."}
 			end
 		end
 	end
@@ -286,15 +289,19 @@ local function package(op, thepkg, deps)
 				x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
 				x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./install")
 			else
-				return "error∆That package either doesn't exist, or was not made correctly."
+				return {"error", "That package either doesn't exist, or was not made correctly."}
 			end
 		elseif op == "remove" then
 			if checkfile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
 				local info = dofile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua")
+				print("Removing program files.")
 				for _,file in pairs(info.files) do
+					print("> Deleting " .. file)
 					x("sudo rm " .. file)
 				end
+				print("Removing program directories.")
 				for _,folder in pairs(info.directories) do
+					print("> Removing " .. folder)
 					x("sudo rm -rf " .. folder)
 				end
 				local pacpkgs = ""
@@ -305,9 +312,6 @@ local function package(op, thepkg, deps)
 				for _,aurdep in pairs(info.aur_depends) do
 					aurpkgs = aurpkgs .. aurdep .. " "
 				end
-				local dependencies = {}
-				dependencies[pacman] = pacpkgs
-				dependencies[aur] = aurpkgs
 				print("Pacman dependencies:\n")
 				print(pacpkgs)
 				print("\n\nAUR dependencies:\n")
@@ -318,9 +322,9 @@ local function package(op, thepkg, deps)
 					x("yay -Rn " .. aurpkgs)
 				end
 				x("sudo rm -rf /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-				return "success∆" .. thepkg .. "has been uninstalled."
+				print(thepkg .. "has been uninstalled.")
 			else
-				return "error∆That package is not installed."
+				print("That package is not installed.")
 			end
 		elseif op == "update" then
 			if checkfile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
@@ -343,11 +347,11 @@ local function package(op, thepkg, deps)
 					x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
 					x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./update")
 				else
-					return "error∆That package either doesn't exist, or was not made correctly."
+					return {"error", "That package either doesn't exist, or was not made correctly."}
 				end
 			end
 		elseif op == "list" then
-			return "info∆" .. capture("ls /var/mizOS/packages")
+			return {"output", capture("ls /var/mizOS/packages")}
 		end
 	end
 end
