@@ -252,7 +252,7 @@ system.config = function(file)
 					x("nvim " .. confile[2])
 				end
 			else
-				return "Config file does not exist."
+				return "error∆Config file does not exist."
 			end
 		end
 	end
@@ -261,7 +261,7 @@ end
 
 
 --[=[ mizOS package management. ]=]--
-local function package(op, thepkg)
+local function package(op, thepkg, deps)
 	local pkgsplit
 	if thepkg then
 		pkgsplit = splitstr(thepkg, "/")
@@ -286,7 +286,7 @@ local function package(op, thepkg)
 				x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
 				x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./install")
 			else
-				return "error - That package either doesn't exist, or was not made correctly."
+				return "error∆That package either doesn't exist, or was not made correctly."
 			end
 		elseif op == "remove" then
 			if checkfile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
@@ -305,6 +305,9 @@ local function package(op, thepkg)
 				for _,aurdep in pairs(info.aur_depends) do
 					aurpkgs = aurpkgs .. aurdep .. " "
 				end
+				local dependencies = {}
+				dependencies[pacman] = pacpkgs
+				dependencies[aur] = aurpkgs
 				print("Pacman dependencies:\n")
 				print(pacpkgs)
 				print("\n\nAUR dependencies:\n")
@@ -315,9 +318,9 @@ local function package(op, thepkg)
 					x("yay -Rn " .. aurpkgs)
 				end
 				x("sudo rm -rf /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-				print(thepkg .. "has been uninstalled.")
+				return "success∆" .. thepkg .. "has been uninstalled."
 			else
-				print("[Error] - That package is not installed.")
+				return "error∆That package is not installed."
 			end
 		elseif op == "update" then
 			if checkfile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
@@ -340,11 +343,11 @@ local function package(op, thepkg)
 					x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua $HOME/.mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
 					x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./update")
 				else
-					return "error - That package either doesn't exist, or was not made correctly."
+					return "error∆That package either doesn't exist, or was not made correctly."
 				end
 			end
 		elseif op == "list" then
-			return capture("ls /var/mizOS/packages")
+			return "info∆" .. capture("ls /var/mizOS/packages")
 		end
 	end
 end
@@ -352,7 +355,7 @@ end
 
 
 --[=[ Software management. ]=]--
-system.software = function(op, channel, pkgs)
+system.software = function(op, channel, pkgs, deps)
 	local packages = ""
 	for _,ag in pairs(pkgs) do
 		if ag ~= "neofetch" then
@@ -375,7 +378,7 @@ system.software = function(op, channel, pkgs)
 		elseif channel == "pacman" then
 			x("sudo pacman -S " .. packages)
 		elseif channel == "mizos" then
-			package("install", packages)
+			package("install", packages, deps)
 		end
 	elseif op == "remove" then
 		if channel == "aur" then
@@ -394,19 +397,19 @@ system.software = function(op, channel, pkgs)
 		elseif channel == "pacman" then
 			x("sudo pacman -Rn " .. packages)
 		elseif channel == "mizos" then
-			package("remove", packages)
+			package("remove", packages, deps)
 		end
 	elseif op == "clear cache" then
 		x("yay -Scc")
 		if init == "systemd" then
 			x("sudo journalctl --vacuum-time=21days")
 		else
-			return "SystemD not found, unable to clear journal logs."
+			return "error∆SystemD not found, unable to clear journal logs."
 		end
 	elseif op == "list packages" then
 		package("list", nil)
 	else
-		return "[sw] > Command not found!"
+		return "error∆Command not found!"
 	end
 end
 
@@ -415,7 +418,7 @@ end
 --[=[ Runit command conversion ]=]--
 local function runit(op, service)
 	if op == "link" then
-                        x("sudo ln -s /etc/runit/sv/" .. arguments[3] .. " /run/runit/service/")
+                        x("sudo ln -s /etc/runit/sv/" .. service .. " /run/runit/service/")
         elseif op == "unlink" then   
 		x("sudo rm /run/runit/service/" .. service)
 	elseif op == "disable" then
@@ -430,12 +433,12 @@ local function runit(op, service)
                 x("sudo sv restart " .. service)
         elseif op == "list" then
                 if service == "installed" then   
-			x("ls /etc/runit/sv/")
+			return "info∆" .. capture("ls /etc/runit/sv/")
                 elseif service == "linked" then  
-			x("ls /run/runit/service/")
+			return "info∆" .. capture("ls /run/runit/service/")
                 end
 	else
-		return "[sv_runit] > Command not found!"
+		return "error∆Command not found!"
         end
 end
 
@@ -459,12 +462,12 @@ local function systemd(op, service)
                 x("sudo systemctl restart " .. arguments[3])
         elseif op == "list" then
                 if service == "installed" then      
-			x("systemctl list-units --type=service --all")    
+			return "info∆" .. capture("systemctl list-units --type=service --all")    
 		elseif service == "linked" then                              
-			x("systemctl list-units --state=enabled")
+			return "info∆" .. capture("systemctl list-units --state=enabled")
                 end
 	else
-		return "[Service_systemd] > Command not found!"
+		return "error∆Command not found!"
         end
 end
 
@@ -488,12 +491,12 @@ local function openrc(op, service)
                 x("sudo rc-service " .. service .. " restart")
         elseif op == "list" then
                 if service == "installed" then
-                        x("rc-update show")
+                        return "info∆" .. capture("rc-update show")
                 elseif service == "linked" then
-                        x("rc-update -v show")
+                        return "info∆" .. capture("rc-update -v show")
                 end
 	else
-		return "[Service_openrc] > Command not found!"
+		return "error∆Command not found!"
         end
 end
 
@@ -508,7 +511,7 @@ system.service = function(op, service)
 	elseif init == "openrc" then
 		openrc(op, service)
 	else
-		return "[Service] > Init system not supported."
+		return "error∆Init system not supported."
 	end
 end
 
@@ -533,7 +536,7 @@ system.gfx = function(op, arguments, mode)
 	elseif op == "setup" then
 		x("sudo systemctl enable --now power-profiles-daemon.service && sudo systemctl enable --now supergfxd")
 	else
-		return "[gfx] > Command not found."
+		return "error∆Command not found."
         end
 end
 

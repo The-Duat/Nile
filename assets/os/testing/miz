@@ -1,7 +1,60 @@
 #!/bin/lua
 
-local mizOS = dofile("/var/mizOS/core/mizOS.lua")
+local mizos = dofile("/var/mizOS/core/mizOS.lua")
 
-local function software()
+local function sv()
+	mizos.service(ar)
+end
 
+local function fetch()
+end
+
+local function remove()
+end
+
+local function cc()
+end
+
+local function lspkgs()
+end
+
+local function gfx()
+end
+
+local function conf()
+	print("Currently WIP")
+end
+
+local function update()
+end
+
+local function info()
+end
+
+
+
+local basecommands = {
+	["sv"] = sv,
+	["fetch"] = fetch,
+	["remove"] = remove,
+	["cc"] = cc,
+	["lspkgs"] = lspkgs,
+	["gfx"] = gfx,
+	["conf"] = conf,
+	["update"] = update,
+	["info"] = info
+}
+
+
+local args = {}
+for _,v in pairs(arg) do
+	if v ~= "/bin/lua" and v ~= "miz" then
+		table.insert(args, v)
+	end
+end
+
+if basecommands[args[1]] then
+	basecommands[args[1]](args)
+else
+	mizos.root(args)
 end
