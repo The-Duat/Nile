@@ -1,42 +1,113 @@
 #!/bin/lua
 
+-- sonic visits ohio
 local mizos = dofile("/var/mizOS/core/mizOS.lua")
 
-local function sv()
-	mizos.service(ar)
+
+-- Channel data
+local channels = {
+	["-m"] = "mizos",
+	["-u"] = "ui",
+	["-p"] = "pacman",
+	["-a"] = "aur"
+}
+
+
+-- Shorten command execution function
+local function x(cmd)
+	os.execute(cmd)
 end
 
-local function fetch()
+-- Collects all package names
+local function setpkgs(args)
+	local pacs = ""
+	for _,ag in pairs(args) do
+		if ag ~= "fetch" and ag ~= "remove" and not channels[ag] then
+			pacs = pacs .. ag
+		end
+	end
+	return pacs
 end
 
-local function remove()
+-- Output coloring/formatting
+local function echo(string, echotype)
+	if echotype == "error" then
+		print("!!> \x1b[38;2;243;139;168m" .. string .. "\x1b[38;2;255;255;255m")
+	elseif echotype == "output" then
+		print("> " .. string)
+	elseif echotype == "rawput" then
+		print(string)
+	end
 end
 
-local function cc()
+
+-- Process data returned from mizOS backend
+local function process(data)
+	local datatype = data[1]
+	local contents = data[2]
+	if datatype == "output" then
+		echo(contents, datatype)
+	elseif datatype == "error" then
+		echo(contents, datatype)
+	elseif datatype == "command" then
+		x(contents)
+	end
 end
 
+
+-- Service management
+local function sv(args)
+	local data = mizos.service(args[2], args[3])
+	if data then
+		proccess(data)
+	end
+end
+
+-- Fetch/remove packages
+local function fandr(args)
+	local pacs = setpkgs(args)
+	local data = mizos.software(args[1], channels[args[2]], pacs)
+	if data then
+		process(data)
+	end
+end
+
+-- Clear cache
+local function cc(args)
+	local data = mizos.software("clear cache", nil, nil)
+	if data then
+		process(data)
+	end
+end
+
+-- List packages
 local function lspkgs()
 end
 
+-- GPU management
 local function gfx()
 end
 
+-- mizOS configuration
 local function conf()
 	print("Currently WIP")
 end
 
+-- mizOS system updating
 local function update()
 end
 
+-- System info
 local function info()
 end
 
 
 
+-- Command proccessor
 local basecommands = {
 	["sv"] = sv,
-	["fetch"] = fetch,
-	["remove"] = remove,
+	["fetch"] = fandr,
+	["remove"] = fandr,
 	["cc"] = cc,
 	["lspkgs"] = lspkgs,
 	["gfx"] = gfx,
