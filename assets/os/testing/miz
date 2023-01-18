@@ -30,13 +30,13 @@ local function setpkgs(args)
 end
 
 -- Output coloring/formatting
-local function echo(string, echotype)
-	if echotype == "error" then
-		print("!!> \x1b[38;2;243;139;168m" .. string .. "\x1b[38;2;255;255;255m")
-	elseif echotype == "output" then
-		print("> " .. string)
-	elseif echotype == "rawput" then
-		print(string)
+local function echo(datatype, contents)
+	if datatype == "error" then
+		print("!!> \x1b[38;2;243;139;168m" .. contents .. "\x1b[38;2;255;255;255m")
+	elseif datatype == "output" then
+		print("> " .. contents)
+	elseif datatype == "rawput" then
+		print(contents)
 	end
 end
 
@@ -59,7 +59,7 @@ end
 local function sv(args)
 	local data = mizos.service(args[2], args[3])
 	if data then
-		proccess(data)
+		process(data)
 	end
 end
 
@@ -81,7 +81,16 @@ local function cc(args)
 end
 
 -- List packages
-local function lspkgs()
+local function lspkgs(args)
+	local data = mizos.software("list packages", channels[args[1]], nil)
+	if data and data[1] ~= "info" then
+		process(data)
+		elseif data[1] == "info" then
+		echo("output", "mizOS package list:")
+		for _,pkg in pairs(data[2]) do
+			echo("rawput", pkg)
+		end
+	end 
 end
 
 -- GPU management
@@ -109,7 +118,7 @@ local basecommands = {
 	["fetch"] = fandr,
 	["remove"] = fandr,
 	["cc"] = cc,
-	["lspkgs"] = lspkgs,
+	["list"] = list,
 	["gfx"] = gfx,
 	["conf"] = conf,
 	["update"] = update,
