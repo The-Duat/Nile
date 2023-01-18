@@ -328,7 +328,7 @@ local function package(op, thepkg)
 				end
 			end
 		elseif op == "list" then
-			return {"output", capture("ls /var/mizOS/packages")}
+			return capture("ls /var/mizOS/packages")
 		end
 	end
 end
@@ -389,7 +389,9 @@ system.software = function(op, channel, pkgs)
 		end
 	elseif op == "list packages" then
 		if channel == "mizos" then
-			package("list", nil)
+			local packagestring = package("list", nil)
+			local packagetable = splitstr(packagestring, " ")
+			return {"info", packagetable}
 		elseif channel == "pacman" then
 			return {"rawput", capture("sudo pacman -Qe")}
 		elseif channel == "aur" then
@@ -559,7 +561,7 @@ system.update = function(op)
 			end
 		end
 	elseif op == "system" then
-		return {"command", "cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && ./install"}
+		x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && ./install")
         end
 end
 
