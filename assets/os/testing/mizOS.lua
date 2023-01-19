@@ -507,9 +507,9 @@ end
 
 
 --[=[ Graphics stuff. ]=]--
-system.gfx = function(op, arguments, mode)
+system.gfx = function(op, mode, arguments)
 	if op == "xi" or op == "xd" then
-                return {"command", mgpu(op, arguments)}
+                x(mgpu(op, arguments))
         elseif op == "mode" then 
 		if mode == "i" then
 			return {"output", capture("supergfxctl --mode integrated")}
@@ -523,7 +523,7 @@ system.gfx = function(op, arguments, mode)
                         return {"output", capture("supergfxctl --mode vfio")}
                 end
 	elseif op == "setup" then
-		return {"command", "sudo systemctl enable --now power-profiles-daemon.service && sudo systemctl enable --now supergfxd"}
+		x("sudo systemctl enable --now power-profiles-daemon.service && sudo systemctl enable --now supergfxd")
 	else
 		return {"error", "Command not found."}
         end
@@ -540,7 +540,7 @@ system.info = function(op)
         elseif op == "creator" then
                 return {"output", "https://theduat.neocities.org"}
         elseif op == "uilist" then
-                return {"info", uis}
+                return {"info", {"desktops", uis}}
 	else
 		return {"error", "Command not found."}
 	end

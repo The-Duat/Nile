@@ -40,6 +40,11 @@ local function echo(datatype, contents)
 	end
 end
 
+-- Get input
+local function read(text)
+	io.write(text .. "\n\n> ")
+	return io.read()
+end
 
 -- Process data returned from mizOS backend
 local function process(data)
@@ -81,7 +86,7 @@ local function cc(args)
 end
 
 -- List packages
-local function lspkgs(args)
+local function list(args)
 	local data = mizos.software("list packages", channels[args[1]], nil)
 	if data and data[1] ~= "info" then
 		process(data)
@@ -94,20 +99,48 @@ local function lspkgs(args)
 end
 
 -- GPU management
-local function gfx()
+local function gfx(args)
+	local data
+	if args[2] == "mode" then
+		data = mizos.gfx("mode", args[3], args)
+	else
+		data = mizos.gfx(args[2], nil, args)
+	end
+	if data then
+		process(data)
+	end
 end
 
 -- mizOS configuration
-local function conf()
+local function conf(args)
 	print("Currently WIP")
 end
 
 -- mizOS system updating
-local function update()
+local function update(args)
+	mizos.update("system")
+	mizos.update("packages")
 end
 
 -- System info
-local function info()
+local function info(args)
+	local data = mizos.info(args[2])
+	if data and data[1] ~= "info" then
+		process(data)
+	elseif data[1] == "info" then
+		if data[2][1] == "desktops" then
+			echo("output", "mizOS DE/WM list:")
+			for _,desktop in pairs(data[2][2]) do
+				local dtype = ""
+				if desktop[3] == true then
+					dtype = "      (AUR)"
+				elseif desktop[3] == false then
+					dtype = "      (pacman)"
+				end
+				print(desktop[1] .. dtype)
+			end
+		end
+	end
 end
 
 
