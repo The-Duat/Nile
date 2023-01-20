@@ -51,9 +51,9 @@ local function process(data)
 	local datatype = data[1]
 	local contents = data[2]
 	if datatype == "output" then
-		echo(contents, datatype)
+		echo(datatype, contents)
 	elseif datatype == "error" then
-		echo(contents, datatype)
+		echo(datatype, contents)
 	elseif datatype == "command" then
 		x(contents)
 	end
