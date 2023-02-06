@@ -20,10 +20,12 @@ end
 
 -- Collects all package names
 local function setpkgs(args)
-	local pacs = ""
+	local pacs = {}
 	for _,ag in pairs(args) do
-		if ag ~= "fetch" and ag ~= "remove" and not channels[ag] then
-			pacs = pacs .. ag
+		if ag ~= "fetch"
+		and ag ~= "remove"
+		and not channels[ag] then
+			table.insert(pacs, ag)
 		end
 	end
 	return pacs
@@ -125,7 +127,7 @@ end
 -- System info
 local function info(args)
 	local data = mizos.info(args[2])
-	if data and data[1] ~= "info" then
+	if data[1] and data[1] ~= "info" then
 		process(data)
 	elseif data[1] == "info" then
 		if data[2][1] == "desktops" then
@@ -161,7 +163,7 @@ local basecommands = {
 
 local args = {}
 for _,v in pairs(arg) do
-	if v ~= "/bin/lua" and v ~= "miz" then
+	if v ~= "/bin/lua" and v ~= "miz" and v ~= "/usr/bin/miz" then
 		table.insert(args, v)
 	end
 end

@@ -55,6 +55,24 @@ end
 
 
 
+--[=[ Whitespace trimmer. ]=]--
+function trim(s)
+	local new = ""
+	local i = 0
+	local new = ""
+	local len = string.len(s)
+	while i <= len do
+		local sub = string.sub(s, i, i)
+		if sub ~= " " then
+			new = new .. sub
+		end
+		i = i + 1
+	end
+	return new
+end
+
+
+
 --[=[ Get shell command output. ]=]--
 local function capture(cmd, raw)
 	local file = assert(io.popen(cmd, 'r'))
@@ -74,7 +92,9 @@ local function checkfile(name)
 	local file = io.open(name, "r")
         if file ~= nil then
                 io.close(file)
- 		return true
+ 		return {true, name}
+	else
+		return {false, name}
 	end
 end
 
@@ -243,15 +263,25 @@ end
 --[=[ mizOS package management. ]=]--
 local function package(op, thepkg)
 	local pkgsplit
+	local dev
+	local name
+	local insdir
+	local pkgdir
 	if thepkg then
 		pkgsplit = splitstr(thepkg, "/")
+		dev = trim(pkgsplit[1])
+		name = trim(pkgsplit[2])
+        	insdir = "/var/mizOS/work/" .. name
+		pkgdir = "/var/mizOS/packages" .. dev .. "_" .. name
 	end
 	if pkgsplit[1] and pkgsplit[2] then
 		if op == "install" then
 			x([[su -c "rm -rf /var/mizOS/work/*" root]])
 			x("cd /var/mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
-			if checkfile("/var/mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
-				local info = dofile("/var/mizOS/work/" .. pkgsplit[2] .. "/info.lua")
+			x("ls /var/mizOS/work/" .. pkgsplit[2])
+			if dofile(insdir .. "/MIZOSPKG.lua") == true then
+				print("> Package is valid, continuing installation.")
+				local info = dofile(insdir .. "/info.lua")
 				local pacpkgs = ""
 				local aurpkgs = ""
 				for _,pacdep in pairs(info.pacman_depends) do
@@ -262,15 +292,15 @@ local function package(op, thepkg)
 				end
 				ipkg(pacpkgs)
 				ypkg(aurpkgs)
-				x("mkdir /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-				x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
-				x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./install")
+				x("mkdir " .. pkgdir)
+				x("cp " .. insdir .. "/info.lua " .. pkgdir .. "/")
+				x("cd " .. insdir .. " && ./install")
 			else
 				return {"error", "That package either doesn't exist, or was not made correctly."}
 			end
 		elseif op == "remove" then
-			if checkfile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
-				local info = dofile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua")
+			if checkfile(pkgdir .. "/info.lua") == true then
+				local info = dofile(pkgdir .. "/info.lua")
 				print("Removing program files.")
 				for _,file in pairs(info.files) do
 					print("> Deleting " .. file)
@@ -298,18 +328,18 @@ local function package(op, thepkg)
 					x("sudo pacman -Rn " .. pacpkgs)
 					x("yay -Rn " .. aurpkgs)
 				end
-				x("sudo rm -rf /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
+				x("sudo rm -rf " .. pkgdir)
 				return {"output", thepkg .. " has been uninstalled."}
 			else
 				return {"error", "That package is not installed."}
 			end
 		elseif op == "update" then
-			if checkfile("/var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua") == true then
-				x("rm -rf /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
+			if checkfile(pkgdir .. "/info.lua") == true then
+				x("rm -rf " .. pkgdir)
 				x([[su -c "rm -rf /var/mizOS/work/*" root]])
-				x("cd /var/mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
-				if checkfile("/var/mizOS/work/" .. pkgsplit[2] .. "/MIZOSPKG") == true then				
-					local info = dofile("/var/mizOS/work/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/info.lua")
+				x("cd /var/mizOS/work && git clone https://github.com/" .. dev .. "/" .. name)
+				if dofile(insdir .. "/MIZOSPKG.lua") == true then				
+					local info = dofile(insdir .. "/info.lua")
 					local pacpkgs = ""
 					local aurpkgs = ""
 					for _,pacdep in pairs(info.pacman_depends) do
@@ -320,9 +350,9 @@ local function package(op, thepkg)
 					end
 					ipkg(pacpkgs)
 					ypkg(aurpkgs)
-					x("mkdir /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2])
-					x("cp /var/mizOS/work/" .. pkgsplit[2] .. "/info.lua /var/mizOS/packages/" .. pkgsplit[1] .. "_" .. pkgsplit[2] .. "/")
-					x("cd /var/mizOS/work/" .. pkgsplit[2] .. " && ./update")
+					x("mkdir " .. pkgdir)
+					x("cp " .. insdir .. "/info.lua " .. pkgdir .. "/")
+					x("cd " .. insdir .. " && ./update")
 				else
 					return {"error", "That package either doesn't exist, or was not made correctly."}
 				end
