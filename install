@@ -6,8 +6,6 @@
 
 echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
-echo "mizOS system updating/installation has been temporarily blocked by the developer to prevent damages to your computer. Try again tomorrow."
-exit
 
 echo "Installing a few dependencies."
 sudo -S pacman -S lua alacritty firefox neovim neofetch fish
