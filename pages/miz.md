@@ -13,16 +13,23 @@ Example: `miz rm -rf /*`
 !!! Do not run this command! It wipes your system! !!!
 
 ## Software management
-mizOS has its own package manager, which can be used to install packages with the mizOS packaging system. The mizOS package manager is currently a work in progress.
+mizOS has its own package manager, which can be used to easily install software onto the system.
+
+The mizOS package manager works in channels. The package name you provide is directed into one of four channels, being -m, -p, -a, and -u.
+
+- **-m** - The official mizOS channel, used for mizOS packages.
+- **-p** - The Pacman channel, used for Pacman packages.
+- **-a** - The AUR chabbel, for installing AUR packages.
+- **-u** - The UI channel, for easy installation of Desktop Environments and Window Managers. For more information on the UI channel, see `miz info uilist`.
 
 ###### Installing packages
-- `miz fetch <package>` - Installs that mizOS package.
+- `miz fetch -m <package>` - Installs that mizOS package.
 - `miz fetch -p <package>` - Installs that pacman package.
 - `miz fetch -a <package>` - Installs that AUR package.
-- `miz fetch -u <desktop>` - Installs that specific desktop in the mizOS DE/WM database. For more information, see `miz info uilist`.
+- `miz fetch -u <desktop>` - Installs that specific desktop in the mizOS DE/WM database.
 
 ###### Removing packages
-- `miz remove <package>` - Removes that mizOS package.
+- `miz remove -m <package>` - Removes that mizOS package.
 - `miz remove -p <package>` - Removes that pacman package.
 - `miz remove -a <package>` - Removes that AUR package.
 - `miz remove -u <desktop>` - Removes that desktop install.
@@ -35,21 +42,11 @@ mizOS has its own package manager, which can be used to install packages with th
 - `miz lspkgs` - Lists all installed mizOS packages.
 
 ## Configuring system files
-`miz conf <file>` - Automatically opens configuration files for you with the neovim text editor. "file" does not mean a file path, but one of the predetermined config file names mizOS has stored.
-
-**Example:** `miz config i3`
-
-Available config files:
-- `miz`
-- `i3`
-- `pacman`
-- `xrc`
-
-You can now directly edit mizOS source code with `miz config miz`.
+**This section is being reworked. Come back soon!"**
 
 ## Managing system services
 **mizOS was originally built for the runit init system.** 
-**Commands with an ¥ next to the name are SystemD compatible.**
+**Commands with a ¥ next to the name are SystemD compatible.**
 **Commands with a £ next to the name are openRC compatible.**
 
 `miz sv link <service>` - Add a service. Lets it start up at boot.
@@ -76,7 +73,7 @@ You can now directly edit mizOS source code with `miz config miz`.
 `miz gfx xi <command>` - Runs the given command on the Integrated GPU.
 
 `miz gfx mode <mode>` - Changes your GPU setup.
-
+54
 - `miz gfx mode` is only available on Asus laptops, but may potentially work on multi-GPU setups with SystemD if you answered "y" to the Asus question during install.
 
 **gfx Modes:**
@@ -98,5 +95,3 @@ You can now directly edit mizOS source code with `miz config miz`.
 `miz info creator` - Links you to the Duat website.
 
 `miz info uilist` - Prints the full list of preset DE/WM installs.
-
-`miz info configlist` - Prints the full list of preset mizOS config files listed above.
