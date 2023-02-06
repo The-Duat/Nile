@@ -272,7 +272,7 @@ local function package(op, thepkg)
 		dev = trim(pkgsplit[1])
 		name = trim(pkgsplit[2])
         	insdir = "/var/mizOS/work/" .. name
-		pkgdir = "/var/mizOS/packages" .. dev .. "_" .. name
+		pkgdir = "/var/mizOS/packages/" .. dev .. "_" .. name
 	end
 	if pkgsplit[1] and pkgsplit[2] then
 		if op == "install" then
@@ -591,7 +591,7 @@ system.update = function(op)
 			end
 		end
 	elseif op == "system" then
-		x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && ./install")
+		x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && ./install && rm -rf /var/mizOS/src/mizOS")
         end
 end
 
