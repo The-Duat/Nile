@@ -1,5 +1,5 @@
 # mizOS Documentation
-Developed by [The Duat](https://theduat.neocities.org).
+Developed by [The Duat](https://entertheduat.org).
 
 
 ```
