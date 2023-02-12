@@ -213,14 +213,7 @@ uis = {
 
 
 --[=[ Detect init system. ]=]--
-local init
-if checkfile("/var/mizOS/init/runit") == true then
-	init = "runit"
-elseif checkfile("/var/mizOS/init/systemd") == true then
-	init = "systemd"
-elseif checkfile("/var/mizOS/init/openrc") == true then
-	init = "openrc"
-end
+local init = dofile("/var/mizOS/init/init.py")
 
 
 
