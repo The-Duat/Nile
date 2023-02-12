@@ -250,9 +250,8 @@ local officialpkgs = {
 system.config = function(op, secondary)
 	return {"error", "This feature is being reworked."}
 	if op == "wallpaper" then
-		
+		print("Still in development.")
 	end
-
 end
 
 
