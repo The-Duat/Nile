@@ -247,14 +247,6 @@ local officialpkgs = {
 }
 
 
-system.config = function(op, secondary)
-	return {"error", "This feature is being reworked."}
-	if op == "wallpaper" then
-		print("Still in development.")
-	end
-end
-
-
 
 --[=[ mizOS package management. ]=]--
 local function package(op, thepkg)
