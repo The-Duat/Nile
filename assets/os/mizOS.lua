@@ -464,15 +464,15 @@ local function systemd(op, service)
         elseif op == "unlink" then
                 return {"error", "This command is only available for the Runit init system."}
         elseif op == "disable" then
-                x("sudo systemctl disable " .. arguments[3])
+                x("sudo systemctl disable " .. service)
         elseif op == "enable" then
-                x("sudo systemctl enable " .. arguments[3])
+                x("sudo systemctl enable " .. service)
         elseif op == "start" then
-                x("sudo systemctl start " .. arguments[3])
+                x("sudo systemctl start " .. service)
         elseif op == "stop" then
-                x("sudo systemctl stop " .. arguments[3])
+                x("sudo systemctl stop " .. service)
         elseif op == "restart" then
-                x("sudo systemctl restart " .. arguments[3])
+                x("sudo systemctl restart " .. service)
         elseif op == "list" then
                 if service == "installed" then      
 			return {"output", capture("systemctl list-units --type=service --all")}
