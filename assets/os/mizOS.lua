@@ -213,7 +213,7 @@ uis = {
 
 
 --[=[ Detect init system. ]=]--
-local init = dofile("/var/mizOS/init/init.py")
+local init = dofile("/var/mizOS/init/init.lua")
 
 
 
