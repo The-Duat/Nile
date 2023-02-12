@@ -108,22 +108,24 @@ fi
 
 
 if [ -d /var/mizOS/init ]; then
+	echo "init folder present."
 	echo "Clearing old init folder."
 	rm -rf /var/mizOS/init/*
-	echo "init folder present."
 else
-	echo "Detecting init system."
+echo "Creating init folder."
 	mkdir /var/mizOS/init
-	if test -f "/usr/bin/sv"; then
-		echo "Runit detected"
-		cp assets/os/init/runit/init.lua /var/mizOS/init
-	elif test -f "/usr/bin/systemctl"; then
-		echo "SystemD detected"
-		cp assets/os/init/systemd/init.lua /var/mizOS/init
-	elif test -f "/usr/bin/rc-service"; then
-		echo "openRC detected"
-		cp assets/os/init/openrc/init.lua /var/mizOS/init
-	fi
+fi
+
+echo "Detecting init system."
+if test -f "/usr/bin/sv"; then
+	echo "Runit detected"
+	cp assets/os/init/runit/init.lua /var/mizOS/init
+elif test -f "/usr/bin/systemctl"; then
+	echo "SystemD detected"
+	cp assets/os/init/systemd/init.lua /var/mizOS/init
+elif test -f "/usr/bin/rc-service"; then
+	echo "openRC detected"
+	cp assets/os/init/openrc/init.lua /var/mizOS/init
 fi
 
 
