@@ -115,7 +115,10 @@ end
 
 -- mizOS configuration
 local function conf(args)
-	print("Currently WIP")
+	local data = mizos.config(args[2], args[3])
+	if data[1] and data[2] then
+		process(data)
+	end
 end
 
 -- mizOS system updating

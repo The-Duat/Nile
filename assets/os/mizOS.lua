@@ -242,7 +242,7 @@ end
 --[-[ mizOS configuration. ]-]--
 system.config = function(op, secondary)
 	if op == "wallpaper" then
-		print("Still in development.")
+		return {"error", "Still in development."}
 	end
 end
 
