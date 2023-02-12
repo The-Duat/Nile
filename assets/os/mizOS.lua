@@ -239,10 +239,46 @@ local function mgpu(gpu, arguments)
 end
 
 
---[-[ mizOS configuration. ]-]--
-system.config = function(op, secondary)
+--[=[ mizOS configuration. ]=]--
+system.config = function(op, value)
+	return {"error", "Still in development."}
 	if op == "wallpaper" then
-		return {"error", "Still in development."}
+		local splitval = splitstr(value, "/")
+		local wallid = 0
+		for _,part in pairs(splitval) do
+			wallid = wallid + 1
+		end
+		local dircount = 1
+		local directory = "/"
+		while dircount < wallid do
+			directory = directory .. splitval[dircount] .. "/"
+			dircount = dircount + 1
+		end
+		local wallpapername = splitval[wallid]
+		local wallpapersplit = splitstr(wallpapername,".")
+		local final = ""
+		if wallpapersplit[2] == "png" then
+			final = directory .. "wallpaper.png"
+		elseif wallpapersplit[2] == "jpg" then
+			final = directory .. "wallpaper.jpg"
+		elseif wallpapersplit[2] == "webp" then
+			final = directory .. "wallpaper.webp"
+		else
+			return {"error", "Inavlid filetype passed. (Must be .png, .jpg, or .webp)"}
+		end
+		x("mv " .. value .. " " final)
+		x("rm /var/mizOS/wallpaper/* && mv " .. final .. " /var/mizOS/wallpaper/")
+	end
+end
+
+
+
+--[=[ System safety. ]=]--
+system.safety = function(op, program)
+	return {"error", "Still in development."}
+	if op == "backup" then
+		if program == nil then
+		end
 	end
 end
 
