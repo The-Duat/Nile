@@ -53,6 +53,8 @@ else
 	echo "fish" >> $HOME/.bashrc
 fi
 
+
+
 echo -e "\nChecking filesystem."
 echo "| Checking core folder."
 if [ -d "/var/mizOS/core" ]; then
@@ -62,7 +64,6 @@ else
 	mkdir /var/mizOS/core
 fi
 
-
 echo "| Checking src folder."
 if [ -d "/var/mizOS/src" ]; then
 	echo "  > src folder present."
@@ -70,7 +71,6 @@ else
 	echo "  > Creating /var/mizOS/src"
 	mkdir /var/mizOS/src
 fi
-
 
 echo "| Checking packages folder."
 if [ -d "/var/mizOS/packages" ]; then
@@ -80,7 +80,6 @@ else
 	mkdir /var/mizOS/packages
 fi
 
-
 echo "| Checking work folder."
 if [ -d "/var/mizOS/work" ]; then
 	echo "  > work folder present."
@@ -88,7 +87,6 @@ else
 	echo "  > Creating /var/mizOS/work"
 	mkdir /var/mizOS/work
 fi
-
 
 echo "| Checking init folder."
 if [ -d "/var/mizOS/init" ]; then
@@ -100,19 +98,7 @@ else
 	mkdir /var/mizOS/init
 fi
 
-echo -e "\n| Detecting init system."
-if test -f "/usr/bin/sv"; then
-	echo "  > Runit detected."
-	cp assets/os/init/runit/init.lua /var/mizOS/init
-elif test -f "/usr/bin/systemctl"; then
-	echo "  > SystemD detected."
-	cp assets/os/init/systemd/init.lua /var/mizOS/init
-elif test -f "/usr/bin/rc-service"; then
-	echo "  > OpenRC detected."
-	cp assets/os/init/openrc/init.lua /var/mizOS/init
-fi
-
-echo -e "\n| Checking backup folder."
+echo "| Checking backup folder."
 if [ -d "/var/mizOS/backup" ]; then
 	echo "  > Backup folder present, clearing."
 	rm -rf /var/mizOS/backup/*
@@ -131,11 +117,11 @@ else
 fi
 
 
-echo -e "\n| Generating config files."
+
+echo -e "\nGenerating config files."
 cp -r assets/system_config/config/* /var/mizOS/config
 
-
-echo -e "\n| Creating symlinks."
+echo -e "\n| Creating config symlinks."
 echo "  > Creating i3 symlink."
 if [ -d "$HOME/.config/i3" ]; then
 	rm -rf $HOME/.config/i3/*
@@ -167,7 +153,20 @@ fi
 ln -s /var/mizOS/config/fish/config.fish $HOME/.config/fish/config.fish
 
 
-echo -e "\n| Installing core system."
+
+echo -e "\nInstalling core system."
+echo "| Detecting init system."
+if test -f "/usr/bin/sv"; then
+        echo "  > Runit detected."
+        cp assets/os/init/runit/init.lua /var/mizOS/init
+elif test -f "/usr/bin/systemctl"; then
+        echo "  > SystemD detected."
+        cp assets/os/init/systemd/init.lua /var/mizOS/init
+elif test -f "/usr/bin/rc-service"; then
+        echo "  > OpenRC detected."
+        cp assets/os/init/openrc/init.lua /var/mizOS/init
+fi
+echo "| Installing frontend and backend."
 echo "  > Installing the mizOS.lua backend."
 if [ -f "/var/mizOS/core/mizOS.lua" ]; then
 	rm /var/mizOS/core/mizOS.lua
@@ -182,11 +181,12 @@ chmod +x assets/os/miz
 sudo -S cp assets/os/miz /usr/bin
 
 
-echo -e "\n| Installing system identification files."
+
+echo -e "\nFinishing up."
+echo "| Installing system identification files."
 echo "  > Replacing /etc/os-release"
 sudo -S rm /etc/os-release
 sudo -S cp assets/details/os-release /etc
-
 
 echo "  > Replacing /etc/lsb-release"
 sudo -S rm /etc/lsb-release
@@ -197,11 +197,12 @@ sudo -S rm /usr/bin/neofetch
 sudo -S cp assets/details/neofetch /usr/bin
 
 
-
-echo -e "\n| Checking source folder."
+echo "| Checking source folder."
 if [ -d "/var/mizOS/src/mizOS" ]; then
 	echo "  > Cleaning source folder."
 	rm -rf /var/mizOS/src/mizOS
+else
+	echo "  > Source folder not found, enjoy your mizOS installation :)"
 fi
 
 
