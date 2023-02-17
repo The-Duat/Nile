@@ -264,10 +264,12 @@ system.config = function(op, value)
 		elseif wallpapersplit[2] == "webp" then
 			final = directory .. "wallpaper.webp"
 		else
-			return {"error", "Inavlid filetype passed. (Must be .png, .jpg, or .webp)"}
+			return {"error", "Invalid filetype passed. (Must be .png, .jpg, or .webp)"}
 		end
 		x("mv " .. value .. " " final)
 		x("rm /var/mizOS/wallpaper/* && mv " .. final .. " /var/mizOS/wallpaper/")
+	else
+		return {"error", "Invalid argument: " .. op}
 	end
 end
 
