@@ -241,7 +241,10 @@ end
 
 --[=[ mizOS configuration. ]=]--
 system.config = function(op, value)
-	return {"error", "Still in development."}
+	local dev = true
+	if dev then
+		return {"error", "Still in development."}
+	end
 	if op == "wallpaper" then
 		local splitval = splitstr(value, "/")
 		local wallid = 0
@@ -266,7 +269,7 @@ system.config = function(op, value)
 		else
 			return {"error", "Invalid filetype passed. (Must be .png, .jpg, or .webp)"}
 		end
-		x("mv " .. value .. " " final)
+		x("mv " .. value .. " "  .. final)
 		x("rm /var/mizOS/wallpaper/* && mv " .. final .. " /var/mizOS/wallpaper/")
 	else
 		return {"error", "Invalid argument: " .. op}
@@ -277,7 +280,10 @@ end
 
 --[=[ System safety. ]=]--
 system.safety = function(op, program)
-	return {"error", "Still in development."}
+	local dev = true
+	if dev then
+		return {"error", "Still in development."}
+	end
 	if op == "backup" then
 		if program == nil then
 			x("rm -rf /var/mizOS/backup/*")
