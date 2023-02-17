@@ -121,7 +121,7 @@ fi
 echo -e "\nGenerating config files."
 cp -r assets/system_config/config/* /var/mizOS/config
 
-echo -e "\n| Creating config symlinks."
+echo "| Creating config symlinks."
 echo "  > Creating i3 symlink."
 if [ -d "$HOME/.config/i3" ]; then
 	rm -rf $HOME/.config/i3/*
