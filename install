@@ -7,7 +7,7 @@
 echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
-echo "Installing a few dependencies."
+echo "Installing dependencies."
 sudo -S pacman -S lua alacritty firefox neovim neofetch fish i3-gaps i3status dmenu picom feh xclip maim
 
 if [ -d "$HOME/.mizOS" ]; then
@@ -16,10 +16,11 @@ if [ -d "$HOME/.mizOS" ]; then
 	sudo chmod 777 /var/mizOS
 fi
 
-echo "| Checking /var/mizOS"
+echo "Checking install type."
 if [ -d "/var/mizOS" ]; then
-	echo "  > mizOS is already installed, skipping base system installation."
+	echo "| Performing system update."
 else
+	echo "| Performing system install."
 	printf "\n\n\nAre you installing SystemD mizOS onto an Asus laptop? (y/n)\n\n> "
 	read ans
 
@@ -52,7 +53,7 @@ else
 	echo "fish" >> $HOME/.bashrc
 fi
 
-
+echo -e "\nChecking filesystem."
 echo "| Checking core folder."
 if [ -d "/var/mizOS/core" ]; then
 	echo "  > core folder present."
@@ -130,12 +131,12 @@ else
 fi
 
 
-echo "Generating config files."
+echo -e "\n| Generating config files."
 cp -r assets/system_config/config/* /var/mizOS/config
 
 
-echo "Creating symlinks."
-echo "| Creating i3 symlink."
+echo -e "\n| Creating symlinks."
+echo "  > Creating i3 symlink."
 if [ -d "$HOME/.config/i3" ]; then
 	rm -rf $HOME/.config/i3/*
 else
@@ -143,13 +144,13 @@ else
 fi
 ln -s /var/mizOS/config/i3/config $HOME/.config/i3/config
 
-echo "| Creating picom symlink."
+echo "  > Creating picom symlink."
 if [ -f "$HOME/.config/picom.conf" ]; then
 	rm $HOME/.config/picom.conf
 fi
 ln -s /var/mizOS/config/picom/picom.conf $HOME/.config/picom.conf
 
-echo "| Creating alacritty symlink."
+echo "  > Creating alacritty symlink."
 if [ -d "$HOME/.config/alacritty" ]; then
 	rm -rf $HOME/.config/alacritty/*
 else
@@ -157,7 +158,7 @@ else
 fi
 ln -s /var/mizOS/config/alacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 
-echo "| Creating fish symlink."
+echo "  > Creating fish symlink."
 if [ -d "$HOME/.config/fish" ]; then
 	rm -rf $HOME/.config/fish/*
 else
@@ -166,14 +167,14 @@ fi
 ln -s /var/mizOS/config/fish/config.fish $HOME/.config/fish/config.fish
 
 
-
-echo "| Installing the mizOS.lua backend."
+echo -e "\n| Installing core system."
+echo "  > Installing the mizOS.lua backend."
 if [ -f "/var/mizOS/core/mizOS.lua" ]; then
 	rm /var/mizOS/core/mizOS.lua
 fi
 cp assets/os/mizOS.lua /var/mizOS/core
 
-echo "| Installing the miz frontend."
+echo "  > Installing the miz frontend."
 if [ -f "/usr/bin/miz" ]; then
 	sudo rm /usr/bin/miz
 fi
@@ -181,22 +182,23 @@ chmod +x assets/os/miz
 sudo -S cp assets/os/miz /usr/bin
 
 
-echo "| Replacing /etc/os-release"
+echo -e "\n| Installing system identification files."
+echo "  > Replacing /etc/os-release"
 sudo -S rm /etc/os-release
 sudo -S cp assets/details/os-release /etc
 
 
-echo "| Replacing /etc/lsb-release"
+echo "  > Replacing /etc/lsb-release"
 sudo -S rm /etc/lsb-release
 sudo -S cp assets/details/lsb-release /etc
 
-echo "| Replacing /usr/bin/neofetch"
+echo "  > Replacing /usr/bin/neofetch"
 sudo -S rm /usr/bin/neofetch
 sudo -S cp assets/details/neofetch /usr/bin
 
 
 
-echo "| Checking src/mizOS"
+echo -e "\n| Checking source folder."
 if [ -d "/var/mizOS/src/mizOS" ]; then
 	echo "  > Cleaning source folder."
 	rm -rf /var/mizOS/src/mizOS
