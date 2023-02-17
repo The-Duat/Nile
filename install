@@ -8,7 +8,7 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing a few dependencies."
-sudo -S pacman -S lua alacritty firefox neovim neofetch fish
+sudo -S pacman -S lua alacritty firefox neovim neofetch fish i3-gaps i3status dmenu picom feh xclip maim
 
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS
@@ -16,8 +16,9 @@ if [ -d "$HOME/.mizOS" ]; then
 	sudo chmod 777 /var/mizOS
 fi
 
+echo "| Checking /var/mizOS"
 if [ -d "/var/mizOS" ]; then
-	echo "mizOS is already installed, skipping base system installation."
+	echo "  > mizOS is already installed, skipping base system installation."
 else
 	printf "\n\n\nAre you installing SystemD mizOS onto an Asus laptop? (y/n)\n\n> "
 	read ans
@@ -29,197 +30,150 @@ else
 		printf "\n\n\n Are you using the ISO image? (y/n)"
 		read ans
 		if [ $ans == "y" ]; then
-			echo "After installation, run miz gfx setup."
+			echo " !! After installation, run miz gfx setup !!"
 		else
 			sudo -S systemctl enable --now power-profiles-daemon.service
 			sudo -S systemctl enable --now supergfxd
 		fi
 	fi
 
+	echo "| Checking $HOME/.config"
 	if [ -d "$HOME/.config" ]; then
-		echo ".config already exists."
+		echo "  > $HOME/.config already exists."
 	else
+		echo "  > Creating $HOME/.config"
 		mkdir $HOME/.config
 	fi
 
-	echo "Creating /var/mizOS"
+	echo "  > Creating /var/mizOS"
 	sudo mkdir /var/mizOS
 	sudo chmod 777 /var/mizOS
-	echo "Enabling fish."
+	echo "  > Enabling fish."
 	echo "fish" >> $HOME/.bashrc
 fi
 
 
-
+echo "| Checking core folder."
 if [ -d "/var/mizOS/core" ]; then
-	echo "core folder present."
+	echo "  > core folder present."
 else
-	echo "Creating /var/mizOS/core"
+	echo "  > Creating /var/mizOS/core"
 	mkdir /var/mizOS/core
 fi
 
 
-if [ -d "/var/mizOS/config" ]; then
-	echo "config folder present."
-else
-	echo "Creating /var/mizOS/config"
-	mkdir /var/mizOS/config
-fi
-
-
-if [ -d "/var/mizOS/backup" ]; then
-	echo "backup folder present."
-else
-	echo "Creating /var/mizOS/backup."
-	mkdir /var/mizOS/backup
-fi
-
-
-if [ -d "/var/mizOS/wallpaper" ]; then
-	echo "wallpaper folder present."
-else
-	echo "Creating /var/mizOS/wallpaper"
-	mkdir /var/mizOS/wallpaper
-fi
-
-
+echo "| Checking src folder."
 if [ -d "/var/mizOS/src" ]; then
-	echo "src folder present."
+	echo "  > src folder present."
 else
-	echo "creating /var/mizOS/src"
+	echo "  > Creating /var/mizOS/src"
 	mkdir /var/mizOS/src
 fi
 
 
+echo "| Checking packages folder."
 if [ -d "/var/mizOS/packages" ]; then
-	echo "packages folder present."
+	echo "  > Packages folder present."
 else
-	echo "Creating /var/mizOS/packages"
+	echo "  > Creating /var/mizOS/packages"
 	mkdir /var/mizOS/packages
 fi
 
 
+echo "| Checking work folder."
 if [ -d "/var/mizOS/work" ]; then
-	echo "work folder present."
+	echo "  > work folder present."
 else
-	echo "creating /var/mizOS/work"
+	echo "  > Creating /var/mizOS/work"
 	mkdir /var/mizOS/work
 fi
 
 
-if [ -d /var/mizOS/init ]; then
-	echo "init folder present."
-	echo "Clearing old init folder."
+echo "| Checking init folder."
+if [ -d "/var/mizOS/init" ]; then
+	echo "  > init folder present."
+	echo "  > Clearing old init folder."
 	rm -rf /var/mizOS/init/*
 else
-echo "Creating init folder."
+	echo "  > Creating init folder."
 	mkdir /var/mizOS/init
 fi
 
-echo "Detecting init system."
+echo -e "\n| Detecting init system."
 if test -f "/usr/bin/sv"; then
-	echo "Runit detected"
+	echo "  > Runit detected."
 	cp assets/os/init/runit/init.lua /var/mizOS/init
 elif test -f "/usr/bin/systemctl"; then
-	echo "SystemD detected"
+	echo "  > SystemD detected."
 	cp assets/os/init/systemd/init.lua /var/mizOS/init
 elif test -f "/usr/bin/rc-service"; then
-	echo "openRC detected"
+	echo "  > OpenRC detected."
 	cp assets/os/init/openrc/init.lua /var/mizOS/init
 fi
 
+echo -e "\n| Checking backup folder."
+if [ -d "/var/mizOS/backup" ]; then
+	echo "  > Backup folder present, clearing."
+	rm -rf /var/mizOS/backup/*
+else
+	echo "  > Creating backup folder."
+	mkdir /var/mizOS/backup
+fi
+
+echo "| Checking config folder.."
+if [ -d "/var/mizOS/config" ]; then
+	echo "  > config folder found, backing up current configuration."
+	mv /var/mizOS/config/* /var/mizOS/backup/
+else
+	echo "  > Creating config folder."
+	mkdir /var/mizOS/config
+fi
 
 
-echo "Replacing original neofetch file."
-sudo -S rm /usr/bin/neofetch
-sudo -S cp assets/details/neofetch /usr/bin
+echo "Generating config files."
+cp -r assets/system_config/config/* /var/mizOS/config
 
 
-echo "Adding that amazing wallpaper to /var/mizOS/wallpaper."
-cp assets/config/wallpaper.png /var/mizOS/wallpaper/
-
-
-echo "Cleaning old backups, if any."
-rm -rf /var/mizOS/backup/*
-
-echo "Cleaning old config files, if any."
-rm -rf /var/mizOS/config/*
-
-echo -e "mizOS is about to install configuration files for several programs. If you already have configuration files for any of the programs listed below, they will be backed up to /var/mizOS/backup\n(i3-gaps)\n(hyprland)\n(picom)\n(fish)\n(alacritty)\n\n"
-
-echo -e "Backing up files\n\n"
-
+echo "Creating symlinks."
+echo "| Creating i3 symlink."
 if [ -d "$HOME/.config/i3" ]; then
-	echo "Backing up current i3 configuration."
-	mv $HOME/.config/i3 /var/mizOS/backup
-fi
-
-
-if [ -d "$HOME/.config/alacritty" ]; then
-	echo "Backing current alacritty configuration."
-	mv $HOME/.config/alacritty /var/mizOS/backup
-fi
-
-
-if [ -f "$HOME/.config/picom.conf" ]; then
-	echo "Backing up current picom configuration."
-	mv $HOME/.config/picom.conf /var/mizOS/backup
-fi
-
-if [ -f "$HOME/.config/fish/config.fish" ]; then
-	echo "Backing up current fish configuration."
-	mv $HOME/.config/fish/config.fish /var/mizOS/backup
-fi
-
-echo -e "\n\nBackup complete."
-
-
-function install_i3()
-{
-	sudo -S pacman -S i3-gaps i3status dmenu picom feh xclip maim
-
-	echo "Installing the i3 configuration file."
+	rm -rf $HOME/.config/i3/*
+else
 	mkdir $HOME/.config/i3
-	cp assets/config/i3/config $HOME/.config/i3/
-	cp -r assets/config/i3 /var/mizOS/config
-
-	echo "Installing the picom configuration file."
-	cp assets/config/picom.conf $HOME/.config
-	cp assets/config/picom.conf /var/mizOS/config
-}
-
-echo -e "\n\n\nPlease select a user interface (desktop).\n"
-echo "Input the list number."
-echo "1 - i3-gaps [Xorg] (Compatible with Intel, AMD, and Nvidia GPUs)"
-echo "2 - None"
-printf "\n\n> "
-read dans
-if [ $dans == "1" ]; then
-	install_i3
 fi
+ln -s /var/mizOS/config/i3/config $HOME/.config/i3/config
 
-echo "Installing the Alacritty config file."
-mkdir $HOME/.config/alacritty
-mkdir /var/mizOS/config/alacritty
-cp assets/config/alacritty.yml $HOME/.config/alacritty
-cp assets/config/alacritty.yml /var/mizOS/config/alacritty
+echo "| Creating picom symlink."
+if [ -f "$HOME/.config/picom.conf" ]; then
+	rm $HOME/.config/picom.conf
+fi
+ln -s /var/mizOS/config/picom/picom.conf $HOME/.config/picom.conf
 
-echo "Installing the fish configuration file."
-cp assets/config/config.fish $HOME/.config/fish
-cp assets/config/config.fish /var/mizOS/config
+echo "| Creating alacritty symlink."
+if [ -d "$HOME/.config/alacritty" ]; then
+	rm -rf $HOME/.config/alacritty/*
+else
+	mkdir $HOME/.config/alacritty
+fi
+ln -s /var/mizOS/config/alacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 
-echo "Configuration files added."
+echo "| Creating fish symlink."
+if [ -d "$HOME/.config/fish" ]; then
+	rm -rf $HOME/.config/fish/*
+else
+	mkdir $HOME/.config/fish
+fi
+ln -s /var/mizOS/config/fish/config.fish $HOME/.config/fish/config.fish
 
 
 
-
-echo "Installing the mizOS.lua backend."
+echo "| Installing the mizOS.lua backend."
 if [ -f "/var/mizOS/core/mizOS.lua" ]; then
 	rm /var/mizOS/core/mizOS.lua
 fi
 cp assets/os/mizOS.lua /var/mizOS/core
 
-echo "Installing the miz frontend."
+echo "| Installing the miz frontend."
 if [ -f "/usr/bin/miz" ]; then
 	sudo rm /usr/bin/miz
 fi
@@ -227,24 +181,35 @@ chmod +x assets/os/miz
 sudo -S cp assets/os/miz /usr/bin
 
 
-echo "Changing your os-release file."
+echo "| Replacing /etc/os-release"
 sudo -S rm /etc/os-release
 sudo -S cp assets/details/os-release /etc
 
 
-echo "Changing your lsb-release file."
+echo "| Replacing /etc/lsb-release"
 sudo -S rm /etc/lsb-release
 sudo -S cp assets/details/lsb-release /etc
 
+echo "| Replacing /usr/bin/neofetch"
+sudo -S rm /usr/bin/neofetch
+sudo -S cp assets/details/neofetch /usr/bin
 
+
+
+echo "| Checking src/mizOS"
 if [ -d "/var/mizOS/src/mizOS" ]; then
-	echo "Cleaning source folder."
+	echo "  > Cleaning source folder."
 	rm -rf /var/mizOS/src/mizOS
 fi
 
 
+
+echo -e "\n\n"
+
 echo "My work here is done! You should probably reboot."
 echo "  "
-echo "If you are currently using i3-gaps, reload with MOD+shift+c to see theming changes."
+echo "If you are currently using i3-gaps, reload with MOD+shift+c."
 echo " "
-echo "! WARNING ! PLEASE REFRAIN FROM USING sudo pacman -Syu to update, instead, PLEASE use miz update"
+echo -e "mizOS theming is installed on a per-user basis. If you want mizOS theming on another user, run \"miz update\" from that user."
+echo " "
+echo -e "Remember, \"sudo pacman -Syu\" does not update mizOS, use \"miz update\" instead."

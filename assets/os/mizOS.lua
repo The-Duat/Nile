@@ -278,6 +278,24 @@ system.safety = function(op, program)
 	return {"error", "Still in development."}
 	if op == "backup" then
 		if program == nil then
+			x("rm -rf /var/mizOS/backup/*")
+			x("cp -r /var/mizOS/config/* /var/mizOS/backup/")
+		else
+			if dofile("/var/mizOS/config/" .. program .. "/c.lua") == true then
+				if dofile("/var/mizOS/backup/" .. program .. "/c.lua") == true then
+					x("rm -rf /var/mizOS/backup/" .. program)
+				end
+				x("cp -r /var/mizOS/config/" .. program .. " /var/mizOS/backup")
+			else
+				return {"error", "Invalid program: " .. program}
+			end
+		end
+	elseif op == "restore" then
+		x("rm -rf /var/mizOS/config/*")
+		if program == nil then
+			if dofile("/var/mizOS/backup/c.lua") == true then
+				x("rm -rf /var/mizOS/config/*")
+			end
 		end
 	end
 end
