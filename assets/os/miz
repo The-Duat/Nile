@@ -114,8 +114,13 @@ local function gfx(args)
 end
 
 -- mizOS configuration
-local function conf(args)
-	local data = mizos.config(args[2], args[3])
+local function config(args)
+	local data
+	if args[3] ~= nil then
+		data = mizos.config(args[2], nil)
+	else
+		data = mizos.config(args[2], args[3])
+	end
 	if data[1] and data[2] then
 		process(data)
 	end
@@ -148,6 +153,18 @@ local function info(args)
 	end
 end
 
+-- System safety
+local function safety(args)
+	local data
+	if args[3] ~= nil then
+		data = mizos.safety(args[2], args[3])
+	else
+		data = mizos.safety(args[2], nil)
+	end
+	if data then
+		process(data)
+	end
+end
 
 
 -- Command proccessor
@@ -158,9 +175,11 @@ local basecommands = {
 	["cc"] = cc,
 	["list"] = list,
 	["gfx"] = gfx,
-	["conf"] = conf,
+	["config"] = config,
 	["update"] = update,
-	["info"] = info
+	["info"] = info,
+	["backup"] = safety,
+	["restore"] = safety
 }
 
 
@@ -174,5 +193,9 @@ end
 if basecommands[args[1]] then
 	basecommands[args[1]](args)
 else
-	mizos.root(args)
+	local command = ""
+	for _,cmd in pairs(args) do
+		command = command .. cmd .. " "
+	end
+	mizos.root(command)
 end
