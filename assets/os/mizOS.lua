@@ -274,7 +274,7 @@ system.config = function(op, value)
 	elseif op == "pkgsecurity" then
 		if value == "strict" or value == "moderate" or value == "none" then
 			local old = dofile("/var/mizOS/security/active/type.lua")
-			x("rm /var/mizOS/security/active/type.lua")
+			x("rm -rf /var/mizOS/security/active/*")
 			x("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
 			return {"output", "Package security changed from " .. old .. " to " .. value .. "."}
 		else
