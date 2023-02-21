@@ -56,7 +56,7 @@ end
 
 
 --[=[ Whitespace trimmer. ]=]--
-function trim(s)
+local function trim(s)
 	local new = ""
 	local i = 0
 	local new = ""
@@ -431,9 +431,9 @@ local function firewall(op, thepkg)
 	local pkg = trim(thepkg)
 	local repo = dofile("/var/mizOS/repo/repo.lua")
 	local seclevel = dofile("/var/mizOS/security/active/type.lua")
-	if repo.official[pkg] == true then
+	if repo["official"][pkg] == true then
 		return package(op, pkg)
-	elseif repo.community[pkg] == true then
+	elseif repo["community"][pkg] == true then
 		if seclevel ~= "strict" then
 			return package(op, pkg)
 		else
