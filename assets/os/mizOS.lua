@@ -425,9 +425,10 @@ end
 
 
 --[=[ Package security check. ]=]--
-local function firewall(op, pkg)
+local function firewall(op, thepkg)
 	x("rm -rf /var/mizOS/repo/*")
 	x("wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
+	local pkg = trim(thepkg)
 	local repo = dofile("/var/mizOS/repo/repo.lua")
 	local seclevel = dofile("/var/mizOS/security/active/type.lua")
 	if repo.official[pkg] == true then
