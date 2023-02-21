@@ -197,7 +197,7 @@ bar {
 	urgent_workspace #f38ba8 #1e1e2e #f38ba8
 	}
 }
-exec feh --bg-fill --zoom fill /var/mizOS/wallpaper/wall*
+exec feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*
 
 gaps inner 10
 

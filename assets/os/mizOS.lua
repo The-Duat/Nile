@@ -262,7 +262,7 @@ system.config = function(op, value)
 		local final = ""
 		if wallpapersplit[2] == "png" then
 			final = directory .. "wallpaper.png"
-		elseif wallpapersplit[2] == "jpg" then
+	elseif wallpapersplit[2] == "jpg" then
 			final = directory .. "wallpaper.jpg"
 		elseif wallpapersplit[2] == "webp" then
 			final = directory .. "wallpaper.webp"

@@ -8,7 +8,7 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing dependencies."
-sudo -S pacman -S lua alacritty firefox neovim neofetch fish i3-gaps i3status dmenu picom feh xclip maim
+sudo -S pacman -S lua alacritty firefox neovim neofetch fish i3-gaps i3status dmenu picom feh xclip maim curl
 
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS
@@ -80,6 +80,13 @@ else
 	mkdir /var/mizOS/packages
 fi
 
+echo "| Checking pkglist folder."
+if [ -d "/var/mizOS/pkglist" ]; then
+	echo "  > pkglist folder present."
+else
+	echo "  > Creating /var/mizOS/pkglist"
+fi
+
 echo "| Checking work folder."
 if [ -d "/var/mizOS/work" ]; then
 	echo "  > work folder present."
@@ -96,6 +103,14 @@ if [ -d "/var/mizOS/init" ]; then
 else
 	echo "  > Creating init folder."
 	mkdir /var/mizOS/init
+fi
+
+echo "| Creating security folder."
+if [ -d "/var/mizOS/security" ]; then
+	echo "  > security folder present."
+else
+	echo "  > Creating security folder."
+	cp -r assets/os/security /var/mizOS
 fi
 
 echo "| Checking backup folder."
