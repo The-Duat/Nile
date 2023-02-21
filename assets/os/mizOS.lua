@@ -271,7 +271,7 @@ system.config = function(op, value)
 		end
 		x("mv " .. value .. " "  .. final)
 		x("rm /var/mizOS/wallpaper/* && mv " .. final .. " /var/mizOS/wallpaper/")
-	elseif op == "pkgsecurity" then
+	elseif op == "pkgsec" then
 		if value == "strict" or value == "moderate" or value == "none" then
 			local old = dofile("/var/mizOS/security/active/type.lua")
 			x("rm -rf /var/mizOS/security/active/*")
