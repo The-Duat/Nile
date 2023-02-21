@@ -80,11 +80,12 @@ else
 	mkdir /var/mizOS/packages
 fi
 
-echo "| Checking pkglist folder."
-if [ -d "/var/mizOS/pkglist" ]; then
-	echo "  > pkglist folder present."
+echo "| Checking repo folder."
+if [ -d "/var/mizOS/repo" ]; then
+	echo "  > repo folder present."
 else
-	echo "  > Creating /var/mizOS/pkglist"
+	echo "  > Creating /var/mizOS/repo"
+	mkdir /var/mizOS/repo
 fi
 
 echo "| Checking work folder."

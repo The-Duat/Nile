@@ -242,10 +242,10 @@ end
 --[=[ mizOS configuration. ]=]--
 system.config = function(op, value)
 	local dev = true
-	if dev then
-		return {"error", "Still in development."}
-	end
 	if op == "wallpaper" then
+		if dev then
+			return {"error", "Still in development."}
+		end
 		local splitval = splitstr(value, "/")
 		local wallid = 0
 		for _,part in pairs(splitval) do
@@ -262,7 +262,7 @@ system.config = function(op, value)
 		local final = ""
 		if wallpapersplit[2] == "png" then
 			final = directory .. "wallpaper.png"
-	elseif wallpapersplit[2] == "jpg" then
+		elseif wallpapersplit[2] == "jpg" then
 			final = directory .. "wallpaper.jpg"
 		elseif wallpapersplit[2] == "webp" then
 			final = directory .. "wallpaper.webp"
@@ -271,6 +271,15 @@ system.config = function(op, value)
 		end
 		x("mv " .. value .. " "  .. final)
 		x("rm /var/mizOS/wallpaper/* && mv " .. final .. " /var/mizOS/wallpaper/")
+	elseif op == "pkgsecurity" then
+		if value == "strict" or value == "moderate" or value == "none" then
+			local old = dofile("/var/mizOS/security/active/type.lua")
+			x("rm /var/mizOS/security/active/type.lua")
+			x("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
+			return {"output", "Package security changed from " .. old .. " to " .. value .. "."}
+		else
+			return {"error", "Invalid argument: " .. value}
+		end
 	else
 		return {"error", "Invalid argument: " .. op}
 	end
@@ -307,12 +316,6 @@ system.safety = function(op, program)
 		end
 	end
 end
-
-
-
-local officialpkgs = {
-	"mizosu97/grapejuice"
-}
 
 
 
@@ -421,6 +424,31 @@ end
 
 
 
+--[=[ Package security check. ]=]--
+local function firewall(op, pkg)
+	x("rm -rf /var/mizOS/repo/*")
+	x("wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
+	local repo = dofile("/var/mizOS/repo/repo.lua")
+	local seclevel = dofile("/var/mizOS/security/active/type.lua")
+	if repo.official[pkg] == true then
+		return package(op, pkg)
+	elseif repo.community[pkg] == true then
+		if seclevel ~= "strict" then
+			return package(op, pkg)
+		else
+			return {"error", "Can't install community packages with the \"strict\" security level set."}
+		end
+	else
+		if seclevel == "none" then
+			return package(op, pkg)
+		else
+			return {"error", "Can't install global packages with the \"" .. seclevel .. "\" security level set."}
+		end
+	end
+end
+
+
+
 --[=[ Software management. ]=]--
 system.software = function(op, channel, pkgs)
 	local packages = ""
@@ -445,7 +473,7 @@ system.software = function(op, channel, pkgs)
 		elseif channel == "pacman" then
 			x("sudo pacman -S " .. packages)
 		elseif channel == "mizos" then
-			return package("install", packages)
+			return firewall("install", packages)
 		end
 	elseif op == "remove" then
 		if channel == "aur" then
@@ -464,7 +492,7 @@ system.software = function(op, channel, pkgs)
 		elseif channel == "pacman" then
 			x("sudo pacman -Rn " .. packages)
 		elseif channel == "mizos" then
-			return package("remove", packages)
+			return firewall("remove", packages)
 		end
 	elseif op == "clear cache" then
 		x("yay -Scc")
