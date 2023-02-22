@@ -241,37 +241,21 @@ end
 
 --[=[ mizOS configuration. ]=]--
 system.config = function(op, value)
-	local dev = true
 	if op == "wallpaper" then
-		if dev then
-			return {"error", "Still in development."}
-		end
-		local splitval = splitstr(value, "/")
-		local wallid = 0
-		for _,part in pairs(splitval) do
-			wallid = wallid + 1
-		end
-		local dircount = 1
-		local directory = "/"
-		while dircount < wallid do
-			directory = directory .. splitval[dircount] .. "/"
-			dircount = dircount + 1
-		end
-		local wallpapername = splitval[wallid]
-		local wallpapersplit = splitstr(wallpapername,".")
-		local final = ""
-		if wallpapersplit[2] == "png" then
-			final = directory .. "wallpaper.png"
-		elseif wallpapersplit[2] == "jpg" then
-			final = directory .. "wallpaper.jpg"
-		elseif wallpapersplit[2] == "webp" then
-			final = directory .. "wallpaper.webp"
-		else
+		local split = splitstr(value, ".")
+		local rawnamesplit = splitstr(value, "/")
+		local filetype = split[#split]
+		local rawname = rawnamesplit[#rawnamesplit]
+		if filetype ~= "png" and filetype ~= "jpg" and filetype ~= "webp" then
 			return {"error", "Invalid filetype passed. (Must be .png, .jpg, or .webp)"}
 		end
-		x("mv " .. value .. " "  .. final)
-		x("rm /var/mizOS/wallpaper/* && mv " .. final .. " /var/mizOS/wallpaper/")
-	elseif op == "pkgsec" then
+		x("rm -rf /var/mizOS/config/wallpaper/*")
+		x("cp " .. value .. " /var/mizOS/config/wallpaper/")
+		x("mv /var/mizOS/config/wallpaper/" .. rawname .. " /var/mizOS/config/wallpaper/wallpaper." .. filetype)
+		x("pkill -fi feh")
+		x("feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*")
+		return {"output", "Wallpaper changed to " .. value}
+	elseif op == "pkgsecurity" then
 		if value == "strict" or value == "moderate" or value == "none" then
 			local old = dofile("/var/mizOS/security/active/type.lua")
 			x("rm -rf /var/mizOS/security/active/*")

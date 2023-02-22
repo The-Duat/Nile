@@ -115,12 +115,7 @@ end
 
 -- mizOS configuration
 local function config(args)
-	local data
-	if args[3] ~= nil then
-		data = mizos.config(args[2], nil)
-	else
-		data = mizos.config(args[2], args[3])
-	end
+	local data = mizos.config(args[2], args[3])
 	if data[1] and data[2] then
 		process(data)
 	end
