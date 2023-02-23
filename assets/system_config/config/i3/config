@@ -18,25 +18,25 @@
 
 
 #### MIZOS CONFIG SETTINGS, DONT TOUCH UNLESS YOU KNOW WHAT YOU ARE DOING.
-set $mod exec `cat /var/mizOS/config/i3/settings/mod-key | tr -d '\n'`
+set $mod `exec cat /var/mizOS/config/i3/settings/mod-key | tr -d '\n'`
 
-set $bar-color exec `cat /var/mizOS/config/i3/settings/bar-color | tr -d '\n'`
-set $bar-position exec `cat /var/mizOS/config/i3/settings/bar-position | tr -d '\n'`
+set $bar-color `exec cat /var/mizOS/config/i3/settings/bar-color | tr -d '\n'`
+set $bar-position `exec cat /var/mizOS/config/i3/settings/bar-position | tr -d '\n'`
 
-set $border-color1 exec `cat /var/mizOS/config/i3/settings/border-color1 | tr -d '\n'`
-set $border-color2 exec `cat /var/mizOS/config/i3/settings/border-color2 | tr -d '\n'`
-set $border-color3 exec `cat /var/mizOS/config/i3/settings/border-color3 | tr -d '\n'`
-set $border-size exec `cat /var/mizOS/config/i3/settings/border-size | tr -d '\n'`
+set $border-color1 `exec cat /var/mizOS/config/i3/settings/border-color1 | tr -d '\n'`
+set $border-color2 `exec cat /var/mizOS/config/i3/settings/border-color2 | tr -d '\n'`
+set $border-color3 `exec cat /var/mizOS/config/i3/settings/border-color3 | tr -d '\n'`
+set $border-size `exec cat /var/mizOS/config/i3/settings/border-size | tr -d '\n'`
 
-set $gaps-inner exec `cat /var/mizOS/config/i3/settings/gaps-inner | tr -d '\n'`
-set $gaps-outer exec `cat /var/mizOS/config/i3/settings/gaps-outer | tr -d '\n'`
+set $gaps-inner `exec cat /var/mizOS/config/i3/settings/gaps-inner | tr -d '\n'`
+set $gaps-outer `exec cat /var/mizOS/config/i3/settings/gaps-outer | tr -d '\n'`
 
-set $ws-bg-color1 exec `cat /var/mizOS/config/i3/settings/ws-bg-color1 | tr -d '\n'`
-set $ws-bg-color2 exec `cat /var/mizOS/config/i3/settings/ws-bg-color2 | tr -d '\n'`
-set $ws-bg-color3 exec `cat /var/mizOS/config/i3/settings/ws-bg-color3 | tr -d '\n'`
-set $ws-txt-color1 exec `cat /var/mizOS/config/i3/settings/ws-txt-color1 | tr -d '\n'`
-set $ws-txt-color2 exec `cat /var/mizOS/config/i3/settings/ws-txt-color2 | tr -d '\n'`
-set $ws-txt-color3 exec `cat /var/mizOS/config/i3/settings/ws-txt-color3 | tr -d '\n'`
+set $ws-bg-color1 `exec cat /var/mizOS/config/i3/settings/ws-bg-color1 | tr -d '\n'`
+set $ws-bg-color2 `exec cat /var/mizOS/config/i3/settings/ws-bg-color2 | tr -d '\n'`
+set $ws-bg-color3 `exec cat /var/mizOS/config/i3/settings/ws-bg-color3 | tr -d '\n'`
+set $ws-txt-color1 `exec cat /var/mizOS/config/i3/settings/ws-txt-color1 | tr -d '\n'`
+set $ws-txt-color2 `exec cat /var/mizOS/config/i3/settings/ws-txt-color2 | tr -d '\n'`
+set $ws-txt-color3 `exec cat /var/mizOS/config/i3/settings/ws-txt-color3 | tr -d '\n'`
 
 
 
