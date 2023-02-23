@@ -9,7 +9,43 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod4
+
+
+
+
+
+
+
+
+#### MIZOS CONFIG SETTINGS, DONT TOUCH UNLESS YOU KNOW WHAT YOU ARE DOING.
+set $mod `cat /var/mizOS/config/i3/settings/mod-key | tr -d '\n'`
+
+set $bar-color `cat /var/mizOS/config/i3/settings/bar-color | tr -d '\n'`
+set $bar-position `cat /var/mizOS/config/i3/settings/bar-position | tr -d '\n'`
+
+set $border-color1 `cat /var/mizOS/config/i3/settings/border-color1 | tr -d '\n'`
+set $border-color2 `cat /var/mizOS/config/i3/settings/border-color2 | tr -d '\n'`
+set $border-color3 `cat /var/mizOS/config/i3/settings/border-color3 | tr -d '\n'`
+set $border-size `cat /var/mizOS/config/i3/settings/border-size | tr -d '\n'`
+
+set $gaps-inner `cat /var/mizOS/config/i3/settings/gaps-inner | tr -d '\n'`
+set $gaps-outer `cat /var/mizOS/config/i3/settings/gaps-outer | tr -d '\n'`
+
+set $ws-bg-color1 `cat /var/mizOS/config/i3/settings/ws-bg-color1 | tr -d '\n'`
+set $ws-bg-color2 `cat /var/mizOS/config/i3/settings/ws-bg-color2 | tr -d '\n'`
+set $ws-bg-color3 `cat /var/mizOS/config/i3/settings/ws-bg-color3 | tr -d '\n'`
+set $ws-txt-color1 `cat /var/mizOS/config/i3/settings/ws-txt-color1 | tr -d '\n'`
+set $ws-txt-color2 `cat /var/mizOS/config/i3/settings/ws-txt-color2 | tr -d '\n'`
+set $ws-txt-color3 `cat /var/mizOS/config/i3/settings/ws-txt-color3 | tr -d '\n'`
+
+
+
+
+
+
+
+
+
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -177,35 +213,35 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-bindsym $mod+shift+p exec xrandr --output HDMI1 --auto --right-of eDP1 && feh --bg-fill --zoom fill ~/Pictures/gltree.png
 
 bindsym $mod+r mode "resize"
 
-default_border pixel 2
-default_floating_border pixel 2
+default_border pixel $border-size
+default_floating_border pixel $border-size
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	position top
+	position $bar-position
 	colors {
-	background #1e1e2e
-
-	active_workspace #b4befe #1e1e2e #b4befe
-	focused_workspace #f5c2e7 #1e1e21e #f5c2e7
-	inactive_workspace #1e1e2e #1e1e2e #7f849c
-	urgent_workspace #f38ba8 #1e1e2e #f38ba8
+	background $bar-color
+	
+	focused_workspace $ws-bg-color1 $ws-bg-color1 $ws-txt-color1
+	active_workspace $ws-bg-color2 $ws-bg-color2 $ws-txt-color2
+	inactive_workspace $ws-bg-color2 $ws-bg-color2 $ws-txt-color2
+	urgent_workspace $ws-bg-color3 $ws-bg-color3 $ws-txt-color3
 	}
 }
 exec feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*
 
-gaps inner 10
+gaps inner $gaps-inner
+gaps outer $gaps-outer
 
 
-client.focused #f5c2e7 #000000 #000000 #f5c2e7 #f5c2e7
-client.focused_inactive #1e1e2e #000000 #000000 #1e1e2e #1e1e2e
-client.unfocused #1e1e2e #000000 #000000 #1e1e2e #1e1e2e
-client.urgent #f38ba8 #000000 #000000 #f38ba8 #f38ba8
+client.focused $border-color1 #000000 #000000 $border-color1 $border-color1
+client.focused_inactive $border-color2 #000000 #000000 $border-color2 $border-color2
+client.unfocused $border-color2 #000000 #000000 $border-color2 $border-color2
+client.urgent $border-color3 #000000 #000000 $border-color3 $border-color3
 
 bindsym $mod+shift+a exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
 bindsym $mod+shift+m exec picom 
