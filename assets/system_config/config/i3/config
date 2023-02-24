@@ -226,10 +226,10 @@ bar {
 	colors {
 	background ${bar_color:1}
 	
-	focused_workspace ${ws_bg_color1:1} ${ws_bg_color1:1} ${ws_txt_color1:1}
-	active_workspace ${ws_bg_color2:1} ${ws_bg_color2:1} ${ws_txt_color2:1}
-	inactive_workspace ${ws_bg_color2:1} ${ws_bg_color2:1} ${ws_txt_color3:1}
-	urgent_workspace ${ws_bg_color3:1} ${ws_bg_color3:1} ${ws_txt_color3:1}
+	focused_workspace #${ws_bg_color1:1} #${ws_bg_color1:1} #${ws_txt_color1:1}
+	active_workspace #${ws_bg_color2:1} #${ws_bg_color2:1} #${ws_txt_color2:1}
+	inactive_workspace #${ws_bg_color2:1} #${ws_bg_color2:1} #${ws_txt_color3:1}
+	urgent_workspace #${ws_bg_color3:1} #${ws_bg_color3:1} #${ws_txt_color3:1}
 	}
 }
 exec feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*
@@ -238,10 +238,10 @@ gaps inner $gaps-inner
 gaps outer $gaps-outer
 
 
-client.focused ${border_color1:1} #000000 #000000 ${border_color1:1} ${border_color1:1}
-client.focused_inactive ${border_color2:1} #000000 #000000 ${border_color2:1} ${border_color2:1}
-client.unfocused ${border_color2:1} #000000 #000000 ${border_color2:1} ${border_color2:1}
-client.urgent ${border_color3:1} #000000 #000000 ${border_color3:1} ${border_color3:1}
+client.focused #${border_color1:1} #000000 #000000 #${border_color1:1} #${border_color1:1}
+client.focused_inactive #${border_color2:1} #000000 #000000 #${border_color2:1} #${border_color2:1}
+client.unfocused #${border_color2:1} #000000 #000000 #${border_color2:1} #${border_color2:1}
+client.urgent #${border_color3:1} #000000 #000000 #${border_color3:1} #${border_color3:1}
 
 bindsym $mod+shift+a exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
 bindsym $mod+shift+m exec picom 
