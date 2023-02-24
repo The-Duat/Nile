@@ -20,16 +20,24 @@
 #### MIZOS CONFIG SETTINGS, DONT TOUCH UNLESS YOU KNOW WHAT YOU ARE DOING.
 exec --no-startup-id export mod=$(cat /var/mizOS/config/i3/settings/mod-key)
 
+
+
 exec --no-startup-id export bar_color=$(cat /var/mizOS/config/i3/settings/bar-color)
 exec --no-startup-id export bar_position=$(cat /var/mizOS/config/i3/settings/bar-position)
+
+
 
 exec --no-startup-id export border_color1=$(cat /var/mizOS/config/i3/settings/border-color1)
 exec --no-startup-id export border_color2=$(cat /var/mizOS/config/i3/settings/border-color2)
 exec --no-startup-id export border_color3=$(cat /var/mizOS/config/i3/settings/border-color3)
-exec --no-startup-id export border_size=$(cat /var/mizOS/config/i3/settings/border-size)
+exec --no-startup-id export border_size=$(expr $(cat /var/mizOS/config/i3/settings/border-size) + 0)
 
-exec --no-startup-id export gaps_inner=$(cat /var/mizOS/config/i3/settings/gaps-inner)
-exec --no-startup-id export gaps_outer=$(cat /var/mizOS/config/i3/settings/gaps-outer)
+
+
+exec --no-startup-id export gaps_inner=$(expr $(cat /var/mizOS/config/i3/settings/gaps-inner) + 0)
+exec --no-startup-id export gaps_outer=$(expr $(cat /var/mizOS/config/i3/settings/gaps_outer) + 0)
+
+
 
 exec --no-startup-id export ws_bg_color1=$(cat /var/mizOS/config/i3/settings/ws-bg-color1)
 exec --no-startup-id export ws_bg_color2=$(cat /var/mizOS/config/i3/settings/ws-bg-color2)
@@ -224,7 +232,7 @@ default_floating_border pixel $border-size
 bar {
 	position $bar-position
 	colors {
-	background ${bar_color:1}
+	background #${bar_color:1}
 	
 	focused_workspace #${ws_bg_color1:1} #${ws_bg_color1:1} #${ws_txt_color1:1}
 	active_workspace #${ws_bg_color2:1} #${ws_bg_color2:1} #${ws_txt_color2:1}
