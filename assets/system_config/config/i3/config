@@ -18,25 +18,25 @@
 
 
 #### MIZOS CONFIG SETTINGS, DONT TOUCH UNLESS YOU KNOW WHAT YOU ARE DOING.
-exec --no-startup-id mod=$(cat /var/mizOS/config/i3/settings/mod)
+exec --no-startup-id export mod=$(cat /var/mizOS/config/i3/settings/mod)
 
-exec --no-startup-id bar-color=$(cat /var/mizOS/config/i3/settings/bar-color)
-exec --no-startup-id bar-position=$(cat /var/mizOS/config/i3/settings/bar-position)
+exec --no-startup-id export bar-color=$(cat /var/mizOS/config/i3/settings/bar-color)
+exec --no-startup-id export bar-position=$(cat /var/mizOS/config/i3/settings/bar-position)
 
-exec --no-startup-id border-color1=$(cat /var/mizOS/config/i3/settings/border-color1)
-exec --no-startup-id border-color2=$(cat /var/mizOS/config/i3/settings/border-color2)
-exec --no-startup-id border-color3=$(cat /var/mizOS/config/i3/settings/border-color3)
-exec --no-startup-id border-size=$(cat /var/mizOS/config/i3/settings/border-size)
+exec --no-startup-id export border-color1=$(cat /var/mizOS/config/i3/settings/border-color1)
+exec --no-startup-id export border-color2=$(cat /var/mizOS/config/i3/settings/border-color2)
+exec --no-startup-id export border-color3=$(cat /var/mizOS/config/i3/settings/border-color3)
+exec --no-startup-id export border-size=$(cat /var/mizOS/config/i3/settings/border-size)
 
-exec --no-startup-id gaps-inner=$(cat /var/mizOS/config/i3/settings/gaps-inner)
-exec --no-startup-id gaps-outer=$(cat /var/mizOS/config/i3/settings/gaps-outer)
+exec --no-startup-id export gaps-inner=$(cat /var/mizOS/config/i3/settings/gaps-inner)
+exec --no-startup-id export gaps-outer=$(cat /var/mizOS/config/i3/settings/gaps-outer)
 
-exec --no-startup-id ws-bg-color1=$(cat /var/mizOS/config/i3/settings/ws-bg-color1)
-exec --no-startup-id ws-bg-color2=$(cat /var/mizOS/config/i3/settings/ws-bg-color2)
-exec --no-startup-id ws-bg-color3=$(cat /var/mizOS/config/i3/settings/ws-bg-color3)
-exec --no-startup-id ws-txt-color1=$(cat /var/mizOS/config/i3/settings/ws-txt-color1)
-exec --no-startup-id ws-txt-color2=$(cat /var/mizOS/config/i3/settings/ws-txt-color2)
-exec --no-startup-id ws-txt-color3=$(cat /var/mizOS/config/i3/settings/ws-txt-color3)
+exec --no-startup-id export ws-bg-color1=$(cat /var/mizOS/config/i3/settings/ws-bg-color1)
+exec --no-startup-id export ws-bg-color2=$(cat /var/mizOS/config/i3/settings/ws-bg-color2)
+exec --no-startup-id export ws-bg-color3=$(cat /var/mizOS/config/i3/settings/ws-bg-color3)
+exec --no-startup-id export ws-txt-color1=$(cat /var/mizOS/config/i3/settings/ws-txt-color1)
+exec --no-startup-id export ws-txt-color2=$(cat /var/mizOS/config/i3/settings/ws-txt-color2)
+exec --no-startup-id export ws-txt-color3=$(cat /var/mizOS/config/i3/settings/ws-txt-color3)
 
 
 
