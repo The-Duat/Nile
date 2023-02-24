@@ -224,13 +224,13 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-default_border pixel $border-size
-default_floating_border pixel $border-size
+default_border pixel $border_size
+default_floating_border pixel $border_size
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	position $bar-position
+	position $bar_position
 	colors {
 	background #${bar_color:1}
 	
@@ -242,8 +242,8 @@ bar {
 }
 exec feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*
 
-gaps inner $gaps-inner
-gaps outer $gaps-outer
+gaps inner $gaps_inner
+gaps outer $gaps_outer
 
 
 client.focused #${border_color1:1} #000000 #000000 #${border_color1:1} #${border_color1:1}
