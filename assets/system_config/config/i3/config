@@ -18,25 +18,25 @@
 
 
 #### MIZOS CONFIG SETTINGS, DONT TOUCH UNLESS YOU KNOW WHAT YOU ARE DOING.
-exec --no-startup-id export mod=$(cat /var/mizOS/config/i3/settings/mod)
+exec --no-startup-id export mod=$(cat /var/mizOS/config/i3/settings/mod-key)
 
-exec --no-startup-id export bar-color=$(cat /var/mizOS/config/i3/settings/bar-color)
-exec --no-startup-id export bar-position=$(cat /var/mizOS/config/i3/settings/bar-position)
+exec --no-startup-id export bar_color=$(cat /var/mizOS/config/i3/settings/bar-color)
+exec --no-startup-id export bar_position=$(cat /var/mizOS/config/i3/settings/bar-position)
 
-exec --no-startup-id export border-color1=$(cat /var/mizOS/config/i3/settings/border-color1)
-exec --no-startup-id export border-color2=$(cat /var/mizOS/config/i3/settings/border-color2)
-exec --no-startup-id export border-color3=$(cat /var/mizOS/config/i3/settings/border-color3)
-exec --no-startup-id export border-size=$(cat /var/mizOS/config/i3/settings/border-size)
+exec --no-startup-id export border_color1=$(cat /var/mizOS/config/i3/settings/border-color1)
+exec --no-startup-id export border_color2=$(cat /var/mizOS/config/i3/settings/border-color2)
+exec --no-startup-id export border_color3=$(cat /var/mizOS/config/i3/settings/border-color3)
+exec --no-startup-id export border_size=$(cat /var/mizOS/config/i3/settings/border-size)
 
-exec --no-startup-id export gaps-inner=$(cat /var/mizOS/config/i3/settings/gaps-inner)
-exec --no-startup-id export gaps-outer=$(cat /var/mizOS/config/i3/settings/gaps-outer)
+exec --no-startup-id export gaps_inner=$(cat /var/mizOS/config/i3/settings/gaps-inner)
+exec --no-startup-id export gaps_outer=$(cat /var/mizOS/config/i3/settings/gaps-outer)
 
-exec --no-startup-id export ws-bg-color1=$(cat /var/mizOS/config/i3/settings/ws-bg-color1)
-exec --no-startup-id export ws-bg-color2=$(cat /var/mizOS/config/i3/settings/ws-bg-color2)
-exec --no-startup-id export ws-bg-color3=$(cat /var/mizOS/config/i3/settings/ws-bg-color3)
-exec --no-startup-id export ws-txt-color1=$(cat /var/mizOS/config/i3/settings/ws-txt-color1)
-exec --no-startup-id export ws-txt-color2=$(cat /var/mizOS/config/i3/settings/ws-txt-color2)
-exec --no-startup-id export ws-txt-color3=$(cat /var/mizOS/config/i3/settings/ws-txt-color3)
+exec --no-startup-id export ws_bg_color1=$(cat /var/mizOS/config/i3/settings/ws-bg-color1)
+exec --no-startup-id export ws_bg_color2=$(cat /var/mizOS/config/i3/settings/ws-bg-color2)
+exec --no-startup-id export ws_bg_color3=$(cat /var/mizOS/config/i3/settings/ws-bg-color3)
+exec --no-startup-id export ws_txt_color1=$(cat /var/mizOS/config/i3/settings/ws-txt-color1)
+exec --no-startup-id export ws_txt_color2=$(cat /var/mizOS/config/i3/settings/ws-txt-color2)
+exec --no-startup-id export ws_txt_color3=$(cat /var/mizOS/config/i3/settings/ws-txt-color3)
 
 
 
@@ -224,12 +224,12 @@ default_floating_border pixel $border-size
 bar {
 	position top_$bar-position
 	colors {
-	background #${bar-color}
+	background #${bar_color}
 	
-	focused_workspace #${ws-bg-color1} #${ws-bg-color1} #${ws-txt-color1}
-	active_workspace #${ws-bg-color2} #${ws-bg-color2} #${ws-txt-color2}
-	inactive_workspace #${ws-bg-color2} #${ws-bg-color2} #${ws-txt-color3}
-	urgent_workspace #${ws-bg-color3} #${ws-bg-color3} #${ws-txt-color3}
+	focused_workspace #${ws_bg_color1} #${ws_bg_color1} #${ws_txt_color1}
+	active_workspace #${ws_bg_color2} #${ws_bg_color2} #${ws_txt_color2}
+	inactive_workspace #${ws_bg_color2} #${ws_bg_color2} #${ws_txt_color3}
+	urgent_workspace #${ws_bg_color3} #${ws_bg_color3} #${ws_txt_color3}
 	}
 }
 exec feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*
@@ -238,10 +238,10 @@ gaps inner $gaps-inner
 gaps outer $gaps-outer
 
 
-client.focused #${border-color1} #000000 #000000 #${border-color1} #${border-color1}
-client.focused_inactive #${border-color2} #000000 #000000 #${border-color2} #${border-color2}
-client.unfocused #${border-color2} #000000 #000000 #${border-color2} #${border-color2}
-client.urgent #${border-color3} #000000 #000000 #${border-color3} #${border-color3}
+client.focused #${border_color1} #000000 #000000 #${border_color1} #${border_color1}
+client.focused_inactive #${border_color2} #000000 #000000 #${border_color2} #${border_color2}
+client.unfocused #${border_color2} #000000 #000000 #${border_color2} #${border_color2}
+client.urgent #${border_color3} #000000 #000000 #${border_color3} #${border_color3}
 
 bindsym $mod+shift+a exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
 bindsym $mod+shift+m exec picom 
