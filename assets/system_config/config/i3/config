@@ -242,8 +242,8 @@ bar {
 }
 exec feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*
 
-gaps inner $gaps_inner
-gaps outer $gaps_outer
+gaps inner ${gaps_inner}px
+gaps outer ${gaps_outer}px
 
 
 client.focused #${border_color1:1} #000000 #000000 #${border_color1:1} #${border_color1:1}
