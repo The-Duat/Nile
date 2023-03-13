@@ -316,7 +316,7 @@ local i3conf = {
 	["bar-color"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
@@ -334,7 +334,7 @@ local i3conf = {
 		["border-color1"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
@@ -343,7 +343,7 @@ local i3conf = {
 		["border-color2"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
@@ -352,7 +352,7 @@ local i3conf = {
 		["border-color3"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
@@ -400,7 +400,7 @@ local i3conf = {
 		["ws-bg-color1"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
@@ -409,7 +409,7 @@ local i3conf = {
 		["ws-bg-color2"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
@@ -418,7 +418,7 @@ local i3conf = {
 		["ws-bg-color3"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
@@ -427,7 +427,7 @@ local i3conf = {
 		["ws-txt-color1"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
@@ -436,7 +436,7 @@ local i3conf = {
 		["ws-txt-color2"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
@@ -445,7 +445,7 @@ local i3conf = {
 		["ws-txt-color3"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
-				wconfig(op, value)
+				wconfig(op, "#" .. value)
 				return {"output", op .. " changed to " .. value}
 			else
 				return {"error", "Invalid hex color code: " .. value}
