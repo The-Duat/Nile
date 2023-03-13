@@ -142,8 +142,8 @@ local function hexcolorcheck(str)
 	while i <= #hex do
 		if not validhexchars[string.sub(hex, i, i)] then
 			return false
-			i = i + 1
 		end
+		i = i + 1
 	end
 	return true
 end
