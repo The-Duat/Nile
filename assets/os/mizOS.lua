@@ -170,6 +170,7 @@ local function intcheck(str)
 		if not validdigits[string.sub(str, i, i)] == true then
 			return false
 		end
+		i = i + 1
 	end
 	return true
 end
