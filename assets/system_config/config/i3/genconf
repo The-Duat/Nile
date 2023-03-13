@@ -139,7 +139,7 @@ default_border pixel $border_size
 default_floating_border pixel $border_size
 
 bar {
-	position top
+	position $bar_position
 	colors {
 	background $bar_color
 	
