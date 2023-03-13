@@ -221,7 +221,8 @@ else
 	echo "  > Source folder not found, enjoy your mizOS installation :)"
 fi
 
-
+echo -e "\nGenerating i3 config."
+cd /var/mizOS/config/i3 && ./genconf
 
 echo -e "\n\n"
 
