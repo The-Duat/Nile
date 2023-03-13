@@ -481,7 +481,7 @@ system.config = function(op, value)
 			return {"error", "Invalid argument: " .. value}
 		end
 	elseif i3conf[op][1] == true then
-		return i3conf[op][2]()
+		return i3conf[op][2](op, value)
 	else
 		return {"error", "Invalid argument: " .. op}
 	end
