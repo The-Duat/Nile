@@ -133,9 +133,7 @@ local validhexchars = {
 
 local function hexcolorcheck(str)
 	local hex = string.lower(str)
-	if #hex ~= 7 then
-		return false
-	elseif string.sub(hex, 1, 1) ~= "#" then
+	if #hex ~= 6 then
 		return false
 	end
 	local i = 2
@@ -326,11 +324,11 @@ local i3conf = {
 		end},
 		["bar-position"] = {true, 
 		function(op, value)
-			if intcheck(value) == true then
+			if value == "bottom" or value == "top" then
 				wconfig(op, value)
 				return {"output", op .. " changed to " .. value}
 			else
-				return {"error", "Invalid integer: " .. value}
+				return {"error", "Invalid position: " .. value}
 			end 
 		end},
 		["border-color1"] = {true, 
