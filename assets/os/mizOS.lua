@@ -477,11 +477,11 @@ system.config = function(op, value)
 			x("rm -rf /var/mizOS/security/active/*")
 			x("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
 			return {"output", "Package security changed from " .. old .. " to " .. value .. "."}
-		elseif i3conf[op][1] == true then
-			return i3conf[op][2]()
 		else
 			return {"error", "Invalid argument: " .. value}
 		end
+	elseif i3conf[op][1] == true then
+		return i3conf[op][2]()
 	else
 		return {"error", "Invalid argument: " .. op}
 	end
