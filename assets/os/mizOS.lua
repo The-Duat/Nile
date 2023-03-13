@@ -111,6 +111,71 @@ end
 
 
 
+--[=[ Check if string is a hex color code. ]=]--
+local validhexchars = {
+	["0"] = true,
+	["1"] = true,
+	["2"] = true,
+	["3"] = true,
+	["4"] = true,
+	["5"] = true,
+	["6"] = true,
+	["7"] = true,
+	["8"] = true,
+	["9"] = true,
+	["a"] = true,
+	["b"] = true,
+	["c"] = true,
+	["d"] = true,
+	["e"] = true,
+	["f"] = true
+}
+
+local function hexcolorcheck(str)
+	local hex = string.lower(str)
+	if #hex ~= 7 then
+		return false
+	elseif string.sub(hex, 1, 1) ~= "#" then
+		return false
+	end
+	local i = 2
+	while i <= #hex do
+		if not validhexchars[string.sub(hex, i, i)] then
+			return false
+			i = i + 1
+		end
+	end
+	return true
+end
+
+
+
+--[=[ Check if string is an integer. ]=]--
+local validdigits = {
+	["0"] = true,
+	["1"] = true,
+	["2"] = true,
+	["3"] = true,
+	["4"] = true,
+	["5"] = true,
+	["6"] = true,
+	["7"] = true,
+	["8"] = true,
+	["9"] = true
+}
+local function intcheck(str)
+	if string.sub(str, 1, 1) == "0" then
+		return false
+	end
+	local i = 1
+	while i <= #str do
+		if not validdigits[string.sub(str, i, i)] == true then
+			return false
+		end
+	end
+	return true
+end
+
 
 
 --[=[--[=[ MIZOS SYSTEM ]=]--]=]--
@@ -240,6 +305,157 @@ end
 
 
 --[=[ mizOS configuration. ]=]--
+local function genconf()
+	x("cd /var/mizOS/config/i3 && ./genconf")
+end
+local function wconfig(typ, val)
+	x("echo \"" .. val .. "\" > /var/mizOS/config/i3/settings/" .. typ)
+	genconf()
+end
+
+
+local i3conf = {
+	["bar-color"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["bar-position"] = {true, 
+		function(op, value)
+			if intcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid integer: " .. value}
+			end 
+		end},
+		["border-color1"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["border-color2"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["border-color3"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["border-size"] = {true, 
+		function(op, value)
+			if intcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["gaps-inner"] = {true, 
+		function(op, value)
+			if intcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["gaps-outer"] = {true, 
+		function(op, value)
+			if intcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["mod-key"] = {true, 
+		function(op, value)
+			if value == "Mod1"
+			or value == "Mod2"
+			or value == "Mod3"
+			or value == "Mod4" then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid mod key: " .. value}
+			end 
+		end},
+		["ws-bg-color1"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["ws-bg-color2"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["ws-bg-color3"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["ws-txt-color1"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["ws-txt-color2"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end},
+		["ws-txt-color3"] = {true, 
+		function(op, value)
+			if hexcolorcheck(value) == true then
+				wconfig(op, value)
+				return {"output", op .. " changed to " .. value}
+			else
+				return {"error", "Invalid hex color code: " .. value}
+			end 
+		end}
+}
+
+
 system.config = function(op, value)
 	if op == "wallpaper" then
 		local split = splitstr(value, ".")
@@ -261,6 +477,8 @@ system.config = function(op, value)
 			x("rm -rf /var/mizOS/security/active/*")
 			x("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
 			return {"output", "Package security changed from " .. old .. " to " .. value .. "."}
+		elseif i3conf[op][1] == true then
+			return i3conf[op][2]()
 		else
 			return {"error", "Invalid argument: " .. value}
 		end
