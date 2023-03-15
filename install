@@ -224,6 +224,12 @@ fi
 echo -e "\nGenerating i3 config."
 cd /var/mizOS/config/i3 && ./genconf
 
+if [ $1 == "dev" ]; then
+	echo -e "\nDev mode active."
+	sudo -S cp assets/os/dev/miz /usr/bin/
+	cp assets/os/dev/mizOS.lua /var/mizOS/core/
+fi
+
 echo -e "\n\n"
 
 echo "My work here is done! You should probably reboot."
