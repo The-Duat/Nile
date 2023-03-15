@@ -865,7 +865,7 @@ end
 
 
 --[=[ System updater. ]=]--
-system.update = function(op)
+system.update = function(op, dev)
 	if op == "packages" then
 		local updatepkgst = capture("ls /var/mizOS/packages")
 		local updatepkgs = splitstr(updatepkgst, " ")
