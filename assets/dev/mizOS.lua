@@ -3,37 +3,54 @@
 
 --[=[--[=[--[=[ THIS SCRIPT STORES THE CORE SOURCE CODE OF MIZOS. ONLY EDIT IF YOU KNOW WHAT YOU ARE DOING ]=]--]=]--]=]--
 
+-- Input/Output table. Contains functions mizOS uses for Input/Output.
+local mio = {}
+
+-- Base mizOS table. Returned by this module.
+local mizOS = {
+	-- System table, this stores mizOS functions.
+	["system"] = {}
+}
 
 
-local system = {}
+-- Copy the frontend's IO functions into mio.
+-- The frontend runs the initialize function, and passes its IO functions to it.
+-- Different frontends may have different methods for IO.
+-- This ensures that mizOS is flexible, and is compatible with all of them.
+mizOS.initialize = function(inp, foutp, afoutp, outp, err)
+	mio.read = inp -- Input
+	mio.say = foutp -- Fancy output, like printing with a newline.
+	mio.say2 = afoutp -- Alternate say, usually with a different design.
+	mio.write = outp -- Raw output. Nothing fancy.
+	mio.fault = err -- Error output.
+end
 
--- If you are writing software that interacts with the mizOS backend, please note that package installation can only be done from the CLI.
-
---Data types:
---error, output, info, command
-
+-- Ease of access.
+local read = mio.read
+local say = mio.say
+local say2 = mio.say2
+local write = mio.write
+local fault = mio.fault
 
 
 --[=[--[=[ GENERAL PURPOSE FUNCTIONS. ]=]--]=]--
 
 
-
-
-
+-- Get the home directory.
 local home = os.getenv("HOME")
 
 
 
 --[=[ Command shorteners. ]=]--
-local function x(cmd)
+local function x(cmd)   -- Run system command.
 	os.execute(cmd)
 end
 
-local function ipkg(pkg)
+local function ipkg(pkg)   -- Install pacman package.
 	x("sudo pacman -S " .. pkg)
 end
 
-local function ypkg(pkg)
+local function ypkg(pkg)   -- Install AUR package.
 	x("yay -S " .. pkg)
 end
 
@@ -148,7 +165,7 @@ end
 
 
 
---[=[ Check if string is an integer. ]=]--
+--[=[ Check if string is an "integer". ]=]--
 local validdigits = {
 	["0"] = true,
 	["1"] = true,
@@ -177,9 +194,7 @@ end
 
 
 
---[=[--[=[ MIZOS SYSTEM ]=]--]=]--
-
-
+--[=[--[=[ MIZOS SYSTEM FUNCTIONS ]=]--]=]--
 
 
 --[=[ User Interface Data ]=]--
@@ -296,9 +311,9 @@ local function mgpu(gpu, arguments)
 		end
 	end
 	if gpu == "xd" then
-		return "export DRI_PRIME=1 && exec " .. gcmd
+		x("export DRI_PRIME=1 && exec " .. gcmd)
 	elseif gpu == "xi" then
-		return "export DRI_PRIME=0 && exec " .. gcmd
+		x("export DRI_PRIME=0 && exec " .. gcmd)
 	end
 end
 
@@ -318,72 +333,72 @@ local i3conf = {
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["bar-position"] = {true, 
 		function(op, value)
 			if value == "bottom" or value == "top" then
 				wconfig(op, value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid position: " .. value}
+				fault("Invalid position: " .. value)
 			end 
 		end},
 		["border-color1"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["border-color2"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["border-color3"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["border-size"] = {true, 
 		function(op, value)
 			if intcheck(value) == true then
 				wconfig(op, value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["gaps-inner"] = {true, 
 		function(op, value)
 			if intcheck(value) == true then
 				wconfig(op, value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				say("Invalid hex color code: " .. value)
 			end 
 		end},
 		["gaps-outer"] = {true, 
 		function(op, value)
 			if intcheck(value) == true then
 				wconfig(op, value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["mod-key"] = {true, 
@@ -393,106 +408,106 @@ local i3conf = {
 			or value == "Mod3"
 			or value == "Mod4" then
 				wconfig(op, value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid mod key: " .. value}
-			end 
+				fault("Invalid mod key: " .. value)
+			end
 		end},
 		["ws-bg-color1"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["ws-bg-color2"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["ws-bg-color3"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["ws-txt-color1"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["ws-txt-color2"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end},
 		["ws-txt-color3"] = {true, 
 		function(op, value)
 			if hexcolorcheck(value) == true then
 				wconfig(op, "#" .. value)
-				return {"output", op .. " changed to " .. value}
+				say(op .. " changed to " .. value)
 			else
-				return {"error", "Invalid hex color code: " .. value}
+				fault("Invalid hex color code: " .. value)
 			end 
 		end}
 }
 
 
-system.config = function(op, value)
+mizOS.system.config = function(op, value)
 	if op == "wallpaper" then
 		local split = splitstr(value, ".")
 		local rawnamesplit = splitstr(value, "/")
 		local filetype = split[#split]
 		local rawname = rawnamesplit[#rawnamesplit]
 		if filetype ~= "png" and filetype ~= "jpg" and filetype ~= "webp" then
-			return {"error", "Invalid filetype passed. (Must be .png, .jpg, or .webp)"}
+			fault("Invalid filetype passed. (Must be .png, .jpg, or .webp)")
 		end
 		x("rm -rf /var/mizOS/config/wallpaper/*")
 		x("cp " .. value .. " /var/mizOS/config/wallpaper/")
 		x("mv /var/mizOS/config/wallpaper/" .. rawname .. " /var/mizOS/config/wallpaper/wallpaper." .. filetype)
 		x("pkill -fi feh")
 		x("feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*")
-		return {"output", "Wallpaper changed to " .. value}
+		say("Wallpaper changed to " .. value)
 	elseif op == "pkgsecurity" then
 		if value == "strict" or value == "moderate" or value == "none" then
 			local old = dofile("/var/mizOS/security/active/type.lua")
 			x("rm -rf /var/mizOS/security/active/*")
 			x("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
-			return {"output", "Package security changed from " .. old .. " to " .. value .. "."}
+			say("Package security changed from " .. old .. " to " .. value .. ".")
 		else
-			return {"error", "Invalid argument: " .. value}
+			fault("Invalid argument: " .. value)
 		end
 	elseif i3conf[op][1] == true then
-		return i3conf[op][2](op, value)
+		i3conf[op][2](op, value)
 	else
-		return {"error", "Invalid argument: " .. op}
+		fault("Invalid argument: " .. op)
 	end
 end
 
 
 
 --[=[ System safety. ]=]--
-system.safety = function(op, program)
+mizOS.system.safety = function(op, program)
 	local dev = true
 	if dev then
-		return {"error", "Still in development."}
+		fault("Still in development.")
 	end
 	if op == "backup" then
 		if program == nil then
@@ -505,7 +520,7 @@ system.safety = function(op, program)
 				end
 				x("cp -r /var/mizOS/config/" .. program .. " /var/mizOS/backup")
 			else
-				return {"error", "Invalid program: " .. program}
+				fault("Invalid program: " .. program)
 			end
 		end
 	elseif op == "restore" then
@@ -521,7 +536,7 @@ end
 
 
 --[=[ mizOS package management. ]=]--
-local function package(op, thepkg)
+local function package(op, thepkg, noask)
 	local pkgsplit
 	local dev
 	local name
@@ -540,15 +555,25 @@ local function package(op, thepkg)
 			x("cd /var/mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
 			x("ls /var/mizOS/work/" .. pkgsplit[2])
 			if dofile(insdir .. "/MIZOSPKG.lua") == true then
-				print("> Package is valid, continuing installation.")
+				say("Package is valid, continuing installation.")
 				local info = dofile(insdir .. "/info.lua")
 				local pacpkgs = ""
 				local aurpkgs = ""
+				say("pacman dependencies:")
 				for _,pacdep in pairs(info.pacman_depends) do
+					write("     " .. pacdep .. "\n")
 					pacpkgs = pacpkgs .. pacdep .. " "
 				end
+				say("\nAUR dependencies:")
 				for _,aurdep in pairs(info.aur_depends) do
+					write("     " .. aurdep .. "\n")
 					aurpkgs = aurpkgs .. aurdep .. " "
+				end
+				if not noask then
+					say("\nContinue installation? (y/n)")
+					if not string.lower(read()) == "y" then
+						fault("Installation aborted.")
+					end
 				end
 				ipkg(pacpkgs)
 				ypkg(aurpkgs)
@@ -556,19 +581,19 @@ local function package(op, thepkg)
 				x("cp " .. insdir .. "/info.lua " .. pkgdir .. "/")
 				x("cd " .. insdir .. " && ./install")
 			else
-				return {"error", "That package either doesn't exist, or was not made correctly."}
+				fault("That package either doesn't exist, or was not made correctly.")
 			end
 		elseif op == "remove" then
 			if checkfile(pkgdir .. "/info.lua") == true then
 				local info = dofile(pkgdir .. "/info.lua")
-				print("Removing program files.")
+				say("Removing program files.")
 				for _,file in pairs(info.files) do
-					print("> Deleting " .. file)
+					say("  Deleting " .. file)
 					x("sudo rm " .. file)
 				end
 				print("Removing program directories.")
 				for _,folder in pairs(info.directories) do
-					print("> Removing " .. folder)
+					("  Removing " .. folder)
 					x("sudo rm -rf " .. folder)
 				end
 				local pacpkgs = ""
@@ -652,7 +677,7 @@ end
 
 
 --[=[ Software management. ]=]--
-system.software = function(op, channel, pkgs)
+mizOS.system.software = function(op, channel, pkgs)
 	local packages = ""
 	for _,ag in pairs(pkgs) do
 		if ag ~= "neofetch" then
@@ -808,7 +833,7 @@ end
 
 
 --[=[ Service. ]=]--
-system.service = function(op, service)
+mizOS.system.service = function(op, service)
 	if init == "runit" then
 		return runit(op, service)
 	elseif init == "systemd" then
@@ -823,7 +848,7 @@ end
 
 
 --[=[ Graphics stuff. ]=]--
-system.gfx = function(op, mode, arguments)
+mizOS.system.gfx = function(op, mode, arguments)
 	if op == "xi" or op == "xd" then
                 x(mgpu(op, arguments))
         elseif op == "mode" then 
@@ -848,7 +873,7 @@ end
 
 
 --[=[ Info ]=]--
-system.info = function(op)
+mizOS.system.info = function(op)
 	if op == "help" then
                 return {"output", "https://discord.gg/CzHw7cXKCx"}
         elseif op == "source" then
@@ -865,7 +890,7 @@ end
 
 
 --[=[ System updater. ]=]--
-system.update = function(op, dev)
+mizOS.system.update = function(op, dev)
 	if op == "packages" then
 		local updatepkgst = capture("ls /var/mizOS/packages")
 		local updatepkgs = splitstr(updatepkgst, " ")
@@ -888,7 +913,7 @@ end
 
 
 --[=[ Root ]=]--
-system.root = function(command)
+mizOS.system.root = function(command)
 	local final = [[su -c "]] .. command .. [[" root]]
 	x(final)
 end
@@ -897,4 +922,4 @@ end
 
 
 
-return system
+return mizOS

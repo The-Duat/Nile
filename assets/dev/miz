@@ -1,7 +1,7 @@
 #!/bin/lua
 
 -- sonic visits ohio
-local mizos = dofile("/var/mizOS/core/mizOS.lua")
+local mizOS = dofile("/var/mizOS/core/mizOS.lua")
 
 
 -- Channel data
@@ -31,22 +31,34 @@ local function setpkgs(args)
 	return pacs
 end
 
--- Output coloring/formatting
-local function echo(datatype, contents)
-	if datatype == "error" then
-		print("!!> \x1b[38;2;243;139;168m" .. contents .. "\x1b[38;2;255;255;255m")
-	elseif datatype == "output" then
-		print("> " .. contents)
-	elseif datatype == "rawput" then
-		print(contents)
-	end
+
+-- Say error
+local function error(text)
+	print("!!> \x1b[38;2;243;139;168m" .. text .. "\x1b[38;2;255;255;255m")
 end
 
 -- Get input
-local function read(text)
-	io.write(text .. "\n\n> ")
+local function read()
+	io.write("\n> ")
 	return io.read()
 end
+
+-- Say output
+local function say(text)
+	print("| " .. text)
+end
+
+-- Alternate say
+local function say2(text)
+	print("    > " .. text)
+end
+
+
+-- Write output
+local function write(text)
+	print(text)
+end
+
 
 -- Process data returned from mizOS backend
 local function process(data)
