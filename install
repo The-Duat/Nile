@@ -224,8 +224,8 @@ fi
 
 if [[ $1 == "dev" ]]; then
 	echo -e "\nDev mode active."
-	sudo -S cp $(devcurn)/assets/dev/miz /usr/bin/
-	cp $(devcurn)/assets/os/mizOS.lua /var/mizOS/core/
+	sudo -S cp $devcurn/assets/dev/miz /usr/bin/
+	cp $devcurn/assets/os/mizOS.lua /var/mizOS/core/
 fi
 
 
