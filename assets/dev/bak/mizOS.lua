@@ -1,36 +1,27 @@
--- Made by https://entertheduat.org
+-- Made by https://theduat.neocities.org
 
 
 --[=[--[=[--[=[ THIS SCRIPT STORES THE CORE SOURCE CODE OF MIZOS. ONLY EDIT IF YOU KNOW WHAT YOU ARE DOING ]=]--]=]--]=]--
-
-
-
---[=[--[=[ MIZOS SETUP ]=]--]=]--
--- Get the home directory.
-local home = os.getenv("HOME")
-
--- Get the init system.
-local init = dofile("/var/mizOS/init/init.lua")
 
 -- Input/Output table. Contains functions mizOS uses for Input/Output.
 local mio = {}
 
 -- Base mizOS table. Returned by this module.
 local mizOS = {
-	-- System table, this stores mizOS system functions.
+	-- System table, this stores mizOS functions.
 	["system"] = {}
 }
 
 
 -- Copy the frontend's IO functions into mio.
--- The frontend runs this initialize function, and passes its IO functions to it.
+-- The frontend runs the initialize function, and passes its IO functions to it.
 -- Different frontends may have different methods for IO.
 -- This ensures that mizOS is flexible, and is compatible with all of them.
-mizOS.initializeIO = function(inp, outp, foutp, afoutp, err)
+mizOS.initialize = function(inp, foutp, afoutp, outp, err)
 	mio.read = inp -- Input
-	mio.write = outp -- Print raw output.
 	mio.say = foutp -- Fancy output, like printing with a newline.
 	mio.say2 = afoutp -- Alternate say, usually with a different design.
+	mio.write = outp -- Raw output. Nothing fancy.
 	mio.fault = err -- Error output.
 end
 
@@ -42,9 +33,12 @@ local write = mio.write
 local fault = mio.fault
 
 
-
-
 --[=[--[=[ GENERAL PURPOSE FUNCTIONS. ]=]--]=]--
+
+
+-- Get the home directory.
+local home = os.getenv("HOME")
+
 
 
 --[=[ Command shorteners. ]=]--
@@ -52,12 +46,8 @@ local function x(cmd)	-- Run system command.
 	os.execute(cmd)
 end
 
-local function ipkg(pkg, noask)  -- Install pacman package.
-	local a = ""
-	if noask == true then
-		a = "--noconfirm"
-	end
-	x("sudo pacman -S " .. a .. " " .. pkg)
+local function ipkg(pkg)   -- Install pacman package.
+	x("sudo pacman -S " .. pkg)
 end
 
 local function ypkg(pkg)   -- Install AUR package.
@@ -298,6 +288,12 @@ uis = {
 	{"xmonad", "xmonad", false},
 	{"hyprland", "hyprland", true}
 }
+
+
+
+--[=[ Detect init system. ]=]--
+local init = dofile("/var/mizOS/init/init.lua")
+
 
 
 --[=[ https://github.com/Mizosu97/mgpu ]=]--
@@ -648,11 +644,7 @@ local function package(op, thepkg, noask)
 				end
 			end
 		elseif op == "list" then
-			say("Installed mizOS packages:")
-			for _,i in pairs(splitstr(capture("ls /var/mizOS/packages"), " ")) do
-				local split = splitstr(i, "_")
-				say2(split[1] .. "/" .. split[2])
-			end
+			write(capture("ls /var/mizOS/packages"))
 		end
 	end
 end
@@ -660,23 +652,23 @@ end
 
 
 --[=[ Package security check. ]=]--
-local function firewall(op, thepkg, noask)
+local function firewall(op, thepkg)
 	x("rm -rf /var/mizOS/repo/*")
 	x("wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
 	local pkg = trim(thepkg)
 	local repo = dofile("/var/mizOS/repo/repo.lua")
 	local seclevel = dofile("/var/mizOS/security/active/type.lua")
 	if repo["official"][pkg] == true then
-		package(op, pkg, noask)
+		package(op, pkg)
 	elseif repo["community"][pkg] == true then
 		if seclevel ~= "strict" then
-			package(op, pkg, noask)
+			package(op, pkg)
 		else
 			fault("Can't install community packages with the \"strict\" security level set.")
 		end
 	else
 		if seclevel == "none" then
-			package(op, pkg, noask)
+			package(op, pkg)
 		else
 			fault("Can't install global packages with the \"" .. seclevel .. "\" security level set.")
 		end
@@ -686,7 +678,7 @@ end
 
 
 --[=[ Software management. ]=]--
-mizOS.system.software = function(op, channel, pkgs, noask)
+mizOS.system.software = function(op, channel, pkgs)
 	local packages = ""
 	for _,ag in pairs(pkgs) do
 		if ag ~= "neofetch" then
@@ -742,7 +734,6 @@ mizOS.system.software = function(op, channel, pkgs, noask)
 			for _,v in pairs(splitstr(package("list", nil), " ")) do
 				say2(v)
 			end
-			package("list", nil, nil)
 		elseif channel == "pacman" then
 			write(capture("sudo pacman -Qe"))
 		elseif channel == "aur" then
