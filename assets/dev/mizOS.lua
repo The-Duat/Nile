@@ -559,14 +559,14 @@ local function package(op, thepkg, noask)
 				local info = dofile(insdir .. "/info.lua")
 				local pacpkgs = ""
 				local aurpkgs = ""
-				say("pacman dependencies:")
+				say("\npacman dependencies:")
 				for _,pacdep in pairs(info.pacman_depends) do
-					write("     " .. pacdep .. "\n")
+					say2(pacdep)
 					pacpkgs = pacpkgs .. pacdep .. " "
 				end
 				say("\nAUR dependencies:")
 				for _,aurdep in pairs(info.aur_depends) do
-					write("     " .. aurdep .. "\n")
+					say2(aurdep)
 					aurpkgs = aurpkgs .. aurdep .. " "
 				end
 				if not noask then
@@ -588,35 +588,36 @@ local function package(op, thepkg, noask)
 				local info = dofile(pkgdir .. "/info.lua")
 				say("Removing program files.")
 				for _,file in pairs(info.files) do
-					say("  Deleting " .. file)
+					say2("Removing " .. file)
 					x("sudo rm " .. file)
 				end
 				print("Removing program directories.")
 				for _,folder in pairs(info.directories) do
-					("  Removing " .. folder)
+					say2("Removing " .. folder)
 					x("sudo rm -rf " .. folder)
 				end
 				local pacpkgs = ""
 				local aurpkgs = ""
+				say("\npacman dependencies:")
 				for _,pacdep in pairs(info.pacman_depends) do
+					say2(pacdep)
 					pacpkgs = pacpkgs .. pacdep .. " "
 				end
+				say("AUR dependencies:")
 				for _,aurdep in pairs(info.aur_depends) do
+					say2(aurdep)
 					aurpkgs = aurpkgs .. aurdep .. " "
 				end
-				print("Pacman dependencies:\n")
-				print(pacpkgs)
-				print("\n\nAUR dependencies:\n")
-				print(aurpkgs)
-				io.write("\n\nRemove dependencies for " .. thepkg .. " ? (y/n)\n\n> ")
-				if io.read() == "y" then
-					x("sudo pacman -Rn " .. pacpkgs)
-					x("yay -Rn " .. aurpkgs)
+				say("\nRemove dependencies for " .. thepkg .. "? (y/n)")
+				if not string.lower(read()) == "y" then
+					fault("Uninstallation aborted.")
 				end
+				x("sudo pacman -Rn " .. pacpkgs)
+				x("yay -Rn " .. aurpkgs)
 				x("sudo rm -rf " .. pkgdir)
-				return {"output", thepkg .. " has been uninstalled."}
+				say(thepkg .. " has been uninstalled.")
 			else
-				return {"error", "That package is not installed."}
+				fault("That package is not installed.")
 			end
 		elseif op == "update" then
 			if checkfile(pkgdir .. "/info.lua") == true then
@@ -639,11 +640,11 @@ local function package(op, thepkg, noask)
 					x("cp " .. insdir .. "/info.lua " .. pkgdir .. "/")
 					x("cd " .. insdir .. " && ./update")
 				else
-					return {"error", "That package either doesn't exist, or was not made correctly."}
+					fault("That package either doesn't exist, or was not made correctly.")
 				end
 			end
 		elseif op == "list" then
-			return capture("ls /var/mizOS/packages")
+			write(capture("ls /var/mizOS/packages"))
 		end
 	end
 end
@@ -658,18 +659,18 @@ local function firewall(op, thepkg)
 	local repo = dofile("/var/mizOS/repo/repo.lua")
 	local seclevel = dofile("/var/mizOS/security/active/type.lua")
 	if repo["official"][pkg] == true then
-		return package(op, pkg)
+		package(op, pkg)
 	elseif repo["community"][pkg] == true then
 		if seclevel ~= "strict" then
-			return package(op, pkg)
+			package(op, pkg)
 		else
-			return {"error", "Can't install community packages with the \"strict\" security level set."}
+			fault("Can't install community packages with the \"strict\" security level set.")
 		end
 	else
 		if seclevel == "none" then
-			return package(op, pkg)
+			package(op, pkg)
 		else
-			return {"error", "Can't install global packages with the \"" .. seclevel .. "\" security level set."}
+			fault("Can't install global packages with the \"" .. seclevel .. "\" security level set.")
 		end
 	end
 end
@@ -689,57 +690,57 @@ mizOS.system.software = function(op, channel, pkgs)
 			ypkg(packages)
 		elseif channel == "ui" then
 			for _,desktop in pairs(uis) do
-                        	if desktop[1] == packages then
+                if desktop[1] == packages then
 					if desktop[3] == false then
-                                        	ipkg(desktop[2])
-                                	elseif desktop[3] == true then
-                                        	ypkg(desktop[2])                                               
-					end
-                       		end
-                	end
+                        ipkg(desktop[2])  
+                 	elseif desktop[3] == true then
+                        	ypkg(desktop[2])                                               
+					end 
+				end
+            end
 		elseif channel == "pacman" then
 			x("sudo pacman -S " .. packages)
 		elseif channel == "mizos" then
-			return firewall("install", packages)
+			firewall("install", packages)
 		end
 	elseif op == "remove" then
 		if channel == "aur" then
 			x("yay -Rn " .. packages)
 		elseif channel == "ui" then
 			for _,desktop in pairs(uis) do
-                                if desktop[1] == packages then  
+                if desktop[1] == packages then  
 					if desktop[3] == false then
 						x("sudo pacman -Rn " .. desktop[2])
-                                        elseif desktop[3] == true then
-                                                x("yay -Rn " .. desktop[2])
-
-                                        end
-                                end
-                        end
+                   elseif desktop[3] == true then
+        	              x("yay -Rn " .. desktop[2])
+                    end
+                end
+            end
 		elseif channel == "pacman" then
 			x("sudo pacman -Rn " .. packages)
 		elseif channel == "mizos" then
-			return firewall("remove", packages)
+			firewall("remove", packages)
 		end
 	elseif op == "clear cache" then
 		x("yay -Scc")
 		if init == "systemd" then
 			x("sudo journalctl --vacuum-time=21days")
 		else
-			return {"error", "SystemD not found, unable to clear journal logs."}
+			fault("SystemD not found, unable to clear journal logs.")
 		end
 	elseif op == "list packages" then
 		if channel == "mizos" then
-			local packagestring = package("list", nil)
-			local packagetable = splitstr(packagestring, " ")
-			return {"info", packagetable}
+			say("Installed mizOS packages:")
+			for _,v in pairs(splitstr(package("list", nil), " ")) do
+				say2(v)
+			end
 		elseif channel == "pacman" then
-			return {"rawput", capture("sudo pacman -Qe")}
+			write(capture("sudo pacman -Qe"))
 		elseif channel == "aur" then
-			return {"error", "AUR packages cannot be listed individually."}
+			fault("As of right now, AUR packages cannot be listed individually.")
 		end
 	else
-		return {"error", "Command not found!"}
+		fault("Command not found!")
 	end
 end
 
@@ -748,27 +749,33 @@ end
 --[=[ Runit command conversion ]=]--
 local function runit(op, service)
 	if op == "link" then
-                        x("sudo ln -s /etc/runit/sv/" .. service .. " /run/runit/service/")
-        elseif op == "unlink" then   
+        x("sudo ln -s /etc/runit/sv/" .. service .. " /run/runit/service/")
+    elseif op == "unlink" then   
 		x("sudo rm /run/runit/service/" .. service)
 	elseif op == "disable" then
 		x("sudo touch /run/runit/service/" .. service .. "/down")  
 	elseif op == "enable" then
-                x("sudo rm /run/runit/service/" .. service .. "/down")
-        elseif op == "start" then
-                x("sudo sv start " .. service)
-        elseif op == "stop" then         
+        x("sudo rm /run/runit/service/" .. service .. "/down")
+    elseif op == "start" then
+        x("sudo sv start " .. service)
+    elseif op == "stop" then         
 		x("sudo sv stop " .. service)
-        elseif op == "restart" then
-                x("sudo sv restart " .. service)
-        elseif op == "list" then
-                if service == "installed" then   
-			return {"info", capture("ls /etc/runit/sv/")}
-                elseif service == "linked" then  
-			return {"info", capture("ls /run/runit/service/")}
-                end
+    elseif op == "restart" then
+        x("sudo sv restart " .. service)
+    elseif op == "list" then
+        if service == "installed" then   
+			say("Installed services:")
+			for _,i in pairs(splitstr(capture("ls /etc/runit/sv"), " ")) do
+				say2(i)
+			end
+        elseif service == "linked" then  
+			say("Linked services:")
+			for _,i in pairs(splitstr(capture("ls /run/runit/service"), " ")) do
+				say2(i)
+			end
+        end
 	else
-		return {"error", "Command not found!"}
+		fault("Command not found!")
         end
 end
 
@@ -777,28 +784,28 @@ end
 --[=[ SystemD command conversion. ]=]--
 local function systemd(op, service)
 	if op == "link" then              
-		return {"error", "This command is only available for the Runit init system."}
-        elseif op == "unlink" then
-                return {"error", "This command is only available for the Runit init system."}
-        elseif op == "disable" then
-                x("sudo systemctl disable " .. service)
-        elseif op == "enable" then
-                x("sudo systemctl enable " .. service)
-        elseif op == "start" then
-                x("sudo systemctl start " .. service)
-        elseif op == "stop" then
-                x("sudo systemctl stop " .. service)
-        elseif op == "restart" then
-                x("sudo systemctl restart " .. service)
-        elseif op == "list" then
-                if service == "installed" then      
-			return {"output", capture("systemctl list-units --type=service --all")}
+		fault("This command is only available for the Runit init system.")
+    elseif op == "unlink" then
+        fault("This command is only available for the Runit init system.")
+    elseif op == "disable" then
+        x("sudo systemctl disable " .. service)
+    elseif op == "enable" then
+        x("sudo systemctl enable " .. service)
+    elseif op == "start" then
+        x("sudo systemctl start " .. service)
+    elseif op == "stop" then
+        x("sudo systemctl stop " .. service)
+    elseif op == "restart" then
+        x("sudo systemctl restart " .. service)
+    elseif op == "list" then
+        if service == "installed" then      
+			write(capture("systemctl list-units --type=service --all"))
 		elseif service == "linked" then                              
-			return {"output", capture("systemctl list-units --state=enabled")}
-                end
-	else
-		return {"error", "Command not found!"}
+			write(capture("systemctl list-units --state=enabled"))
         end
+	else
+		fault("Command not found!")
+    end
 end
 
 
@@ -806,28 +813,28 @@ end
 --[=[ OpenRC command conversion ]=]--
 local function openrc(op, service)
 	if op == "link" then       
-		return {"error", "This command is only available for the Runit init system."}
-        elseif op == "unlink" then
-                return {"error", "This command is only available for the Runit init system."}
+		fault("This command is only available for the Runit init system.")
+    elseif op == "unlink" then
+        fault("This command is only available for the Runit init system.")
 	elseif op == "disable" then  
 		x("sudo rc-update del " .. service .. " default")  
 	elseif op == "enable" then  
 		x("sudo rc-update add " .. service .. " default")  
 	elseif op == "start" then
-                x("sudo rc-service " .. service .. " start")
-        elseif op == "stop" then
-                x("sudo rc-service " .. service .. " stop")
-        elseif op == "restart" then
-                x("sudo rc-service " .. service .. " restart")
-        elseif op == "list" then
-                if service == "installed" then
-                        return {"output", capture("rc-update show")}
-                elseif service == "linked" then
-                        return {"output", capture("rc-update -v show")}
-                end
+        x("sudo rc-service " .. service .. " start")
+    elseif op == "stop" then
+        x("sudo rc-service " .. service .. " stop")
+    elseif op == "restart" then
+        x("sudo rc-service " .. service .. " restart")
+    elseif op == "list" then
+        if service == "installed" then
+            write(capture("rc-update show"))
+        elseif service == "linked" then
+            write(capture("rc-update -v show"))
+    	end
 	else
-		return {"error", "Command not found!"}
-        end
+		fault("Command not found!")
+    end
 end
 
 
@@ -835,13 +842,13 @@ end
 --[=[ Service. ]=]--
 mizOS.system.service = function(op, service)
 	if init == "runit" then
-		return runit(op, service)
+		runit(op, service)
 	elseif init == "systemd" then
-		return systemd(op, service)
+		systemd(op, service)
 	elseif init == "openrc" then
-		return openrc(op, service)
+		openrc(op, service)
 	else
-		return {"error", "Your init system is not supported."}
+		fault("Your init system is not supported.")
 	end
 end
 
