@@ -3,7 +3,7 @@
 
 
 
-
+$devcurn = $(pwd)
 echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
@@ -224,8 +224,8 @@ fi
 
 if [[ $1 == "dev" ]]; then
 	echo -e "\nDev mode active."
-	sudo -S cp assets/dev/miz /usr/bin/
-	cp assets/os/mizOS.lua /var/mizOS/core/
+	sudo -S cp $(devcurn)/assets/dev/miz /usr/bin/
+	cp $(devcurn)/assets/os/mizOS.lua /var/mizOS/core/
 fi
 
 
