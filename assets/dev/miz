@@ -73,98 +73,77 @@ mizOS.initializeIO(inp, outp, foutp, afoutp, err)
 -- Service management.
 -- (miz sv)
 local function sv(args)
-mizos.service(args[2], args[3])
-		if data then
-		process(data)
-	end
+    mizOS.system.service(args[2], args[3])  -- System functions are stored in the mizOS.system table.
 end
 
--- Fetch/remove packages 
+-- Fetch/remove packages.
 -- (miz fetch, miz remove)
 local function fandr(args)
 	local pacs = setpkgs(args)
 	mizOS.system.software(args[1], channels[args[2]], pacs)
 end
 
--- Clear cache
+-- Clear cache.
 -- (miz cc)
 local function cc(args)
 	mizOS.system.software("clear cache", nil, nil)
 end
 
--- List packages
+-- List packages.
 -- (miz lspkgs)
 local function list(args)
 	mizOS.system.software("list packages", channels[args[1]], nil)
 end
 
--- GPU management
+-- GPU management.
+-- (miz gfx)
 local function gfx(args)
 	local data
 	if args[2] == "mode" then
-		data = mizos.gfx("mode", args[3], args)
+		mizOS.system.gfx("mode", args[3], args)
 	else
-		data = mizos.gfx(args[2], nil, args)
-	end
-	if data then
-		process(data)
+		mizOS.system.gfx(args[2], nil, args)
 	end
 end
 
--- mizOS configuration
+-- mizOS configuration.
+-- (miz config)
 local function config(args)
-	local data = mizos.config(args[2], args[3])
-	if data[1] and data[2] then
-		process(data)
-	end
+	mizOS.system.config(args[2], args[3])
 end
 
--- mizOS system updating
+-- mizOS system updating.
+-- (miz update)
 local function update(args)
 	local dev = false
 	if args[2] == "dev" then
 		dev = true
 	end
-	mizos.update("system", dev)
-	mizos.update("packages", dev)
+	mizOS.system.update("system", dev)
+	mizOS.system.update("packages", dev)
 end
 
--- System info
+-- System info.
+-- (miz info)
 local function info(args)
-	local data = mizos.info(args[2])
-	if data[1] and data[1] ~= "info" then
-		process(data)
-	elseif data[1] == "info" then
-		if data[2][1] == "desktops" then
-			echo("output", "mizOS DE/WM list:")
-			for _,desktop in pairs(data[2][2]) do
-				local dtype = ""
-				if desktop[3] == true then
-					dtype = "      (AUR)"
-				elseif desktop[3] == false then
-					dtype = "      (pacman)"
-				end
-				print(desktop[1] .. dtype)
-			end
-		end
-	end
+	mizOS.system.info(args[2])
 end
 
--- System safety
+-- System safety.
+-- (miz backup, miz restore)
 local function safety(args)
-	local data
 	if args[3] ~= nil then
-		data = mizos.safety(args[2], args[3])
+		mizOS.system.safety(args[2], args[3])
 	else
-		data = mizos.safety(args[2], nil)
-	end
-	if data then
-		process(data)
+		mizOS.system.safety(args[2], nil)
 	end
 end
 
 
--- Command proccessor
+
+--[=[--[=[ COMMAND INTERPRETER ]=]--]=]--
+
+-- Command to function translation table.
 local basecommands = {
 	["sv"] = sv,
 	["fetch"] = fandr,
@@ -179,7 +158,7 @@ local basecommands = {
 	["restore"] = safety
 }
 
-
+-- Wipe unneeded arguments.
 local args = {}
 for _,v in pairs(arg) do
 	if v ~= "/bin/lua" and v ~= "miz" and v ~= "/usr/bin/miz" then
@@ -187,12 +166,13 @@ for _,v in pairs(arg) do
 	end
 end
 
+-- Check if the first argument exists in the translation table.
 if basecommands[args[1]] then
-	basecommands[args[1]](args)
+	basecommands[args[1]](args)  -- If it does, run the corresponding function.
 else
-	local command = ""
+	local command = ""  -- If it isn't, concatenate arguments into a string, run string as command under root.
 	for _,cmd in pairs(args) do
 		command = command .. cmd .. " "
 	end
-	mizos.root(command)
+	mizOS.system.root(command)
 end

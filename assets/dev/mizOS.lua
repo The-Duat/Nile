@@ -1,11 +1,14 @@
 -- Made by https://entertheduat.org
 
 
+
 --[=[--[=[--[=[ THIS SCRIPT STORES THE CORE SOURCE CODE OF MIZOS. ONLY EDIT IF YOU KNOW WHAT YOU ARE DOING ]=]--]=]--]=]--
 
 
 
 --[=[--[=[ MIZOS SETUP ]=]--]=]--
+
+
 -- Get the home directory.
 local home = os.getenv("HOME")
 
@@ -20,7 +23,6 @@ local mizOS = {
 	-- System table, this stores mizOS system functions.
 	["system"] = {}
 }
-
 
 -- Copy the frontend's IO functions into mio.
 -- The frontend runs this initialize function, and passes its IO functions to it.
@@ -42,173 +44,8 @@ local write = mio.write
 local fault = mio.fault
 
 
-
-
---[=[--[=[ GENERAL PURPOSE FUNCTIONS. ]=]--]=]--
-
-
---[=[ Command shorteners. ]=]--
-local function x(cmd)	-- Run system command.
-	os.execute(cmd)
-end
-
-local function ipkg(pkg, noask)  -- Install pacman package.
-	local a = ""
-	if noask == true then
-		a = "--noconfirm"
-	end
-	x("sudo pacman -S " .. a .. " " .. pkg)
-end
-
-local function ypkg(pkg)   -- Install AUR package.
-	x("yay -S " .. pkg)
-end
-
-
-
----[=[ String split function. ]=]--
-local function splitstr(ins, sep)
-	if sep == nil then
-		sep = " "
-	end
-	local t = {}
-	if ins and sep then
-		for str in string.gmatch(ins, "([^"..sep.."]+)") do
-			table.insert(t, str)
-		end
-	end
-	return t
-end
-
-
-
---[=[ Whitespace trimmer. ]=]--
-local function trim(s)
-	local new = ""
-	local i = 0
-	local new = ""
-	local len = string.len(s)
-	while i <= len do
-		local sub = string.sub(s, i, i)
-		if sub ~= " " then
-			new = new .. sub
-		end
-		i = i + 1
-	end
-	return new
-end
-
-
-
---[=[ Get shell command output. ]=]--
-local function capture(cmd, raw)
-	local file = assert(io.popen(cmd, 'r'))
-	local out = assert(file:read('*a'))
-	file:close()
-	if raw then return out end
-	out = string.gsub(out, '^%s+', '')
-	out = string.gsub(out, '%s+$', '')
-	out = string.gsub(out, '[\n\r]+', ' ')
-	return out
-end
-
-
-
---[=[ Check if file exists. ]=]--
-local function checkfile(name)
-	local file = io.open(name, "r")
-	if file ~= nil then
-				io.close(file)
-		return {true, name}
-	else
-		return {false, name}
-	end
-end
-
-
-
---[=[ Read file contents. ]=]--
-local function readfile(file)
-	local contents = ""
-	if checkfile(file) == true then
-		contents = capture("cat " .. file)
-	end
-	return contents
-end
-
-
-
---[=[ Check if string is a hex color code. ]=]--
-local validhexchars = {
-	["0"] = true,
-	["1"] = true,
-	["2"] = true,
-	["3"] = true,
-	["4"] = true,
-	["5"] = true,
-	["6"] = true,
-	["7"] = true,
-	["8"] = true,
-	["9"] = true,
-	["a"] = true,
-	["b"] = true,
-	["c"] = true,
-	["d"] = true,
-	["e"] = true,
-	["f"] = true
-}
-
-local function hexcolorcheck(str)
-	local hex = string.lower(str)
-	if #hex ~= 6 then
-		return false
-	end
-	local i = 2
-	while i <= #hex do
-		if not validhexchars[string.sub(hex, i, i)] then
-			return false
-		end
-		i = i + 1
-	end
-	return true
-end
-
-
-
---[=[ Check if string is an "integer". ]=]--
-local validdigits = {
-	["0"] = true,
-	["1"] = true,
-	["2"] = true,
-	["3"] = true,
-	["4"] = true,
-	["5"] = true,
-	["6"] = true,
-	["7"] = true,
-	["8"] = true,
-	["9"] = true
-}
-local function intcheck(str)
-	if string.sub(str, 1, 1) == "0" then
-		return false
-	end
-	local i = 1
-	while i <= #str do
-		if not validdigits[string.sub(str, i, i)] == true then
-			return false
-		end
-		i = i + 1
-	end
-	return true
-end
-
-
-
---[=[--[=[ MIZOS SYSTEM FUNCTIONS ]=]--]=]--
-
-
 --[=[ User Interface Data ]=]--
-uis = { 
+local uis = { 
 	{"budgie", "budgie-desktop", false},
 	{"cinnamon", "cinnamon", false},
 	{"cutefish", "cutefish", false},
@@ -300,38 +137,176 @@ uis = {
 }
 
 
---[=[ https://github.com/Mizosu97/mgpu ]=]--
-local function mgpu(gpu, arguments)
-	local gcmd = ""
-	for _,ag in pairs(arguments) do
-		if ag ~= "miz" 
-		and ag ~= "/bin/lua" 
-		and ag ~= "/usr/bin/miz" 
-		and ag ~= "./miz" 
-		and ag ~= "xd" 
-		and ag ~= "xi" 
-		and ag ~= "gfx" then
-			gcmd = gcmd .. ag .. " "
+
+--[=[--[=[ GENERAL PURPOSE FUNCTIONS. ]=]--]=]--
+
+
+--[=[ Command shorteners. ]=]--
+local function x(cmd)	-- Run system command.
+	os.execute(cmd)
+end
+
+local function ipkg(pkg, noask)  -- Install pacman package.
+	local a = ""
+	if noask == true then
+		a = "--noconfirm"
+	end
+	x("sudo pacman -S " .. a .. " " .. pkg)
+end
+
+local function ypkg(pkg)   -- Install AUR package.
+	x("yay -S " .. pkg)
+end
+
+
+--[=[ String Manipulation. ]=]--
+
+-- Split string function.
+local function splitstr(ins, sep)
+	if sep == nil then
+		sep = " "
+	end
+	local t = {}
+	if ins and sep then
+		for str in string.gmatch(ins, "([^"..sep.."]+)") do
+			table.insert(t, str)
 		end
 	end
-	if gpu == "xd" then
-		x("export DRI_PRIME=1 && exec " .. gcmd)
-	elseif gpu == "xi" then
-		x("export DRI_PRIME=0 && exec " .. gcmd)
+	return t
+end
+
+-- Trim whitepsace.
+local function trim(s)
+	local new = ""
+	local i = 0
+	local new = ""
+	local len = string.len(s)
+	while i <= len do
+		local sub = string.sub(s, i, i)
+		if sub ~= " " then
+			new = new .. sub
+		end
+		i = i + 1
+	end
+	return new
+end
+
+-- Check if string is a hex color code.
+local validhexchars = {
+	["0"] = true,
+	["1"] = true,
+	["2"] = true,
+	["3"] = true,
+	["4"] = true,
+	["5"] = true,
+	["6"] = true,
+	["7"] = true,
+	["8"] = true,
+	["9"] = true,
+	["a"] = true,
+	["b"] = true,
+	["c"] = true,
+	["d"] = true,
+	["e"] = true,
+	["f"] = true
+}
+local function hexcolorcheck(str)
+	local hex = string.lower(str)
+	if #hex ~= 6 then
+		return false
+	end
+	local i = 2
+	while i <= #hex do
+		if not validhexchars[string.sub(hex, i, i)] then
+			return false
+		end
+		i = i + 1
+	end
+	return true
+end
+
+-- Check if string is an "integer". 
+local validdigits = {
+	["0"] = true,
+	["1"] = true,
+	["2"] = true,
+	["3"] = true,
+	["4"] = true,
+	["5"] = true,
+	["6"] = true,
+	["7"] = true,
+	["8"] = true,
+	["9"] = true
+}
+local function intcheck(str)
+	if string.sub(str, 1, 1) == "0" then
+		return false
+	end
+	local i = 1
+	while i <= #str do
+		if not validdigits[string.sub(str, i, i)] == true then
+			return false
+		end
+		i = i + 1
+	end
+	return true
+end
+
+
+--[=[ File Manipulation ]=]--
+
+--Check if file exists.
+local function checkfile(name)
+	local file = io.open(name, "r")
+	if file ~= nil then
+				io.close(file)
+		return {true, name}
+	else
+		return {false, name}
 	end
 end
+
+-- Read file contents.
+local function readfile(file)
+	local contents = ""
+	if checkfile(file) == true then
+		contents = capture("cat " .. file)
+	end
+	return contents
+end
+
+-- Get output of command.
+local function capture(cmd, raw)
+	local file = assert(io.popen(cmd, 'r'))
+	local out = assert(file:read('*a'))
+	file:close()
+	if raw then return out end
+	out = string.gsub(out, '^%s+', '')
+	out = string.gsub(out, '%s+$', '')
+	out = string.gsub(out, '[\n\r]+', ' ')
+	return out
+end
+
+
+
+--[=[--[=[ MIZOS SYSTEM FUNCTIONS ]=]--]=]--
 
 
 --[=[ mizOS configuration. ]=]--
+
+-- Generate new i3 config file.
 local function genconf()
 	x("cd /var/mizOS/config/i3 && ./genconf")
 end
+
+-- Write a new i3 config setting.
 local function wconfig(typ, val)
 	x("echo \"" .. val .. "\" > /var/mizOS/config/i3/settings/" .. typ)
 	genconf()
 end
 
 
+-- i3 configuration functions.
 local i3conf = {
 	["bar-color"] = {true, 
 		function(op, value)
@@ -473,9 +448,9 @@ local i3conf = {
 		end}
 }
 
-
+-- Config system function.
 mizOS.system.config = function(op, value)
-	if op == "wallpaper" then
+	if op == "wallpaper" then  -- Change wallpaper.
 		local split = splitstr(value, ".")
 		local rawnamesplit = splitstr(value, "/")
 		local filetype = split[#split]
@@ -489,7 +464,7 @@ mizOS.system.config = function(op, value)
 		x("pkill -fi feh")
 		x("feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*")
 		say("Wallpaper changed to " .. value)
-	elseif op == "pkgsecurity" then
+	elseif op == "pkgsecurity" then  -- Change package security type
 		if value == "strict" or value == "moderate" or value == "none" then
 			local old = dofile("/var/mizOS/security/active/type.lua")
 			x("rm -rf /var/mizOS/security/active/*")
@@ -506,8 +481,9 @@ mizOS.system.config = function(op, value)
 end
 
 
-
 --[=[ System safety. ]=]--
+
+-- System safety system function. (wow, what a mouthful)
 mizOS.system.safety = function(op, program)
 	local dev = true
 	if dev then
@@ -538,8 +514,9 @@ mizOS.system.safety = function(op, program)
 end
 
 
-
 --[=[ mizOS package management. ]=]--
+
+-- mizOS package manager function.
 local function package(op, thepkg, noask)
 	local pkgsplit
 	local dev
@@ -657,9 +634,7 @@ local function package(op, thepkg, noask)
 	end
 end
 
-
-
---[=[ Package security check. ]=]--
+-- Check mizOS package security level before installing package.
 local function firewall(op, thepkg, noask)
 	x("rm -rf /var/mizOS/repo/*")
 	x("wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
@@ -683,9 +658,7 @@ local function firewall(op, thepkg, noask)
 	end
 end
 
-
-
---[=[ Software management. ]=]--
+-- Software management system function.
 mizOS.system.software = function(op, channel, pkgs, noask)
 	local packages = ""
 	for _,ag in pairs(pkgs) do
@@ -755,7 +728,9 @@ end
 
 
 
---[=[ Runit command conversion ]=]--
+--[=[ Init System Management ]=]--
+
+-- Runit command conversion.
 local function runit(op, service)
 	if op == "link" then
 		x("sudo ln -s /etc/runit/sv/" .. service .. " /run/runit/service/")
@@ -788,9 +763,7 @@ local function runit(op, service)
 		end
 end
 
-
-
---[=[ SystemD command conversion. ]=]--
+-- SystemD command conversion.
 local function systemd(op, service)
 	if op == "link" then			  
 		fault("This command is only available for the Runit init system.")
@@ -817,9 +790,7 @@ local function systemd(op, service)
 	end
 end
 
-
-
---[=[ OpenRC command conversion ]=]--
+-- OpenRC command conversion.
 local function openrc(op, service)
 	if op == "link" then	   
 		fault("This command is only available for the Runit init system.")
@@ -846,9 +817,7 @@ local function openrc(op, service)
 	end
 end
 
-
-
---[=[ Service. ]=]--
+-- Service management system function.
 mizOS.system.service = function(op, service)
 	if init == "runit" then
 		runit(op, service)
@@ -862,8 +831,30 @@ mizOS.system.service = function(op, service)
 end
 
 
+--[=[ GPU Management ]=]--
 
---[=[ Graphics stuff. ]=]--
+-- https://github.com/Mizosu97/mgpu
+local function mgpu(gpu, arguments)
+	local gcmd = ""
+	for _,ag in pairs(arguments) do
+		if ag ~= "miz" 
+		and ag ~= "/bin/lua" 
+		and ag ~= "/usr/bin/miz" 
+		and ag ~= "./miz" 
+		and ag ~= "xd" 
+		and ag ~= "xi" 
+		and ag ~= "gfx" then
+			gcmd = gcmd .. ag .. " "
+		end
+	end
+	if gpu == "xd" then
+		x("export DRI_PRIME=1 && exec " .. gcmd)
+	elseif gpu == "xi" then
+		x("export DRI_PRIME=0 && exec " .. gcmd)
+	end
+end
+
+-- GPU management system function
 mizOS.system.gfx = function(op, mode, arguments)
 	if op == "xi" or op == "xd" then
 		x(mgpu(op, arguments))
@@ -887,8 +878,9 @@ mizOS.system.gfx = function(op, mode, arguments)
 end
 
 
+--[=[ Display System Information ]=]--
 
---[=[ Info ]=]--
+-- System info system function.
 mizOS.system.info = function(op)
 	if op == "help" then
 		say("https://discord.gg/CzHw7cXKCx")
@@ -897,15 +889,25 @@ mizOS.system.info = function(op)
 	elseif op == "creator" then
 		say("https://theduat.neocities.org")
 	elseif op == "uilist" then
-		return uis
+        say("Desktop environment/Window manager list:")
+		for _,desktop in pairs(uis) do
+            local dtype = ""
+            if desktop[3] == true then
+                dtype = "    (AUR)"
+            else
+                dtype = "    (pacman)"
+            end
+            say2(desktop[1] .. dtype)
+        end
 	else
 		fault("Command not found.")
 	end
 end
 
 
+--[=[ mizOS System Updating ]=]--
 
---[=[ System updater. ]=]--
+--mizOS system update system function.
 mizOS.system.update = function(op, dev)
 	if op == "packages" then
 		local updatepkgst = capture("ls /var/mizOS/packages")
@@ -927,15 +929,24 @@ mizOS.system.update = function(op, dev)
 end
 
 
+--[=[ Root Command Execution ]=]--
 
---[=[ Root ]=]--
+-- Root command execution system function.
 mizOS.system.root = function(command)
-	local final = [[su -c "]] .. command .. [[" root]]
+    -- This is not meant to replace sudo.
+    -- This is useful when you want a minimal interface, and want the password prompt to show up every time.
+	local final = [[su -c "]] .. command .. [[" root]]  -- This uses "su" instead of "sudo"
 	x(final)
 end
 
 
 
+--[=[--[=[ RETURN THE MIZOS TABLE ]=]--]=]--
 
+-- Returns thy fabled table.
+return mizOS  -- THY FABLED TABLE.
+-- OH MY GOD IT JUST RETURNED THE TABLE!
+-- OH MY GOD OH MY GOD OH MY GOD NO WAY
+-- As you can see, I am very bored right now.
 
-return mizOS
+-- Wow you made it to the end :D
