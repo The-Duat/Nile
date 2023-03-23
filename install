@@ -3,7 +3,7 @@
 
 
 
-$devcurn = $(pwd)
+$devcurn=$(pwd)
 echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
