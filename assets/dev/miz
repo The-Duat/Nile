@@ -42,24 +42,24 @@ end
 --[=[--[=[ INPUT/OUTPUT ]=]--]=]--
 
 inout = {} -- IO table.
-inou.inp = function()  -- Get user input.
+inout.inp = function()  -- Get user input.
 		io.write("\n> ")
 		return io.read()
 end
 
-inou.outp = function(text)  -- Print raw output.
+inout.outp = function(text)  -- Print raw output.
 		io.write(text)
 end
 
-inou.foutp = function(text)  -- Print fancy output.
+inout.foutp = function(text)  -- Print fancy output.
 		print("| " .. text)
 end
 
-inou.afoutp = function(text)  -- Print alternate fancy output.
+inout.afoutp = function(text)  -- Print alternate fancy output.
 		print("    > " .. text)
 end
 
-inou.err = function(text)  -- Print error messages.
+inout.err = function(text)  -- Print error messages.
 	print("!!> \x1b[38;2;243;139;168m" .. text .. "\x1b[38;2;255;255;255m")
 end
 
