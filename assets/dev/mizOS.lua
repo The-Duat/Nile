@@ -24,24 +24,22 @@ local mizOS = {
 	["system"] = {}
 }
 
--- Copy the frontend's IO functions into mio.
--- The frontend runs this initialize function, and passes its IO functions to it.
+local read
+local say
+local say2
+local write
+local err
+-- Transfer the frontend's IO functions to the mizOS backend.
+-- The frontend runs this initialize function, and passes its IO functions stored in a table to it.
 -- Different frontends may have different methods for IO.
 -- This ensures that mizOS is flexible, and is compatible with all of them.
-mizOS.initializeIO = function(inp, outp, foutp, afoutp, err)
-	mio.read = inp -- Input
-	mio.write = outp -- Print raw output.
-	mio.say = foutp -- Fancy output, like printing with a newline.
-	mio.say2 = afoutp -- Alternate say, usually with a different design.
-	mio.fault = err -- Error output.
+mizOS.initializeIO = function(givenio)
+	read = givenio.inp -- Input
+	write = givenio.outp -- Print raw output.
+	say = givenio.foutp -- Fancy output, like printing with a newline.
+	say2 = givenio.afoutp -- Alternate say, usually with a different design.
+	fault = givenio.err -- Error output.
 end
-
--- Ease of access.
-local read = mio.read
-local say = mio.say
-local say2 = mio.say2
-local write = mio.write
-local fault = mio.fault
 
 
 --[=[ User Interface Data ]=]--
