@@ -891,11 +891,12 @@ mizOS.system.info = function(op)
 		for _,desktop in pairs(uis) do
             local dtype = ""
             if desktop[3] == true then
-                dtype = "    (AUR)"
+                dtype = "(AUR)"
             else
-                dtype = "    (pacman)"
+                dtype = "(pacman)"
             end
-            say2(desktop[1] .. dtype)
+            --say2(desktop[1] .. dtype)
+            say2(string.format("%s %-s", desktop[1], dtype))
         end
 	else
 		fault("Command not found.")
