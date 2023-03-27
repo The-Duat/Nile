@@ -525,7 +525,7 @@ local function package(op, thepkg, noask)
 		pkgsplit = splitstr(thepkg, "/")
 		dev = trim(pkgsplit[1])
 		name = trim(pkgsplit[2])
-			insdir = "/var/mizOS/work/" .. name
+		insdir = "/var/mizOS/work/" .. name
 		pkgdir = "/var/mizOS/packages/" .. dev .. "_" .. name
 	end
 	if pkgsplit[1] and pkgsplit[2] then
@@ -548,14 +548,25 @@ local function package(op, thepkg, noask)
 					say2(aurdep)
 					aurpkgs = aurpkgs .. aurdep .. " "
 				end
-				if not noask then
-					say("\nContinue installation? (y/n)")
-					if not string.lower(read()) == "y" then
-						fault("Installation aborted.")
-					end
-				end
-				ipkg(pacpkgs)
-				ypkg(aurpkgs)
+                if not noask then
+                    say("Install dependencies for " .. thepkg .. "? (y/n)")
+                    if string.lower(read()) == "y" then
+                        ipkg(pacpkgs)
+                        ypkg(aurpkgs)
+                    else
+                        say("Dependency installation skipped.")
+                    end
+                else
+                    ipkg(pacpkgs)
+                    ypkg(aurpkgs)
+                end
+                if not noask then
+                    say("Continue installation? (y/n)")
+                    if not string.lower(read()) == "y" then
+                        fault("Installation aborted.")
+                        os.exit()
+                    end
+                end
 				x("mkdir " .. pkgdir)
 				x("cp " .. insdir .. "/info.lua " .. pkgdir .. "/")
 				x("cd " .. insdir .. " && ./install")
@@ -570,7 +581,7 @@ local function package(op, thepkg, noask)
 					say2("Removing " .. file)
 					x("sudo rm " .. file)
 				end
-				print("Removing program directories.")
+				say("Removing program directories.")
 				for _,folder in pairs(info.directories) do
 					say2("Removing " .. folder)
 					x("sudo rm -rf " .. folder)
@@ -587,13 +598,16 @@ local function package(op, thepkg, noask)
 					say2(aurdep)
 					aurpkgs = aurpkgs .. aurdep .. " "
 				end
-				say("\nRemove dependencies for " .. thepkg .. "? (y/n)")
-				if not string.lower(read()) == "y" then
-					fault("Uninstallation aborted.")
-				end
-				x("sudo pacman -Rn " .. pacpkgs)
-				x("yay -Rn " .. aurpkgs)
-				x("sudo rm -rf " .. pkgdir)
+				if not noask then
+                    say("\nRemove dependencies for " .. thepkg .. "? (y/n)")
+                    if string.lower(read()) == "y" then
+                        x("sudo pacman -Rn " .. pacpkgs)
+				        x("yay -Rn " .. aurpkgs)
+				        x("sudo rm -rf " .. pkgdir)
+                    else
+                        say("Dependencies kept.")
+                    end
+                end
 				say(thepkg .. " has been uninstalled.")
 			else
 				fault("That package is not installed.")

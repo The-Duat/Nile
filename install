@@ -8,7 +8,7 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing dependencies."
-sudo -S pacman -S lua alacritty firefox neovim neofetch fish i3-gaps i3status dmenu picom feh xclip maim curl
+sudo -S pacman -S alacritty curl dmenu feh firefox fish i3-gaps i3status lua maim neofetch neovim picom thunar xclip
 
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS
