@@ -8,7 +8,7 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing dependencies."
-sudo -S pacman -S alacritty curl dmenu feh firefox fish i3-gaps i3status lua maim neofetch neovim picom thunar xclip
+sudo -S pacman -S alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-gaps i3status lua luarocks maim neofetch neovim picom python python-pip thunar unzip xclip
 
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS
@@ -106,7 +106,7 @@ else
 	mkdir /var/mizOS/init
 fi
 
-echo "| Creating security folder."
+echo "| Checking security folder."
 if [ -d "/var/mizOS/security" ]; then
 	echo "  > security folder present."
 else
@@ -123,7 +123,7 @@ else
 	mkdir /var/mizOS/backup
 fi
 
-echo "| Checking config folder.."
+echo "| Checking config folder."
 if [ -d "/var/mizOS/config" ]; then
 	echo "  > config folder found, backing up current configuration."
 	mv /var/mizOS/config/* /var/mizOS/backup/
@@ -132,12 +132,28 @@ else
 	mkdir /var/mizOS/config
 fi
 
+echo "| Checking download folder."
+if [ -d "/var/mizOS/download" ]; then
+	echo "  > download folder present, clearing."
+	rm -rf /var/mizOS/download/*
+else
+	echo "  > Creating download folder."
+	mkdir /var/mizOS/download
+fi
 
 
-echo -e "\nGenerating config files."
+
+echo -e "\nConfiguring system."
+echo "| Copying mizOS config directory structure."
 cp -r assets/system_config/config/* /var/mizOS/config
 
-echo "| Creating config symlinks."
+echo "| Installing GTK theme."
+echo "  > Downloading theme."
+wget https://github.com/catppuccin/gtk/releases/download/v0.4.3/Catppuccin-Mocha-Standard-Pink-Dark.zip -O /var/mizOS/download/catppuccin.zip
+echo "  > Extracting theme."
+
+
+echo "| Creating config file symlinks."
 echo "  > Creating i3 symlink."
 if [ -d "$HOME/.config/i3" ]; then
 	rm -rf $HOME/.config/i3/*
