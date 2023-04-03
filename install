@@ -10,6 +10,9 @@ sudo -S pacman -Syu
 echo "Installing dependencies."
 sudo -S pacman -S alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-gaps i3status lua luarocks maim neofetch neovim picom python python-pip thunar unzip xclip
 
+echo "Installing python pygobject library."
+pip install pygobject
+
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS
 	mv $HOME/mizOS /var/
@@ -44,6 +47,22 @@ else
 	else
 		echo "  > Creating $HOME/.config"
 		mkdir $HOME/.config
+	fi
+
+	echo "| Checking $HOME/.themes"
+	if [ -d "$HOME/.themes" ]; then
+		echo "  > $HOME/.themes already exists."
+	else
+		echo "  > Creating $HOME/.themes"
+		mkdir $HOME/.themes
+	fi
+
+	echo "| Checking $HOME/.icons"
+	if [ -d "$HOME/.icons" ]; then
+		echo "  > $HOME/.icons already exists."
+	else
+		echo "  > Creating $HOME/.icons"
+		mkdir $HOME/.icons
 	fi
 
 	echo "  > Creating /var/mizOS"
@@ -148,9 +167,14 @@ echo "| Copying mizOS config directory structure."
 cp -r assets/system_config/config/* /var/mizOS/config
 
 echo "| Installing GTK theme."
+if [ -d "/var/mizOS/download/cat" ]; then
+else
+	mkdir /var/mizOS/download/cat
+fi
 echo "  > Downloading theme."
 wget https://github.com/catppuccin/gtk/releases/download/v0.4.3/Catppuccin-Mocha-Standard-Pink-Dark.zip -O /var/mizOS/download/catppuccin.zip
 echo "  > Extracting theme."
+unzip /var/mizOS/download/catppuccin.zip -d /var/mizOS/download/cat
 
 
 echo "| Creating config file symlinks."
