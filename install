@@ -167,6 +167,7 @@ echo "| Copying mizOS config directory structure."
 cp -r assets/system_config/config/* /var/mizOS/config
 
 echo "| Installing GTK theme."
+echo "  > Preparing theme folder."
 if [ -d "/var/mizOS/download/cat" ]; then
 else
 	mkdir /var/mizOS/download/cat
@@ -175,6 +176,14 @@ echo "  > Downloading theme."
 wget https://github.com/catppuccin/gtk/releases/download/v0.4.3/Catppuccin-Mocha-Standard-Pink-Dark.zip -O /var/mizOS/download/catppuccin.zip
 echo "  > Extracting theme."
 unzip /var/mizOS/download/catppuccin.zip -d /var/mizOS/download/cat
+echo "  > Renaming theme files."
+mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark /var/mizOS/download/cat/Catppuccin
+mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /var/mizOS/download/cat/Catppuccin-hdpi
+mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-xhdpi /var/mizOS/download/cat/Catppuccin-xhdpi
+echo "  > Installing theme."
+mv /var/mizOS/download/cat/* $HOME/.themes
+echo "  > Removing theme zip file."
+rm /var/mizOS/download/catppuccin.zip
 
 
 echo "| Creating config file symlinks."
@@ -231,7 +240,7 @@ cp assets/os/mizOS.lua /var/mizOS/core
 
 echo "  > Installing the miz frontend."
 if [ -f "/usr/bin/miz" ]; then
-	sudo rm /usr/bin/miz
+	sudo -S rm /usr/bin/miz
 fi
 chmod +x assets/os/miz
 sudo -S cp assets/os/miz /usr/bin
