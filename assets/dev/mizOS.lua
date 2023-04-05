@@ -258,19 +258,23 @@ local function checkfile(name)
 	local file = io.open(name, "r")
 	if file ~= nil then
 				io.close(file)
-		return {true, name}
+		return true
 	else
-		return {false, name}
+		return false
 	end
 end
 
 -- Read file contents.
 local function readfile(file)
-	local contents = ""
-	if checkfile(file) == true then
-		contents = capture("cat " .. file)
-	end
-	return contents
+	local openf = io.open(file, "r")
+    local contents = ""
+    if openf then 
+        contents = openf:read("*all")
+    else
+        fault("Could not open file \"" .. file .. "\"")
+    end
+    openf:close()
+    return contents
 end
 
 -- Get output of command.
@@ -292,164 +296,80 @@ end
 
 --[=[ mizOS configuration. ]=]--
 
--- Generate new i3 config file.
-local function geni3conf()
-	x("cd /var/mizOS/config/i3 && ./genconf")
+-- Generate new config.
+local function genconf(typ)
+	x("cd /var/mizOS/config/" .. typ .. " && ./genconf")
 end
 
--- Write a new i3 config setting.
-local function wi3config(typ, val)
-	x("echo \"" .. val .. "\" > /var/mizOS/config/i3/settings/" .. typ)
-	geni3conf()
+-- Write a new config setting.
+local function wconfig(typ, set, val)
+	x("echo \"" .. val .. "\" > /var/mizOS/config/" .. typ .. "/settings/" .. set)
+	genconf(typ)
 end
 
+-- Change i3 config setting needing hex color value.
+local function i3hex(op, value)
+    if hexcolorcheck(value) == true then
+        wconfig("i3", op, "#" .. value)
+        say(op .. " changed to " .. value)
+    else
+        fault("Invalid hex color code: " .. value)
+    end 
+end
 
--- i3 configuration functions.
+-- Change i3 config setting needing integer value.
+local function i3int(op, value)
+    if intcheck(value) == true then
+        wconfig("i3", op, value)
+        say(op .. " changed to " .. value)
+    else
+        say("Invalid integer: " .. value)
+    end 
+end
+
+-- i3 configuration switch table.
 local i3conf = {
-	["bar-color"] = {true, 
+	["bar-color"] = {i3hex},
+	["bar-position"] = {
 		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
+			 if value == "bottom" or value == "top" then
+			    wconfig("i3", op, value)
+			    say(op .. " changed to " .. value)
 			else
-				fault("Invalid hex color code: " .. value)
+			    fault("Invalid position: " .. value)
 			end 
-		end},
-		["bar-position"] = {true, 
-		function(op, value)
-			if value == "bottom" or value == "top" then
-				wi3config(op, value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid position: " .. value)
-			end 
-		end},
-		["border-color1"] = {true, 
-		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["border-color2"] = {true, 
-		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["border-color3"] = {true, 
-		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["border-size"] = {true, 
-		function(op, value)
-			if intcheck(value) == true then
-				wi3config(op, value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["gaps-inner"] = {true, 
-		function(op, value)
-			if intcheck(value) == true then
-				wi3config(op, value)
-				say(op .. " changed to " .. value)
-			else
-				say("Invalid hex color code: " .. value)
-			end 
-		end},
-		["gaps-outer"] = {true, 
-		function(op, value)
-			if intcheck(value) == true then
-				wi3config(op, value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["mod-key"] = {true, 
+		 end},
+	["border-color1"] = {i3hex},
+	["border-color2"] = {i3hex},
+	["border-color3"] = {i3hex},
+	["border-size"] = {i3int},
+	["gaps-inner"] = {i3int},
+	["gaps-outer"] = {i3int},
+	["mod-key"] = {
 		function(op, value)
 			if value == "Mod1"
 			or value == "Mod2"
 			or value == "Mod3"
 			or value == "Mod4" then
-				wi3config(op, value)
-				say(op .. " changed to " .. value)
+			    wconfig("i3", op, value)
+			    say(op .. " changed to " .. value)
 			else
 				fault("Invalid mod key: " .. value)
-			end
+		    end
 		end},
-		["ws-bg-color1"] = {true, 
-		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["ws-bg-color2"] = {true, 
-		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["ws-bg-color3"] = {true, 
-		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["ws-txt-color1"] = {true, 
-		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["ws-txt-color2"] = {true, 
-		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end},
-		["ws-txt-color3"] = {true, 
-		function(op, value)
-			if hexcolorcheck(value) == true then
-				wi3config(op, "#" .. value)
-				say(op .. " changed to " .. value)
-			else
-				fault("Invalid hex color code: " .. value)
-			end 
-		end}
+	["ws-bg-color1"] = {i3hex},
+	["ws-bg-color2"] = {i3hex},
+	["ws-bg-color3"] = {i3hex},
+	["ws-txt-color1"] = {i3hex},
+	["ws-txt-color2"] = {i3hex},
+	["ws-txt-color3"] = {i3hex}
 }
 
--- GTK config
+
+-- GTK config switch table.
 local gtkconf = {
     ["gtk-theme"] = {true,
-        function(theme)
+        function(op, value)
         end}
 }
 
@@ -478,8 +398,8 @@ mizOS.system.config = function(op, value)
 		else
 			fault("Invalid argument: " .. value)
 		end
-	elseif i3conf[op][1] == true then
-		i3conf[op][2](op, value)
+	elseif i3conf[op] == true then
+		i3conf[op](op, value)
 	else
 		fault("Invalid argument: " .. op)
 	end
