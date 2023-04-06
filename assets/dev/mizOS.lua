@@ -852,6 +852,9 @@ end
 --mizOS system update system function.
 mizOS.system.update = function(op, dev)
 	if op == "packages" then
+		package("list", nil, nil)
+		say("Update mizOS packages? (y/n)")
+		if not read() == "y" then say("mizOS package update aborted.") return end
 		local updatepkgst = capture("ls /var/mizOS/packages")
 		local updatepkgs = splitstr(updatepkgst, " ")
 		for _,pkg in pairs(updatepkgs) do

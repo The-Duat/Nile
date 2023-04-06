@@ -41,6 +41,7 @@ else
 		fi
 	fi
 
+	echo -e "Checking $HOME filesystem."
 	echo "| Checking $HOME/.config"
 	if [ -d "$HOME/.config" ]; then
 		echo "  > $HOME/.config already exists."
