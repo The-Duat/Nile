@@ -503,7 +503,7 @@ local function package(op, thepkg, noask)
 				fault("That package either doesn't exist, or was not made correctly.")
 			end
 		elseif op == "remove" then
-			if checkfile(pkgdir .. "/info.lua") == true then
+			if inspkgpresent == true then
 				local info = dofile(pkgdir .. "/info.lua")
 				say("Removing program files.")
 				for _,file in pairs(info.files) do
@@ -544,7 +544,7 @@ local function package(op, thepkg, noask)
 		elseif op == "update" then
 			if inspkgpresent == true then
 				x("rm -rf " .. pkgdir)
-				x([[su -c "rm -rf /var/mizOS/work/*" root]])
+				x("sudo rm -rf /var/mizOS/work/*")
 				x("cd /var/mizOS/work && git clone https://github.com/" .. dev .. "/" .. name)
 				if dofile(insdir .. "/MIZOSPKG.lua") == true then				
 					local info = dofile(insdir .. "/info.lua")
