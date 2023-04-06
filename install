@@ -168,8 +168,7 @@ cp -r assets/system_config/config/* /var/mizOS/config
 
 echo "| Installing GTK theme."
 echo "  > Preparing theme folder."
-if [ -d "/var/mizOS/download/cat" ]; then
-else
+if [ ! -d "/var/mizOS/download/cat" ]; then
 	mkdir /var/mizOS/download/cat
 fi
 echo "  > Downloading theme."

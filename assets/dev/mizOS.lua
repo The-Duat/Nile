@@ -257,8 +257,8 @@ end
 local function checkfile(name)
 	local file = io.open(name, "r")
 	if file ~= nil then
-				io.close(file)
-		return true
+        io.close(file)
+        return true
 	else
 		return false
 	end
