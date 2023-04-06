@@ -257,8 +257,8 @@ end
 local function checkfile(name)
 	local file = io.open(name, "r")
 	if file ~= nil then
-        io.close(file)
-        return true
+		io.close(file)
+		return true
 	else
 		return false
 	end
@@ -448,12 +448,14 @@ local function package(op, thepkg, noask)
 	local name
 	local insdir
 	local pkgdir
+	local inspkgpresent
 	if thepkg then
 		pkgsplit = splitstr(thepkg, "/")
 		dev = trim(pkgsplit[1])
 		name = trim(pkgsplit[2])
 		insdir = "/var/mizOS/work/" .. name
 		pkgdir = "/var/mizOS/packages/" .. dev .. "_" .. name
+		inspkgpresent = dofile(pkgdir .. "/info.lua").is_present
 	end
 	if pkgsplit[1] and pkgsplit[2] then
 		if op == "install" then
@@ -540,7 +542,7 @@ local function package(op, thepkg, noask)
 				fault("That package is not installed.")
 			end
 		elseif op == "update" then
-			if checkfile(pkgdir .. "/info.lua") == true then
+			if inspkgpresent == true then
 				x("rm -rf " .. pkgdir)
 				x([[su -c "rm -rf /var/mizOS/work/*" root]])
 				x("cd /var/mizOS/work && git clone https://github.com/" .. dev .. "/" .. name)
