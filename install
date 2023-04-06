@@ -19,11 +19,15 @@ if [ -d "$HOME/.mizOS" ]; then
 	sudo chmod 777 /var/mizOS
 fi
 
+installType=""
+
 echo "Checking install type."
 if [ -d "/var/mizOS" ]; then
 	echo "| Performing system update."
+	installType="update"
 else
 	echo "| Performing system install."
+	installType="install"
 	printf "\n\n\nAre you installing SystemD mizOS onto an Asus laptop? (y/n)\n\n> "
 	read ans
 
@@ -166,6 +170,8 @@ fi
 echo -e "\nConfiguring system."
 echo "| Copying mizOS config directory structure."
 cp -r assets/system_config/config/* /var/mizOS/config
+echo "| Generating i3 config file."
+/var/mizOS/config/i3/genconf
 
 echo "| Installing GTK theme."
 echo "  > Preparing theme folder."
@@ -292,15 +298,13 @@ else
 	echo "  > Source folder not found, enjoy your mizOS installation :)"
 fi
 
-echo -e "\nGenerating i3 config."
-cd /var/mizOS/config/i3 && ./genconf
-
 echo -e "\n\n"
-
-echo "My work here is done! You should probably reboot."
-echo "  "
-echo "If you are currently using i3-gaps, reload with MOD+shift+c."
-echo " "
-echo -e "mizOS theming is installed on a per-user basis. If you want mizOS theming on another user, run \"miz update\" from that user."
-echo " "
-echo -e "Remember, \"sudo pacman -Syu\" does not update mizOS, use \"miz update\" instead."
+if [ "$installType" = "install" ]; then
+	echo "My work here is done! You should probably reboot."
+	echo "  "
+	echo "If you are currently using i3-gaps, reload with MOD+shift+c."
+	echo " "
+	echo -e "mizOS theming is installed on a per-user basis. If you want mizOS theming on another user, run \"miz update\" from that user."
+	echo " "
+	echo -e "Remember, \"sudo pacman -Syu\" does not update mizOS, use \"miz update\" instead."
+fi

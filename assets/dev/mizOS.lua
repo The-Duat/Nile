@@ -290,6 +290,21 @@ local function capture(cmd, raw)
 end
 
 
+--[=[ Run lua code as root ]=]--
+local function sudo(fn)
+	if type(fn) ~= "function" then
+		fault("Critcal system error regarding mizOS's \"sudo\" function. Notify developer immediately. https://entertheduat.org")
+		return
+	end
+	local tmpFileName = os.tmpname()
+	local tmpFile = io.open(tmpFileName, "w")
+	tmpFile:write(string.dump(fn))
+	tmpFile:close()
+	x("sudo lua " .. tmpFile)
+	os.remove(tmpFile)
+end
+
+
 
 --[=[--[=[ MIZOS SYSTEM FUNCTIONS ]=]--]=]--
 
@@ -389,8 +404,10 @@ mizOS.system.config = function(op, value)
 		x("pkill -fi feh")
 		x("feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*")
 		say("Wallpaper changed to " .. value)
-	elseif op == "pkgsecurity" then  -- Change package security type
-		if value == "strict" or value == "moderate" or value == "none" then
+	elseif op == "pkgsec" then  -- Change package security type
+		if value == "strict"
+		or value == "moderate"
+		or value == "none" then
 			local old = dofile("/var/mizOS/security/active/type.lua")
 			x("rm -rf /var/mizOS/security/active/*")
 			x("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
@@ -577,8 +594,7 @@ end
 
 -- Check mizOS package security level before installing package.
 local function firewall(op, thepkg, noask)
-	x("rm -rf /var/mizOS/repo/*")
-	x("wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
+	x("rm -rf /var/mizOS/repo/* && wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
 	local pkg = trim(thepkg)
 	local repo = dofile("/var/mizOS/repo/repo.lua")
 	local seclevel = dofile("/var/mizOS/security/active/type.lua")
