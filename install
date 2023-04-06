@@ -180,6 +180,9 @@ mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark /var/mizOS/downlo
 mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /var/mizOS/download/cat/Catppuccin-hdpi
 mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-xhdpi /var/mizOS/download/cat/Catppuccin-xhdpi
 echo "  > Installing theme."
+if [ -d "$HOME/.themes/catppuccin" ]; then
+    rm -rf $HOME/.themes/catppuccin
+fi
 mv /var/mizOS/download/cat/* $HOME/.themes
 echo "  > Removing theme zip file."
 rm /var/mizOS/download/catppuccin.zip
