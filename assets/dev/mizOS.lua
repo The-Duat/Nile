@@ -457,7 +457,7 @@ local function package(op, thepkg, noask)
 		pkgdir = "/var/mizOS/packages/" .. dev .. "_" .. name
 		inspkgpresent = dofile(pkgdir .. "/info.lua").is_present
 	end
-	if pkgsplit[1] and pkgsplit[2] then
+	if not thepkg == nil and pkgsplit[1] and pkgsplit[2] then
 		if op == "install" then
 			x([[su -c "rm -rf /var/mizOS/work/*" root]])
 			x("cd /var/mizOS/work && git clone https://github.com/" .. pkgsplit[1] .. "/" .. pkgsplit[2])
@@ -565,12 +565,12 @@ local function package(op, thepkg, noask)
 					fault("That package either doesn't exist, or was not made correctly.")
 				end
 			end
-		elseif op == "list" then
-			say("Installed mizOS packages:")
-			for _,i in pairs(splitstr(capture("ls /var/mizOS/packages"), " ")) do
-				local split = splitstr(i, "_")
-				say2(split[1] .. "/" .. split[2])
-			end
+		end
+	elseif op == "list" then
+		say("Installed mizOS packages:")
+		for _,i in pairs(splitstr(capture("ls /var/mizOS/packages"), " ")) do
+			local split = splitstr(i, "_")
+			say2(split[1] .. "/" .. split[2])
 		end
 	end
 end
