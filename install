@@ -183,6 +183,12 @@ echo "  > Installing theme."
 if [ -d "$HOME/.themes/catppuccin" ]; then
     rm -rf $HOME/.themes/catppuccin
 fi
+if [ -d "$HOME/.themes/catppuccin-hdpi" ]; then
+    rm -rf $HOME/.themes/catppuccin-hdpi
+fi
+if [ -d "$HOME/.themes/catppuccin-xhdpi" ]; then
+    rm -rf $HOME/.themes/catppuccin-xhdpi
+fi
 mv /var/mizOS/download/cat/* $HOME/.themes
 echo "  > Removing theme zip file."
 rm /var/mizOS/download/catppuccin.zip
