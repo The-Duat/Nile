@@ -8,7 +8,7 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing dependencies."
-sudo -S pacman -S alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-gaps i3status lua luarocks maim neofetch neovim picom python python-pip thunar unzip xclip
+sudo -S pacman -S alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-gaps i3status lua luarocks maim neofetch neovim papirus-icon-theme picom python python-pip thunar unzip xclip
 
 echo "Installing python pygobject library."
 pip install pygobject
@@ -194,6 +194,13 @@ mv /var/mizOS/download/cat/* $HOME/.themes
 echo "  > Removing theme zip file."
 rm /var/mizOS/download/catppuccin.zip
 
+echo "| Configuring icon pack."
+echo "  > Downloading configurations."
+git clone https://github.com/catppuccin/papirus-folders /var/mizOS/download/cat-papi
+echo "  > Copying new icon files."
+sudo -S cp /var/mizOS/download/cat-papi/src/* /usr/share/icons/Papirus
+echo "  > Overwriting old icon files."
+sudo -S /var/mizOS/download/cat-papi/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
 
 echo "| Creating config file symlinks."
 echo "  > Creating i3 symlink."
