@@ -322,7 +322,7 @@ end
 local function genconf(typ)
 	if typ == "i3" then
 		x("cd /var/mizOS/config/i3 && ./genconf")
-	elseif typ == "gtk"
+	elseif typ == "gtk" then
 		x("cd /var/mizOS/config/gtk && python3 setsettings.py")
 	end
 
