@@ -236,6 +236,12 @@ else
 fi
 ln -s /var/mizOS/config/i3/config $HOME/.config/i3/config
 
+echo "  > Creating gtk symlink."
+if [ -f "$HOME/.config/gtk-3.0/settings.ini" ]; then
+	rm $HOME/.config/gtk-3.0/settings.ini
+fi
+ln -s /var/mizOS/config/gtk/settings.ini $HOME/.config/gtk-3.0/settings.ini
+
 echo "  > Creating picom symlink."
 if [ -f "$HOME/.config/picom.conf" ]; then
 	rm $HOME/.config/picom.conf
