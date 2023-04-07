@@ -1,5 +1,5 @@
 import gi
-gi.require_version("GTK", "3.0")
+gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk as gtk
 
 settings = gtk.Settings.get_default()
