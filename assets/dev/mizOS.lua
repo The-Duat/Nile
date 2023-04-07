@@ -871,6 +871,16 @@ mizOS.system.info = function(op)
 end
 
 
+--[=[ Session management ]=]--
+mizOS.system.session = function(op)
+	if op == "relog" then
+		local sessionID = capture("loginctl list-sessions | awk '/$(id -u)/{print $1}'")
+		x("loginctl terminate-session " .. sessionID)
+		x("loginctl unlock-session " .. sessionID)
+	end
+end
+
+
 --[=[ mizOS System Updating ]=]--
 
 --mizOS system update system function.
