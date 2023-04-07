@@ -225,7 +225,7 @@ echo "  > Overwriting old icon files."
 sudo -S /var/mizOS/download/cat-papi/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
 
 echo "| Writing GTK settings."
-python3 /var/mizOS/config/gtk/setsettings.py
+/var/mizOS/config/gtk/genconf
 
 echo "| Creating config file symlinks."
 echo "  > Creating i3 symlink."
