@@ -217,7 +217,7 @@ echo "| Configuring Papirus icon pack."
 echo "  > Downloading configurations."
 git clone https://github.com/catppuccin/papirus-folders /var/mizOS/download/cat-papi
 echo "  > Copying new icon files."
-sudo -S cp /var/mizOS/download/cat-papi/src/* /usr/share/icons/Papirus
+sudo -S cp -r /var/mizOS/download/cat-papi/src/* /usr/share/icons/Papirus
 echo "  > Overwriting old icon files."
 sudo -S /var/mizOS/download/cat-papi/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
 
