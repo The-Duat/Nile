@@ -265,16 +265,23 @@ local function checkfile(name)
 end
 
 -- Read file contents.
-local function readfile(file)
-	local openf = io.open(file, "r")
+local function readfile(path)
+	local file = io.open(path, "r")
     local contents = ""
-    if openf then 
-        contents = openf:read("*all")
+    if file then 
+        contents = file:read("*all")
     else
-        fault("Could not open file \"" .. file .. "\"")
+        fault("Could not open file \"" .. path .. "\"")
     end
-    openf:close()
+    file:close()
     return contents
+end
+
+-- Write to file
+local function writefile(path, contents)
+	local file = io.open(path, "w")
+	file:write(contents)
+	file:close()
 end
 
 -- Get output of command.
@@ -313,19 +320,24 @@ end
 
 -- Generate new config.
 local function genconf(typ)
-	x("cd /var/mizOS/config/" .. typ .. " && ./genconf")
+	if typ == "i3" then
+		x("cd /var/mizOS/config/i3 && ./genconf")
+	elseif typ == "gtk"
+		x("cd /var/mizOS/config/gtk && python3 setsettings.py")
+	end
+
 end
 
 -- Write a new config setting.
-local function wconfig(typ, set, val)
-	x("echo \"" .. val .. "\" > /var/mizOS/config/" .. typ .. "/settings/" .. set)
+local function wsetting(typ, setting, val)
+	writefile("/var/mizOS/config" .. typ .. "/settings/" .. setting, val)
 	genconf(typ)
 end
 
 -- Change i3 config setting needing hex color value.
 local function i3hex(op, value)
     if hexcolorcheck(value) == true then
-        wconfig("i3", op, "#" .. value)
+        wsetting("i3", op, "#" .. value)
         say(op .. " changed to " .. value)
     else
         fault("Invalid hex color code: " .. value)
@@ -335,7 +347,7 @@ end
 -- Change i3 config setting needing integer value.
 local function i3int(op, value)
     if intcheck(value) == true then
-        wconfig("i3", op, value)
+        wsetting("i3", op, value)
         say(op .. " changed to " .. value)
     else
         say("Invalid integer: " .. value)
@@ -344,11 +356,11 @@ end
 
 -- i3 configuration switch table.
 local i3conf = {
-	["bar-color"] = {i3hex},
+	["bar-color"] = i3hex,
 	["bar-position"] = {
 		function(op, value)
 			 if value == "bottom" or value == "top" then
-			    wconfig("i3", op, value)
+			    wsetting("i3", op, value)
 			    say(op .. " changed to " .. value)
 			else
 			    fault("Invalid position: " .. value)
@@ -366,7 +378,7 @@ local i3conf = {
 			or value == "Mod2"
 			or value == "Mod3"
 			or value == "Mod4" then
-			    wconfig("i3", op, value)
+			    wsetting("i3", op, value)
 			    say(op .. " changed to " .. value)
 			else
 				fault("Invalid mod key: " .. value)
@@ -380,12 +392,11 @@ local i3conf = {
 	["ws-txt-color3"] = {i3hex}
 }
 
-
 -- GTK config switch table.
 local gtkconf = {
-    ["gtk-theme"] = {true,
-        function(op, value)
-        end}
+    ["gtk-theme"] = wsetting,
+	["icon-theme"] = wsetting,
+	["cursor-theme"] = wsetting
 }
 
 -- Config system function.
@@ -416,7 +427,9 @@ mizOS.system.config = function(op, value)
 			fault("Invalid argument: " .. value)
 		end
 	elseif i3conf[op] == true then
-		i3conf[op](op, value)
+		i3conf[op][1](op, value)
+	elseif gtkconf[op] == true then
+		gtkconf[op]("gtk", op, value)
 	else
 		fault("Invalid argument: " .. op)
 	end

@@ -200,7 +200,20 @@ mv /var/mizOS/download/cat/* $HOME/.themes
 echo "  > Removing theme zip file."
 rm /var/mizOS/download/catppuccin.zip
 
-echo "| Configuring icon pack."
+echo "| Installing cursor theme."
+if [ ! -d "/var/mizOS/download/cat-cursor" ]; then
+	mkdir /var/mizOS/download/cat-cursor
+fi
+echo "  > Downloading theme."
+wget https://github.com/catppuccin/cursors/raw/main/cursors/Catppuccin-Mocha-Lavender-Cursors.zip -O /var/mizOS/download/cursor.zip
+echo "  > Extracting theme."
+unzip /var/mizOS/download/cursor.zip -d /var/mizOS/download/cat-cursor
+echo "  > Renaming theme file."
+mv /var/mizOS/download/cat-cursor/Catppuccin-Mocha-Lavender-Cursors /var/mizOS/download/cat-cursor/catppuccin-cursor
+echo "  > Installing cursor theme."
+sudo -S mv /var/mizOS/download/cat-cursor/catppuccin-cursor /usr/share/icons
+
+echo "| Configuring Papirus icon pack."
 echo "  > Downloading configurations."
 git clone https://github.com/catppuccin/papirus-folders /var/mizOS/download/cat-papi
 echo "  > Copying new icon files."
