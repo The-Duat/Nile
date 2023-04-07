@@ -140,11 +140,6 @@ local function safety(args)
 	end
 end
 
--- Session.
--- (miz relog)
-local function session(args)
-	mizOS.system.session(args[1])
-end
 
 
 --[=[--[=[ COMMAND INTERPRETER ]=]--]=]--
@@ -161,8 +156,7 @@ local basecommands = {
 	["update"] = update,
 	["info"] = info,
 	["backup"] = safety,
-	["restore"] = safety,
-	["relog"] = session
+	["restore"] = safety
 }
 
 -- Wipe unneeded arguments.
