@@ -188,13 +188,13 @@ mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /var/mizOS/d
 mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-xhdpi /var/mizOS/download/cat/Catppuccin-xhdpi
 echo "  > Installing theme."
 if [ -d "$HOME/.themes/catppuccin" ]; then
-    rm -rf $HOME/.themes/catppuccin
+    rm -rf $HOME/.themes/Catppuccin
 fi
 if [ -d "$HOME/.themes/catppuccin-hdpi" ]; then
-    rm -rf $HOME/.themes/catppuccin-hdpi
+    rm -rf $HOME/.themes/Catppuccin-hdpi
 fi
 if [ -d "$HOME/.themes/catppuccin-xhdpi" ]; then
-    rm -rf $HOME/.themes/catppuccin-xhdpi
+    rm -rf $HOME/.themes/Catppuccin-xhdpi
 fi
 mv /var/mizOS/download/cat/* $HOME/.themes
 echo "  > Removing theme zip file."
@@ -211,7 +211,10 @@ unzip /var/mizOS/download/cursor.zip -d /var/mizOS/download/cat-cursor
 echo "  > Renaming theme file."
 mv /var/mizOS/download/cat-cursor/Catppuccin-Mocha-Lavender-Cursors /var/mizOS/download/cat-cursor/catppuccin-cursor
 echo "  > Installing cursor theme."
-sudo -S mv /var/mizOS/download/cat-cursor/catppuccin-cursor /usr/share/icons
+if [ -d "$HOME/.icons/cat-cursor" ]; then
+	rm -rf $HOME/.icons/cat-cursor
+fi
+sudo -S mv /var/mizOS/download/cat-cursor/catppuccin-cursor $HOME/.icons
 
 echo "| Configuring Papirus icon pack."
 echo "  > Downloading configurations."
@@ -220,6 +223,9 @@ echo "  > Copying new icon files."
 sudo -S cp -r /var/mizOS/download/cat-papi/src/* /usr/share/icons/Papirus
 echo "  > Overwriting old icon files."
 sudo -S /var/mizOS/download/cat-papi/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
+
+echo "| Writing GTK settings."
+python3 /var/mizOS/config/gtk/setsettings.py
 
 echo "| Creating config file symlinks."
 echo "  > Creating i3 symlink."
