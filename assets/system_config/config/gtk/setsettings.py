@@ -16,6 +16,3 @@ with open("/var/mizOS/config/gtk/settings/cursor-theme", "r") as f:
 settings.set_property("gtk-theme-name", gtk_theme)
 settings.set_property("gtk-icon-theme-name", icon_theme)
 settings.set_property("gtk-cursor-theme-name", cursor_theme)
-
-gtk.StyleContext().invalidate()
-settings.sync()
