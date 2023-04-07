@@ -18,4 +18,4 @@ settings.set_property("gtk-icon-theme-name", icon_theme)
 settings.set_property("gtk-cursor-theme-name", cursor_theme)
 
 gtk.StyleContext().invalidate()
-settings.apply()
+settings.sync()
