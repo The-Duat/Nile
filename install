@@ -8,10 +8,7 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing dependencies."
-sudo -S pacman -S alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-gaps i3status lua luarocks maim neofetch neovim papirus-icon-theme picom python python-pip thunar unzip xclip
-
-echo "Installing python pygobject library."
-pip install pygobject
+sudo -S pacman -S alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-gaps i3status lua luarocks maim neofetch neovim papirus-icon-theme picom thunar unzip xclip
 
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS

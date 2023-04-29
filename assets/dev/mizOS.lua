@@ -389,7 +389,7 @@ local i3conf = {
 
 -- GTK config switch table.
 local gtkconf = {
-    ["gtk-theme"] = wsetting,
+	["gtk-theme"] = wsetting,
 	["icon-theme"] = wsetting,
 	["cursor-theme"] = wsetting
 }
