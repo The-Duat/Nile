@@ -14,6 +14,8 @@ end
 local GlobalData = dofile("/var/mizOS/core/libraries/mOS_Global_Data.lua")
 homeDir               = GlobalData.homeDir
 initSystem            = GlobalData.initSystem
+packageSecType        = GlobalData.packageSecType
+i3ConfigSheet         = GlobalData.i3ConfigSheet
 UITable               = GlobalData.UITable
 integerCharacterSheet = GlobalData.integerCharacterSheet
 hexCharacterSheet     = GlobalData.hexCharacterSheet
@@ -34,6 +36,14 @@ isInt        = UtilityFunctions.isInt
 isHex        = UtilityFunctions.isHex
 writeSetting = UtilityFunctions.writeSetting
 exit         = UtilityFunctions.exit
+
+local PackageManager = dofile("/var/mizOS/core/libraries/mOS_Package_Msnager.lua")
+installMPackage  = PackageManager.installMPackage
+removeMPackage   = PackageManager.removeMPackage
+updateMPackage   = PackageManager.updateMPackage
+checkPkgSecLevel = PackageManager.checkPkgSecLevel
+listInstalled    = PackageManager.listInstalled
+listRepo         = PackageManager.listRepo
 
 
 

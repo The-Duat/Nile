@@ -56,8 +56,8 @@ Manager.installMPackage = function(packageName)
 		exit()
 	end
 
-	x("mkdir " .. infoDir)
-	x("cp " .. downloadDir .. "/info.lua " .. infoDir)
+	xs("mkdir " .. infoDir)
+	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
 	x("cd " .. downloadDir .. " && ./install")
 end
 
@@ -113,7 +113,7 @@ end
 
 --[=[ Update mizOS Package ]=]--
 Manager.updateMPackage = function(packageName)
-	local nameInfo = splitString3(packageName, "/")
+	local nameInfo = splitString(packageName, "/")
 	local developerName = trimWhite(nameInfo[1])
 	local softwareName = trimWhite(nameInfo[2])
 	local downloadDir = "/var/mizOS/work/" .. softwareName
@@ -134,6 +134,72 @@ Manager.updateMPackage = function(packageName)
 
 	say("Downloading package.")
 	x("cd /var/mizOS/work && git clone https://github.com/" .. developerName .. "/" .. softwareName)
+
+	say("Creating new info file.")
+	xs("mkdir " .. infoDir)
+	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
+
+	local packageInfo = dofile(downloadDir .. "/info.lua")
+
+	say("\nPacman dependencies:")
+	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
+		say2(pacmanDep)
+	end
+	say("\nAUR dependencies:")
+	for _,aurDep in pairs(packageInfo.aur_depends) do
+		say2(pacmanDep)
+	end
+	say("Autoinstalling dependencies.")
+	iPkg(packageInfo.pacman_depends, "pacman")
+	iPkg(packageInfo.aur_depends, "aur")
+
+	say("Updating " .. packageName)
+end
+
+--[=[ Check installable package's required security level ]=]--
+Manager.checkPkgSecLevel = function(packageName)
+	say("Downloading package repo.")
+	x("rm -rf /var/mizOS/repo/* && wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
+	local mizOSRepo = dofile("/var/mizOS/repo/repo.lua")
+
+	local packageName = trimWhite(packageName)
+
+	if mizOSRepo["official"][packageName][2] == true then
+		return "official"
+	elseif mizOSRepo["community"][packageName][2] == true then
+		return "community"
+	else
+		return "global"
+	end
+end
+
+--[=[ Get list of installed packages ]=]-- 
+Manager.listInstalled = function()
+	say("Installed mizOS packages:")
+	for _,package in pairs(splitString(readCommand("ls /var/mizOS/packages"))) do
+		local pkgNameInfo = splitString(package, "_")
+		say2(pkgNameInfo[1] .. "/" .. pkgNameInfo[2])
+	end
+end
+
+--[=[ Get list of packages in the Duat's repo ]=]--
+Manager.listRepo = function()
+	say("Downloading package repo.")
+	x("rm -rf /var/mizOS/repo/* && wget https://entertheduat.org/packages/repo.lua -P /var/*")
+
+	local mizOSRepo = dofile("/var/mizOS/repo/repo.lua")
+
+	say("\nThe Duat's Package Repository")
+	say("Official:")
+	for _,package in pairs(mizOSRepo.official) do
+		say2(package[1])
+	end
+	say("\nCommunity:")
+	for _,package in pairs(mizOSRepo.community) do
+		say2(package[1])
+	end
+	say("\nDue to the nature of \"global\" packages, they cannot be listed.")
+
 end
 
 

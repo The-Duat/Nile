@@ -5,9 +5,29 @@ Data.homeDir = os.getenv("HOME")
 
 Data.initSystem = dofile("/var/mizOS/init/init.lua")
 
+Data.packageSecType = dofile("/var/mizOS/security/active/type.lua")
+
 Data.integerCharacterSheet = "0123456789"
 
 Data.hexCharacterSheet = "0123456789abcdef"
+
+Data.i3ConfigSheet = {
+	["bar-color"] = "hex",
+	["bar-position"] = "special_bar",
+	["border-color1"] = "hex",
+	["border-color2"] = "hex",
+	["border-color3"] = "hex",
+	["border-size"] = "int",
+	["gaps-inner"] = "int",
+	["gaps-outer"] = "int",
+	["mod-key"] = "special_mod",
+	["ws-bg-color1"] = "hex",
+	["ws-bg-color2"] = "hex",
+	["ws-bg-color3"] = "hex",
+	["ws-txt-color1"] = "hex",
+	["ws-txt-color2"] = "hex",
+	["ws-txt-color3"] = "hex"
+}
 
 Data.UITable = {
         {"budgie", "budgie-desktop", false},
