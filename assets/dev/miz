@@ -1,7 +1,7 @@
 #!/bin/lua
 -- [ Made by the Duat. https://entertheduat.org ] --
 
-local argCount = #args
+local argCount = #arg
 
 --[=[ Backend setup ]=]--
 local mizOS = dofile("/var/mizOS/core/mizOS.lua")
@@ -31,39 +31,39 @@ mizOS.initializeIO(frontend_IO)
 
 --[=[ System function handler ]=]--
 local function sendInfo()
-	mizOS.System.info(args[2])
+	mizOS.System.info(arg[2])
 end
 
 local function sendConfig()
-	mizOS.System.config(args[2], args[3])
+	mizOS.System.config(arg[2], arg[3])
 end
 
 local function sendService()
-	mizOS.System.service(args[2], args[3])
+	mizOS.System.service(arg[2], arg[3])
 end
 
 local function sendGraphics()
 	local value
-	if args[2] == "xd" or args[2] == "xi" then
+	if arg[2] == "xd" or args[2] == "xi" then
 		value = {}
 		while argCount > 2 do
-			table.insert(value, args[argCount])
+			table.insert(value, arg[argCount])
 			argCount = argCount - 1
 		end
 	else
-		value = args[3]
+		value = arg[3]
 	end
-	mizOS.System.graphics(args[2], value)
+	mizOS.System.graphics(arg[2], value)
 end
 
 local function sendSoftware()
-	if args[2] == "cc" then
+	if arg[2] == "cc" then
 		mizOS.System.software("clear cache")
 		os.exit()
 	end
 	local packageList = {}
 	while argCount > 2 do
-		table.insert(packageList, args[argCount])
+		table.insert(packageList, arg[argCount])
 		argCount = argCount - 1
 	end
 	local channelTranslation = {
@@ -72,12 +72,12 @@ local function sendSoftware()
 		["-a"] = "aur",
 		["-d"] = "desktop"
 	}
-	mizOS.System.software(args[1], channelTranslation[args[2]], packageList)
+	mizOS.System.software(arg[1], channelTranslation[arg[2]], packageList)
 end
 
 local function sendUpdate()
 	local dev = false
-	if args[2] == "dev" then
+	if arg[2] == "dev" then
 		dev = true
 	end
 	mizOS.System.update("system", dev)
@@ -97,8 +97,8 @@ local firstArgSheet = {
 	["update"] = sendUpdate
 }
 
-if firstArgSheet[args[1]] then
-	firstArgSheet[args[1]]()
+if firstArgSheet[arg[1]] then
+	firstArgSheet[arg[1]]()
 else
-	frontend_IO.err(args[1] .. "is not a valid \"miz\" command.")
+	frontend_IO.err(arg[1] .. "is not a valid \"miz\" command.")
 end
