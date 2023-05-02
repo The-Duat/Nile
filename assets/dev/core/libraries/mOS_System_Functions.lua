@@ -78,6 +78,8 @@ System.config = function(operator, value)
 		x("pkill -fi feh")
 		x("feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wallpaper.*")
 		say("Wallpaper changed to " .. value)
+
+	-- Change the package security level.
 	elseif operator == "pkgsec" then
 		if value == "strict"
 		or value == "moderate"
@@ -89,6 +91,8 @@ System.config = function(operator, value)
 		else
 			fault("Invalid security type: " .. value)
 		end
+
+	-- Change i3 settings.
 	elseif i3ConfigSheet[operator] then
 		local dataType = i3ConfigSheet[operator]
 		if dataType == "special_bar" then
@@ -125,6 +129,164 @@ System.config = function(operator, value)
 			end
 		end
 		say(operator .. " has been set to " .. value)
+
+	-- Change GTK settings.
+	elseif gtkConfigSheet[operator] == true then
+		writeSetting("gtk", operator, value)
+	end
+end
+
+
+--[=[ mizOS service management ]=]--
+System.service = function(operator, value)
+	local commandSheet
+	if initSystem == "systemd" then
+		commandSheet = systemdCommandSheet
+	elseif initSystem == "runit" then
+		commandSheet = runitCommandSheet
+	elseif initSystem == "openrc" then
+		commandSheet = openrcCommandSheet
+	else
+		fault("Your init system is not supported.")
+		exit()
+	end
+
+	local commandInfo = commandSheet[operator]
+	if commandInfo then
+		if commandInfo[1] == "runit_only" then
+			fault("The operator \"" .. operator .. "\" is only supported by the Runit init system.")
+			exit()
+		elseif commandInfo[1] == "special" then
+			write(readCommand(commandInfo[2][value]))
+		else
+			xs(string.format(commandInfo[1], value))
+		end
+	else
+		fault("Invalid operator: " .. operator)
+		exit()
+	end
+end
+
+
+--[=[ mizOS graphics management ]=]--
+System.graphics = function(operator, value)
+
+	-- If present, construct the command to be ran.
+	local commandString = ""
+	if type(value) == "table" then
+		for _,argument in pairs(value) do
+			commandString = commandString .. argument .. " "
+		end
+	end
+
+	-- Run command on dedicated GPU.
+	if operator == "xd" then
+		x("export DRI_PRIME=1 && exec " .. commandString)
+
+	-- Run command on integrated GPU.
+	elseif operator == "xi" then
+		x("export DRI_PRIME=0 && exec " .. commandString)
+
+	-- Change the graphics mode.
+	elseif operator == "mode" then
+		if value == "i" then
+			say(readCommand("supergfxctl --mode integrated"))
+		elseif value == "d" then
+			say(readCommand("supergfxctl --mode dedicated"))
+		elseif value == "h" then
+			say(readCommand("supergfxctl --mode hybrid"))
+		elseif value == "c" then
+			say(readCommand("supergfxctl --mode compute"))
+		elseif value == "v" then
+			say(readCommand("supergfxctl --mode vfio"))
+		else
+			fault("Invalid GPU mode: " .. value)
+		end
+	end
+end
+
+
+--[=[ System software management. ]=]--
+System.software = function(operator, channel, packageList)
+
+	-- If channel is mizOS, convert packagelist table to string.
+	local packageString
+	if packageList and channel == "mizos" then
+		packageString = packageList[1]
+	end
+
+	-- Install a package.
+	if operator == "fetch" then
+		if channel == "mizos" then
+			say("Current security level: " .. packageSecType)
+			say("Checking required security level for " .. packageString .. ".")
+			local requiredSecLevel = checkPkgSecLevel(packageString)
+			say("Required security level: " .. requiredSecLevel)
+			local doesItPass = false
+			if requiredSecLevel == "official" then
+				doesItPass = true
+			elseif requiredSecLevel == "community" then
+				if packageSecType ~= "strict" then
+					doesItPass = true
+				end
+			elseif requiredSecLevel == "global" then
+				if packageSecType == "none" then
+					doesItPass = true
+				end
+			end
+			if doesItPass == true then
+				installMPackage(packageString)
+			else
+				fault("Unable to install " .. packageString .. " with the \"" .. packageSecType .. "\" security type.")
+				exit()	
+			end
+		elseif channel == "pacman" or channel == "aur" then
+			iPkg(packageList, channel)
+		end
+	
+	-- Remove a package.
+	elseif operator == "remove" then
+		if channel == "mizos" then
+			removeMPackage(packageString)
+		elseif channel == "pacman" or channel == "aur" then
+			rPkg(packageList, channel)
+		end
+
+	-- Clear package cache, and journal logs if SystemD is present.
+	elseif operator == "clear cache" then
+		say("Clearing package cache.")
+		x("yay -Scc")
+		if initSystem == "systemd" then
+			xs("journalctl --vacuum-time=21days")
+		else
+			fault("SystemD not found, unable to clear journal logs.")
+		end
+	end
+end
+
+
+--[=[ mizOS system updates ]=]--
+System.update = function(updateType, dev)
+	if updateType == "system" then
+		local devString = ""
+		if dev == true then
+			devString = "dev"
+		end
+		x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && ./install " .. devString .. " && rm -rf /var/mizOS/src/*")
+	elseif updateType == "packages" then
+		listInstalled()
+		say("Update installed mizOS packages? (y/n)")
+		if not read() == "y" then
+			say("mizOS package update aborted.")
+			exit()
+		end
+		local packages = splitString(readCommand("ls /var/mizOS/packages"))
+		for _,package in pairs(packages) do
+			local splitName = splitString(package, "_")
+			if splitName[1] and splitName[2] then
+				updateMPackage(splitName[1] .. "/" .. splitName[2])
+			end
+		end
 	end
 end
 

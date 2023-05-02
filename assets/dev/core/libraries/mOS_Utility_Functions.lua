@@ -172,6 +172,32 @@ Functions.writeSetting = function(program, setting, value)
 	end
 end
 
+-- Install a DE/WM
+Functions.iDesktop = function(desktopName)
+	for _,desktop in pairs(UITable) do
+		if desktop[1] == desktopName then
+			if desktop[3] == false then
+				os.execute("sudo pacman -S " .. desktop[2])
+			elseif desktop[3] == true then
+				os.execute("yay -S " .. desktop[2])
+			end
+		end
+	end
+end
+
+-- Remove a DE/WM
+Functions.rDesktop = function(desktopName)
+	for _,desktop in pairs(UITable) do
+		if desktop[1] == desktopName then
+			if desktop[3] == true then
+				os.execute("sudo pacman -Rn " .. desktop[2])
+			elseif desktop[3] == false then
+				os.execute("yay -Rn " .. desktop[2])
+			end
+		end
+	end
+end
+
 -- Exit.
 Functions.exit = function()
 	os.exit()

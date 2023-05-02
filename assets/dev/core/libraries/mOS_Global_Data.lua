@@ -29,6 +29,54 @@ Data.i3ConfigSheet = {
 	["ws-txt-color3"] = "hex"
 }
 
+Data.gtkConfigSheet = {
+	["gtk-theme"] = true,
+	["icon-theme"] = true,
+	["cursor-theme"] = true
+}
+
+Data.systemdCommandSheet = {
+	["link"]    = {"runit_only"},
+	["unlink"]  = {"runit_only"},
+	["disable"] = {"systemctl disable %s"},
+	["enable"]  = {"systemctl enable %s"},
+	["start"]   = {"systemctl start %s"},
+	["stop"]    = {"systemctl stop %s"},
+	["restart"] = {"systemctl restart %s"},
+	["list"]    = {"special", {
+		["installed"] = "systemctl list-units --type=service --all",
+		["linked"]    = "systemctl list-units --state=enabled"
+	}}
+}
+
+Data.runitCommandSheet = {
+	["link"]    = {"ln -s /etc/runit/sv/%s /run/runit/service/"},
+	["unlink"]  = {"rm /run/runit/service/%s"},
+	["disable"] = {"touch /run/runit/service/%s/down"},
+	["enable"]  = {"rm /run/runit/service/%s/down"},
+	["start"]   = {"sv start %s"},
+	["stop"]    = {"sv stop %s"},
+	["restart"] = {"sv restart %s"},
+	["list"]    = {"special", {
+		["installed"] = "ls /etc/runit/sv",
+		["linked"]    = "ls /run/runit/service"
+	}}
+}
+
+Data.openrcCommandSheet = {
+	["linked"]  = {"runit_only"},
+	["unlink"   = {"runit_only"},
+	["disable"] = {"rc-update del %s default"},
+	["enable"]  = {"rc-update add %s default"},
+	["start"]   = {"rc-service %s start"},
+	["stop"]    = {"rc-service %s stop"},
+	["restart"] = {"rc-service %s restart"},
+	["list"]    = {"special", {
+		["installed"] = "rc-update show",
+		["linked"]    = "rc-update -v show"
+	}}
+}
+
 Data.UITable = {
         {"budgie", "budgie-desktop", false},
         {"cinnamon", "cinnamon", false},

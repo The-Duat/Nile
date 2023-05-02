@@ -74,26 +74,26 @@ mizOS.initializeIO(inout)
 -- Service management.
 -- (miz sv)
 local function sv(args)
-    mizOS.system.service(args[2], args[3])  -- System functions are stored in the mizOS.system table.
+    mizOS.System.service(args[2], args[3])  -- System functions are stored in the mizOS.system table.
 end
 
 -- Fetch/remove packages.
 -- (miz fetch, miz remove)
 local function fandr(args)
 	local pacs = setpkgs(args)
-	mizOS.system.software(args[1], channels[args[2]], pacs)
+	mizOS.System.software(args[1], channels[args[2]], pacs)
 end
 
 -- Clear cache.
 -- (miz cc)
 local function cc(args)
-	mizOS.system.software("clear cache", nil, nil)
+	mizOS.System.software("clear cache", nil, nil)
 end
 
 -- List packages.
 -- (miz lspkgs)
 local function list(args)
-	mizOS.system.software("list packages", channels[args[1]], nil)
+	mizOS.System.software("list packages", channels[args[1]], nil)
 end
 
 -- GPU management.
@@ -101,16 +101,16 @@ end
 local function gfx(args)
 	local data
 	if args[2] == "mode" then
-		mizOS.system.gfx("mode", args[3], args)
+		mizOS.System.gfx("mode", args[3], args)
 	else
-		mizOS.system.gfx(args[2], nil, args)
+		mizOS.System.gfx(args[2], nil, args)
 	end
 end
 
 -- mizOS configuration.
 -- (miz config)
 local function config(args)
-	mizOS.system.config(args[2], args[3])
+	mizOS.System.config(args[2], args[3])
 end
 
 -- mizOS system updating.
@@ -120,25 +120,27 @@ local function update(args)
 	if args[2] == "dev" then
 		dev = true
 	end
-	mizOS.system.update("system", dev)
-	mizOS.system.update("packages", dev)
+	mizOS.System.update("system", dev)
+	mizOS.Dystem.update("packages", dev)
 end
 
 -- System info.
 -- (miz info)
 local function info(args)
-	mizOS.system.info(args[2])
+	mizOS.System.info(args[2])
 end
 
+--[=[
 -- System safety.
 -- (miz backup, miz restore)
 local function safety(args)
 	if args[3] ~= nil then
-		mizOS.system.safety(args[2], args[3])
+		mizOS.System.safety(args[2], args[3])
 	else
-		mizOS.system.safety(args[2], nil)
+		mizOS.System.safety(args[2], nil)
 	end
 end
+]=]--
 
 
 
@@ -171,9 +173,5 @@ end
 if basecommands[args[1]] then
 	basecommands[args[1]](args)  -- If it does, run the corresponding function.
 else
-	local command = ""  -- If it isn't, concatenate arguments into a string, run string as command under root.
-	for _,cmd in pairs(args) do
-		command = command .. cmd .. " "
-	end
-	mizOS.system.root(command)
+	print("Not a command.")
 end

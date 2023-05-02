@@ -309,7 +309,8 @@ sudo -S cp assets/details/neofetch /usr/bin
 if [[ $1 == "dev" ]]; then
 	echo -e "\nDev mode active."
 	sudo -S cp assets/dev/miz /usr/bin/
-	cp assets/dev/mizOS.lua /var/mizOS/core/
+	sudo rm -rf /var/mizOS/core
+	cp -r assets/dev/core /var/mizOS
 fi
 
 echo "| Checking source folder."
