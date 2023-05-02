@@ -225,19 +225,19 @@ System.software = function(operator, channel, packageList)
 			local requiredSecLevel = checkPkgSecLevel(packageString)
 			say("Required security level: " .. requiredSecLevel)
 			local doesItPass = false
-			if requiredSecLevel == "official" then
+			if requiredSecLevel == "strict" then
 				doesItPass = true
-			elseif requiredSecLevel == "community" then
+			elseif requiredSecLevel == "moderate" then
 				if packageSecType ~= "strict" then
 					doesItPass = true
 				end
-			elseif requiredSecLevel == "global" then
+			elseif requiredSecLevel == "none" then
 				if packageSecType == "none" then
 					doesItPass = true
 				end
 			end
 			if doesItPass == true then
-				installMPackage(packageString)
+				installMPackage(trimWhite(packageString))
 			else
 				fault("Unable to install " .. packageString .. " with the \"" .. packageSecType .. "\" security type.")
 				exit()	
