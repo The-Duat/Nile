@@ -14,10 +14,6 @@ Manager.installMPackage = function(packageName)
 		fault("Invalid package name format.")
 		exit()
 	end
-	if dofile(infoDir .. "/info.lua").is_present == true then
-		fault("Package is already installed.")
-		exit()
-	end
 
 	say("Clearing work folder.")
 	x("rm -rf /var/mizOS/work/*")
