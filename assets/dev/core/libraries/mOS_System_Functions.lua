@@ -9,9 +9,9 @@ System.info = function(operator)
 	if operator == "help" then
 		say("Documentation:")
 		say2("https://entertheduat.org")
-		say("\nDiscord server:")
+		say("Discord server:")
 		say2("https://discord.gg/AVSuRZsTXp")
-		say("\nGithub:")
+		say("Github:")
 		say2("https://github.com/Mizosu97/mizOS")
 
 	-- Display installable DE/WMs
