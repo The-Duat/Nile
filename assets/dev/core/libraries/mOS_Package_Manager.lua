@@ -165,11 +165,11 @@ Manager.checkPkgSecLevel = function(packageName)
 	local packageName = trimWhite(packageName)
 
 	if mizOSRepo["official"][packageName][2] == true then
-		return "official"
+		return "strict"
 	elseif mizOSRepo["community"][packageName][2] == true then
-		return "community"
+		return "moderate"
 	else
-		return "global"
+		return "none"
 	end
 end
 
