@@ -170,6 +170,8 @@ cp -r assets/system_config/config/* /var/mizOS/config
 echo "| Generating i3 config file."
 /var/mizOS/config/i3/genconf
 
+read ans
+if [ $ans == "y" ]; then
 echo "| Installing GTK theme."
 echo "  > Preparing theme folder."
 if [ ! -d "/var/mizOS/download/cat" ]; then
@@ -223,6 +225,7 @@ sudo -S /var/mizOS/download/cat-papi/papirus-folders -C cat-mocha-pink --theme P
 
 echo "| Writing GTK settings."
 /var/mizOS/config/gtk/genconf
+fi
 
 echo "| Creating config file symlinks."
 echo "  > Creating i3 symlink."
