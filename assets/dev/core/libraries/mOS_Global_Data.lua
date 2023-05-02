@@ -65,7 +65,7 @@ Data.runitCommandSheet = {
 
 Data.openrcCommandSheet = {
 	["linked"]  = {"runit_only"},
-	["unlink"   = {"runit_only"},
+	["unlink"]   = {"runit_only"},
 	["disable"] = {"rc-update del %s default"},
 	["enable"]  = {"rc-update add %s default"},
 	["start"]   = {"rc-service %s start"},
