@@ -111,7 +111,7 @@ Functions.splitString = function(str, splitChar)
 		splitChar = " "
 	end
 	if str and splitChar then
-		for part in string.gmatch(str, "([^"..sep.."]+)") do
+		for part in string.gmatch(str, "([^"..splitChar.."]+)") do
 			table.insert(resultSplit, part)
 		end
 	end
