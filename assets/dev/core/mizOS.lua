@@ -43,13 +43,23 @@ iDesktop     = UtilityFunctions.iDesktop
 rDesktop     = UtilityFunctions.rDesktop
 exit         = UtilityFunctions.exit
 
-local PackageManager = dofile("/var/mizOS/core/libraries/mOS_Package_Msnager.lua")
+local PackageManager = dofile("/var/mizOS/core/libraries/mOS_Package_Manager.lua")
 installMPackage  = PackageManager.installMPackage
 removeMPackage   = PackageManager.removeMPackage
 updateMPackage   = PackageManager.updateMPackage
 checkPkgSecLevel = PackageManager.checkPkgSecLevel
 listInstalled    = PackageManager.listInstalled
 listRepo         = PackageManager.listRepo
+
+mizOS.System = {}
+
+local SystemFunctions = dofile("/var/mizOS/core/libraries/mOS_System_Functions.lua")
+mizOS.System.info     = SystemFunctions.info
+mizOS.System.config   = SystemFunctions.config
+mizOS.System.service  = SystemFunctions.service
+mizOS.System.graphics = SystemFunctions.graphics
+mizOS.System.software = SystemFunctions.software
+mizOS.System.update   = SystemFunctions.update
 
 
 
