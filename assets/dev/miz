@@ -1,177 +1,104 @@
 #!/bin/lua
+-- [ Made by the Duat. https://entertheduat.org ] --
 
+local argCount = #args
 
-
---[=[--[=[ FRONTEND SETUP ]=]--]=]--
-
--- Load in the backend.
+--[=[ Backend setup ]=]--
 local mizOS = dofile("/var/mizOS/core/mizOS.lua")
 
--- Frontend to backend package manager channel translation table.
-local channels = {
-	["-m"] = "mizos",
-	["-u"] = "ui",
-	["-p"] = "pacman",
-	["-a"] = "aur"
-}
 
+-- [ Input/Output setup. ] --
+local frontend_IO = {}
 
-
---[=[--[=[ GENERAL PURPOSE FUNCTIONS ]=]--]=]--
-
--- Shorten command execution function.
-local function x(cmd)
-	os.execute(cmd)
+frontend_IO.inp = function() -- Get user input.
+	return read()
+end
+frontend_IO.outp = function(text) -- Write raw output.
+	io.write(text)
+end
+frontend_IO.foutp = function(text) -- Print stylized output.
+	print("\x1b[38;2;137;180;250m| \x1b[38;2;180;190;254m" .. text .. "\x1b[38;2;255;255;255m")
+end
+frontend_IO.afoutp = function(text) -- Print alternate stylized output.
+	print("    \x1b[38;2;245;194;231m> \x1b[38;2;203;166;247m" .. text .. "\x1b[38;2;255;255;255m")
+end
+frontend_IO.err = function(text) -- Print error output.
+	print("\x1b[38;2;243;139;168m!![Error]> \x1b[38;2;203;160;247m" .. text .. "\x1b[38;2;255;255;255m")
 end
 
--- Collects all package names from arguments list.
-local function setpkgs(args)
-	local pacs = {}
-	for _,ag in pairs(args) do
-		if ag ~= "fetch"
-		and ag ~= "remove"
-		and not channels[ag] then
-			table.insert(pacs, ag)
-		end
-	end
-	return pacs
+mizOS.initializeIO(frontend_IO)
+
+
+--[=[ System function handler ]=]--
+local function sendInfo()
+	mizOS.System.info(args[2])
 end
 
-
-
---[=[--[=[ INPUT/OUTPUT ]=]--]=]--
-
-inout = {} -- IO table.
-inout.inp = function()  -- Get user input.
-		io.write("\n> ")
-		return io.read()
-end
-
-inout.outp = function(text)  -- Print raw output.
-		io.write(text)
-end
-
-inout.foutp = function(text)  -- Print fancy output.
-		print("| " .. text)
-end
-
-inout.afoutp = function(text)  -- Print alternate fancy output.
-		print("    > " .. text)
-end
-
-inout.err = function(text)  -- Print error messages.
-	print("!!> \x1b[38;2;243;139;168m" .. text .. "\x1b[38;2;255;255;255m")
-end
-
--- Send IO functions to the mizOS backend.
--- the mizOS backend will use these functions for IO.
-mizOS.initializeIO(inout)
-
-
-
---[=[--[=[ FRONTEND COMMAND FUNCTIONS ]=]--]=]--
-
--- Service management.
--- (miz sv)
-local function sv(args)
-    mizOS.System.service(args[2], args[3])  -- System functions are stored in the mizOS.system table.
-end
-
--- Fetch/remove packages.
--- (miz fetch, miz remove)
-local function fandr(args)
-	local pacs = setpkgs(args)
-	mizOS.System.software(args[1], channels[args[2]], pacs)
-end
-
--- Clear cache.
--- (miz cc)
-local function cc(args)
-	mizOS.System.software("clear cache", nil, nil)
-end
-
--- List packages.
--- (miz lspkgs)
-local function list(args)
-	mizOS.System.software("list packages", channels[args[1]], nil)
-end
-
--- GPU management.
--- (miz gfx)
-local function gfx(args)
-	local data
-	if args[2] == "mode" then
-		mizOS.System.gfx("mode", args[3], args)
-	else
-		mizOS.System.gfx(args[2], nil, args)
-	end
-end
-
--- mizOS configuration.
--- (miz config)
-local function config(args)
+local function sendConfig()
 	mizOS.System.config(args[2], args[3])
 end
 
--- mizOS system updating.
--- (miz update)
-local function update(args)
+local function sendService()
+	mizOS.System.service(args[2], args[3])
+end
+
+local function sendGraphics()
+	local value
+	if args[2] == "xd" or args[2] == "xi" then
+		value = {}
+		while argCount > 2 do
+			table.insert(value, args[argCount])
+			argCount = argCount - 1
+		end
+	else
+		value = args[3]
+	end
+	mizOS.System.graphics(args[2], value)
+end
+
+local function sendSoftware()
+	if args[2] == "cc" then
+		mizOS.System.software("clear cache")
+		os.exit()
+	end
+	local packageList = {}
+	while argCount > 2 do
+		table.insert(packageList, args[argCount])
+		argCount = argCount - 1
+	end
+	local channelTranslation = {
+		["-m"] = "mizos",
+		["-p"] = "pacman",
+		["-a"] = "aur",
+		["-d"] = "desktop"
+	}
+	mizOS.System.software(args[1], channelTranslation[args[2]], packageList)
+end
+
+local function sendUpdate()
 	local dev = false
 	if args[2] == "dev" then
 		dev = true
 	end
 	mizOS.System.update("system", dev)
-	mizOS.Dystem.update("packages", dev)
+	mizOS.System.update("packages", dev)
 end
 
--- System info.
--- (miz info)
-local function info(args)
-	mizOS.System.info(args[2])
-end
 
---[=[
--- System safety.
--- (miz backup, miz restore)
-local function safety(args)
-	if args[3] ~= nil then
-		mizOS.System.safety(args[2], args[3])
-	else
-		mizOS.System.safety(args[2], nil)
-	end
-end
-]=]--
-
-
-
---[=[--[=[ COMMAND INTERPRETER ]=]--]=]--
-
--- Command to function translation table.
-local basecommands = {
-	["sv"] = sv,
-	["fetch"] = fandr,
-	["remove"] = fandr,
-	["cc"] = cc,
-	["list"] = list,
-	["gfx"] = gfx,
-	["config"] = config,
-	["update"] = update,
-	["info"] = info,
-	["backup"] = safety,
-	["restore"] = safety
+--[=[ Command processor ]=]--
+local firstArgSheet = {
+	["info"] = sendInfo,
+	["config"] = sendConfig,
+	["sv"] = sendService,
+	["gfx"] = sendGraphics,
+	["fetch"] = sendSoftware,
+	["remove"] = sendSoftware,
+	["cc"] = sendSoftware,
+	["update"] = sendUpdate
 }
 
--- Wipe unneeded arguments.
-local args = {}
-for _,v in pairs(arg) do
-	if v ~= "/bin/lua" and v ~= "miz" and v ~= "/usr/bin/miz" then
-		table.insert(args, v)
-	end
-end
-
--- Check if the first argument exists in the translation table.
-if basecommands[args[1]] then
-	basecommands[args[1]](args)  -- If it does, run the corresponding function.
+if firstArgSheet[args[1]] then
+	firstArgSheet[args[1]]()
 else
-	print("Not a command.")
+	frontend_IO.err(args[1] .. "is not a valid \"miz\" command.")
 end

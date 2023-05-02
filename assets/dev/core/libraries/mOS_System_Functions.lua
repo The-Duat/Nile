@@ -211,8 +211,10 @@ System.software = function(operator, channel, packageList)
 
 	-- If channel is mizOS, convert packagelist table to string.
 	local packageString
-	if packageList and channel == "mizos" then
-		packageString = packageList[1]
+	if packageList then
+		if channel == "mizos" or channel == "desktop" then
+			packageString = packageList[1]
+		end
 	end
 
 	-- Install a package.
@@ -242,6 +244,8 @@ System.software = function(operator, channel, packageList)
 			end
 		elseif channel == "pacman" or channel == "aur" then
 			iPkg(packageList, channel)
+		elseif channel == "dekstop" then
+			iDesktop(packageString)
 		end
 	
 	-- Remove a package.
@@ -250,6 +254,8 @@ System.software = function(operator, channel, packageList)
 			removeMPackage(packageString)
 		elseif channel == "pacman" or channel == "aur" then
 			rPkg(packageList, channel)
+		elseif channel == "desktop" then
+			rDesktop(packageString)
 		end
 
 	-- Clear package cache, and journal logs if SystemD is present.
