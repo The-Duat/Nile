@@ -170,7 +170,7 @@ cp -r assets/system_config/config/* /var/mizOS/config
 echo "| Generating i3 config file."
 /var/mizOS/config/i3/genconf
 
-echo -e "\n\nWould you like to install GTK and icon themes? It may take a while. (y/n)\n\n> "
+printf "\n\nWould you like to install GTK and icon themes? It may take a while. (y/n)\n\n> "
 read ans
 if [ $ans == "y" ]; then
 echo "| Installing GTK theme."
