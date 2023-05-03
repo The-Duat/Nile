@@ -181,7 +181,7 @@ end
 --[=[ Get list of packages in the Duat's repo ]=]--
 Manager.listRepo = function()
 	say("Downloading package repo.")
-	x("rm -rf /var/mizOS/repo/* && wget https://entertheduat.org/packages/repo.lua -P /var/*")
+	x("rm -rf /var/mizOS/repo/* && wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
 
 	local mizOSRepo = dofile("/var/mizOS/repo/repo.lua")
 
