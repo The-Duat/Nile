@@ -30,11 +30,11 @@ Manager.installMPackage = function(packageName)
 
 	local packageInfo = dofile(downloadDir .. "/info.lua")
 
-	say("\nPacman dependencies:")
+	say("Pacman dependencies:")
 	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
 		say2(pacmanDep)
 	end
-	say("\nAUR dependencies:")
+	say("AUR dependencies:")
 	for _,aurDep in pairs(packageInfo.aur_depends) do
 		say2(aurDep)
 	end
@@ -46,7 +46,7 @@ Manager.installMPackage = function(packageName)
 		say("Dependency installation skipped.")
 	end
 
-	say("\nInstall " .. packageName .. "? (y/n)")
+	say("Install " .. packageName .. "? (y/n)")
 	if not string.lower(read()) == "y" then
 		fault("Installation aborted.")
 		exit()
@@ -88,11 +88,11 @@ Manager.removeMPackage = function(packageName)
 		xs("rm -rf " .. directory)
 	end
 
-	say("\nPacman dependencies:")
+	say("Pacman dependencies:")
 	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
 		say2(pacmanDep)
 	end
-	say("\nAUR dependencies:")
+	say("AUR dependencies:")
 	for _,aurDep in pairs(packageInfo.aur_depends) do
 		say2(aurDep)
 	end
@@ -137,11 +137,11 @@ Manager.updateMPackage = function(packageName)
 
 	local packageInfo = dofile(downloadDir .. "/info.lua")
 
-	say("\nPacman dependencies:")
+	say("Pacman dependencies:")
 	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
 		say2(pacmanDep)
 	end
-	say("\nAUR dependencies:")
+	say("AUR dependencies:")
 	for _,aurDep in pairs(packageInfo.aur_depends) do
 		say2(pacmanDep)
 	end
@@ -185,16 +185,16 @@ Manager.listRepo = function()
 
 	local mizOSRepo = dofile("/var/mizOS/repo/repo.lua")
 
-	say("\nThe Duat's Package Repository")
+	say("The Duat's Package Repository")
 	say("Official:")
 	for _,package in pairs(mizOSRepo.official) do
 		say2(package[1])
 	end
-	say("\nCommunity:")
+	say("Community:")
 	for _,package in pairs(mizOSRepo.community) do
 		say2(package[1])
 	end
-	say("\nDue to the nature of \"global\" packages, they cannot be listed.")
+	say("Due to the nature of \"global\" packages, they cannot be listed.")
 
 end
 

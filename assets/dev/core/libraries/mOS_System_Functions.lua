@@ -223,7 +223,11 @@ System.software = function(operator, channel, packageList)
 			say("Current security level: " .. packageSecType)
 			say("Checking required security level for " .. packageString .. ".")
 			local requiredSecLevel = checkPkgSecLevel(packageString)
-			say("Required security level: " .. requiredSecLevel)
+			local appendage = ", or below"
+			if requiredSecLevel == "none" then
+				appendage = ""
+			end
+			say("Required security level: " .. requiredSecLevel .. appendage .. ".")
 			local doesItPass = false
 			if requiredSecLevel == "strict" then
 				doesItPass = true
