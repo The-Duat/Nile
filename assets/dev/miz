@@ -11,7 +11,10 @@ local mizOS = dofile("/var/mizOS/core/mizOS.lua")
 local frontend_IO = {}
 
 frontend_IO.inp = function() -- Get user input.
-	return read()
+	io.write("\x1b[38;2;137;180;250m> \x1b[38;2;180;190;254m")
+	local text = io.read()
+	io.write("\x1b[38;2;255;255;255m")
+	return text
 end
 frontend_IO.outp = function(text) -- Write raw output.
 	io.write(text)
