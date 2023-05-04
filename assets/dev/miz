@@ -47,7 +47,7 @@ end
 
 local function sendGraphics()
 	local value
-	if arg[2] == "xd" or args[2] == "xi" then
+	if arg[2] == "xd" or arg[2] == "xi" then
 		value = {}
 		while argCount > 2 do
 			table.insert(value, arg[argCount])

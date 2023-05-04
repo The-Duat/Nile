@@ -79,11 +79,12 @@ fi
 echo -e "\nChecking filesystem."
 echo "| Checking core folder."
 if [ -d "/var/mizOS/core" ]; then
-	echo "  > core folder present."
+	echo "  > core folder present, updating."
+	rm -rf /var/mizOS/core
 else
 	echo "  > Creating /var/mizOS/core"
-	mkdir /var/mizOS/core
 fi
+cp -r assets/os/core /var/mizOS
 
 echo "| Checking src folder."
 if [ -d "/var/mizOS/src" ]; then

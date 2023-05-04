@@ -1,200 +1,107 @@
 #!/bin/lua
+-- [ Made by the Duat. https://entertheduat.org ] --
 
--- sonic visits ohio
-local mizos = dofile("/var/mizOS/core/mizOS.lua")
+local argCount = #arg
 
-
--- Channel data
-local channels = {
-	["-m"] = "mizos",
-	["-u"] = "ui",
-	["-p"] = "pacman",
-	["-a"] = "aur"
-}
+--[=[ Backend setup ]=]--
+local mizOS = dofile("/var/mizOS/core/mizOS.lua")
 
 
--- Shorten command execution function
-local function x(cmd)
-	os.execute(cmd)
+-- [ Input/Output setup. ] --
+local frontend_IO = {}
+
+frontend_IO.inp = function() -- Get user input.
+	io.write("\x1b[38;2;137;180;250m> \x1b[38;2;180;190;254m")
+	local text = io.read()
+	io.write("\x1b[38;2;255;255;255m")
+	return text
+end
+frontend_IO.outp = function(text) -- Write raw output.
+	io.write(text)
+end
+frontend_IO.foutp = function(text) -- Print stylized output.
+	print("\x1b[38;2;137;180;250m| \x1b[38;2;180;190;254m" .. text .. "\x1b[38;2;255;255;255m")
+end
+frontend_IO.afoutp = function(text) -- Print alternate stylized output.
+	print("    \x1b[38;2;245;194;231m> \x1b[38;2;203;166;247m" .. text .. "\x1b[38;2;255;255;255m")
+end
+frontend_IO.err = function(text) -- Print error output.
+	print("\x1b[38;2;243;139;168m!![Error]> \x1b[38;2;203;160;247m" .. text .. "\x1b[38;2;255;255;255m")
 end
 
--- Collects all package names
-local function setpkgs(args)
-	local pacs = {}
-	for _,ag in pairs(args) do
-		if ag ~= "fetch"
-		and ag ~= "remove"
-		and not channels[ag] then
-			table.insert(pacs, ag)
+mizOS.initializeIO(frontend_IO)
+
+
+--[=[ System function handler ]=]--
+local function sendInfo()
+	mizOS.System.info(arg[2])
+end
+
+local function sendConfig()
+	mizOS.System.config(arg[2], arg[3])
+end
+
+local function sendService()
+	mizOS.System.service(arg[2], arg[3])
+end
+
+local function sendGraphics()
+	local value
+	if arg[2] == "xd" or arg[2] == "xi" then
+		value = {}
+		while argCount > 2 do
+			table.insert(value, arg[argCount])
+			argCount = argCount - 1
 		end
-	end
-	return pacs
-end
-
--- Output coloring/formatting
-local function echo(datatype, contents)
-	if datatype == "error" then
-		print("!!> \x1b[38;2;243;139;168m" .. contents .. "\x1b[38;2;255;255;255m")
-	elseif datatype == "output" then
-		print("> " .. contents)
-	elseif datatype == "rawput" then
-		print(contents)
-	end
-end
-
--- Get input
-local function read(text)
-	io.write(text .. "\n\n> ")
-	return io.read()
-end
-
--- Process data returned from mizOS backend
-local function process(data)
-	local datatype = data[1]
-	local contents = data[2]
-	if datatype == "output" then
-		echo(datatype, contents)
-	elseif datatype == "error" then
-		echo(datatype, contents)
-	elseif datatype == "command" then
-		x(contents)
-	end
-end
-
-
--- Service management
-local function sv(args)
-	local data = mizos.service(args[2], args[3])
-	if data then
-		process(data)
-	end
-end
-
--- Fetch/remove packages
-local function fandr(args)
-	local pacs = setpkgs(args)
-	local data = mizos.software(args[1], channels[args[2]], pacs)
-	if data then
-		process(data)
-	end
-end
-
--- Clear cache
-local function cc(args)
-	local data = mizos.software("clear cache", nil, nil)
-	if data then
-		process(data)
-	end
-end
-
--- List packages
-local function list(args)
-	local data = mizos.software("list packages", channels[args[1]], nil)
-	if data and data[1] ~= "info" then
-		process(data)
-		elseif data[1] == "info" then
-		echo("output", "mizOS package list:")
-		for _,pkg in pairs(data[2]) do
-			echo("rawput", pkg)
-		end
-	end 
-end
-
--- GPU management
-local function gfx(args)
-	local data
-	if args[2] == "mode" then
-		data = mizos.gfx("mode", args[3], args)
 	else
-		data = mizos.gfx(args[2], nil, args)
+		value = arg[3]
 	end
-	if data then
-		process(data)
-	end
+	mizOS.System.graphics(arg[2], value)
 end
 
--- mizOS configuration
-local function config(args)
-	local data = mizos.config(args[2], args[3])
-	if data[1] and data[2] then
-		process(data)
+local function sendSoftware()
+	if arg[2] == "cc" then
+		mizOS.System.software("clear cache")
+		os.exit()
 	end
+	local packageList = {}
+	while argCount > 2 do
+		table.insert(packageList, arg[argCount])
+		argCount = argCount - 1
+	end
+	local channelTranslation = {
+		["-m"] = "mizos",
+		["-p"] = "pacman",
+		["-a"] = "aur",
+		["-d"] = "desktop"
+	}
+	mizOS.System.software(arg[1], channelTranslation[arg[2]], packageList)
 end
 
--- mizOS system updating
-local function update(args)
+local function sendUpdate()
 	local dev = false
-	if args[2] == "dev" then
+	if arg[2] == "dev" then
 		dev = true
 	end
-	mizos.update("system", dev)
-	mizos.update("packages", dev)
-end
-
--- System info
-local function info(args)
-	local data = mizos.info(args[2])
-	if data[1] and data[1] ~= "info" then
-		process(data)
-	elseif data[1] == "info" then
-		if data[2][1] == "desktops" then
-			echo("output", "mizOS DE/WM list:")
-			for _,desktop in pairs(data[2][2]) do
-				local dtype = ""
-				if desktop[3] == true then
-					dtype = "      (AUR)"
-				elseif desktop[3] == false then
-					dtype = "      (pacman)"
-				end
-				print(desktop[1] .. dtype)
-			end
-		end
-	end
-end
-
--- System safety
-local function safety(args)
-	local data
-	if args[3] ~= nil then
-		data = mizos.safety(args[2], args[3])
-	else
-		data = mizos.safety(args[2], nil)
-	end
-	if data then
-		process(data)
-	end
+	mizOS.System.update("system", dev)
+	mizOS.System.update("packages", dev)
 end
 
 
--- Command proccessor
-local basecommands = {
-	["sv"] = sv,
-	["fetch"] = fandr,
-	["remove"] = fandr,
-	["cc"] = cc,
-	["list"] = list,
-	["gfx"] = gfx,
-	["config"] = config,
-	["update"] = update,
-	["info"] = info,
-	["backup"] = safety,
-	["restore"] = safety
+--[=[ Command processor ]=]--
+local firstArgSheet = {
+	["info"] = sendInfo,
+	["config"] = sendConfig,
+	["sv"] = sendService,
+	["gfx"] = sendGraphics,
+	["fetch"] = sendSoftware,
+	["remove"] = sendSoftware,
+	["cc"] = sendSoftware,
+	["update"] = sendUpdate
 }
 
-
-local args = {}
-for _,v in pairs(arg) do
-	if v ~= "/bin/lua" and v ~= "miz" and v ~= "/usr/bin/miz" then
-		table.insert(args, v)
-	end
-end
-
-if basecommands[args[1]] then
-	basecommands[args[1]](args)
+if firstArgSheet[arg[1]] then
+	firstArgSheet[arg[1]]()
 else
-	local command = ""
-	for _,cmd in pairs(args) do
-		command = command .. cmd .. " "
-	end
-	mizos.root(command)
+	frontend_IO.err(arg[1] .. "is not a valid \"miz\" command.")
 end
