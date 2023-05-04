@@ -304,7 +304,7 @@ System.update = function(updateType, dev)
 			exit()
 		end
 		local packages = splitString(readCommand("ls /var/mizOS/packages"))
-		for _,package in pairs(packages) do7
+		for _,package in pairs(packages) do
 			local splitName = splitString(package, "_")
 			if splitName[1] and splitName[2] then
 				updateMPackage(trimWhite(splitName[1] .. "/" .. splitName[2]))
