@@ -84,7 +84,9 @@ if [ -d "/var/mizOS/core" ]; then
 else
 	echo "  > Creating /var/mizOS/core"
 fi
-cp -r assets/os/core /var/mizOS
+mkdir /var/mizOS/core
+cp -r assets/os/core/libraries /var/mizOS/core
+cp assets/os/core/mizOS.lua /var/mizOS/core
 
 echo "| Checking src folder."
 if [ -d "/var/mizOS/src" ]; then
