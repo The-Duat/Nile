@@ -300,7 +300,8 @@ System.update = function(updateType, dev)
 		listInstalled()
 		say("Update installed mizOS packages? (y/n)")
 		if string.lower(read()) ~= "y" then
-			say("mizOS package update aborted.")
+			fault("mizOS package update aborted.")
+			fault("It is considered dangerous to update the system and not the packages, or vice versa.")
 			exit()
 		end
 		local packages = splitString(readCommand("ls /var/mizOS/packages"))

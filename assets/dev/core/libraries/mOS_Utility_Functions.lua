@@ -36,7 +36,11 @@ Functions.readCommand = function(cmd)
 end
 
 -- Install pacman/AUR packages.
-Functions.iPkg = function(packages, manager)
+Functions.iPkg = function(packages, manager, noask)
+	local noconfirm = ""
+	if noask == true then
+		noconfirm = "--noconfirm"
+	end
 	local baseCommand
 	if manager == "pacman" then
 		baseCommand = "sudo pacman"
@@ -47,7 +51,7 @@ Functions.iPkg = function(packages, manager)
 	for _,package in pairs(packages) do
 		packageString = packageString .. package .. " "
 	end
-	os.execute(baseCommand .. " -S " .. packageString)
+	os.execute(baseCommand .. " -S " .. noconfirm .. " " .. packageString)
 end
 
 -- Remove pacman/AUR package

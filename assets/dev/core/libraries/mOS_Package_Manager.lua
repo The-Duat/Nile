@@ -40,8 +40,8 @@ Manager.installMPackage = function(packageName)
 	end
 	say("Install dependencies for " .. packageName .. "? (y/n)")
 	if string.lower(read()) == "y" then
-		iPkg(packageInfo.pacman_depends, "pacman")
-		iPkg(packageInfo.aur_depends, "aur")
+		iPkg(packageInfo.pacman_depends, "pacman", true)
+		iPkg(packageInfo.aur_depends, "aur", true)
 	else
 		say("Dependency installation skipped.")
 	end
