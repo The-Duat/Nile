@@ -291,7 +291,7 @@ System.update = function(updateType, dev)
 			say("Developer mode enabled.")
 		end
 		say("Update mizOS? (y/n)")
-		if not string.lower(read()) == "y" then
+		if string.lower(read()) ~= "y" then
 			fault("mizOS System Update aborted.")
 			exit()
 		end
@@ -299,7 +299,7 @@ System.update = function(updateType, dev)
 	elseif updateType == "packages" then
 		listInstalled()
 		say("Update installed mizOS packages? (y/n)")
-		if not string.lower(read()) == "y" then
+		if string.lower(read()) ~= "y" then
 			say("mizOS package update aborted.")
 			exit()
 		end
@@ -311,7 +311,7 @@ System.update = function(updateType, dev)
 			end
 		end
 	else
-		fault("Invslid update type: " .. updateType)
+		fault("Invalid update type: " .. updateType)
 	end
 end
 

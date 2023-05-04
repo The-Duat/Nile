@@ -47,7 +47,7 @@ Manager.installMPackage = function(packageName)
 	end
 
 	say("Install " .. packageName .. "? (y/n)")
-	if not string.lower(read()) == "y" then
+	if string.lower(read()) ~= "y" then
 		fault("Installation aborted.")
 		exit()
 	end
@@ -70,7 +70,7 @@ Manager.removeMPackage = function(packageName)
 	end
 
 	say("Remove " .. packageName .. "? (y/n)")
-	if not string.lower(read()) == "y" then
+	if string.lower(read()) ~= "y" then
 		fault("Package removal aborted.")
 		exit()
 	end
