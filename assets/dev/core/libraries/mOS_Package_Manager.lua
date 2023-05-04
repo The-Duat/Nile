@@ -115,11 +115,6 @@ Manager.updateMPackage = function(packageName)
 	local downloadDir = "/var/mizOS/work/" .. softwareName
 	local infoDir = "/var/mizOS/packages/" .. developerName .. "_" .. softwareName
 
-	if not dofile(infoDir .. "/info.lua").is_present == true then
-		fault("That package is not installed.")
-		exit()
-	end
-
 	say("Updating " .. packageName .. ".")
 
 	say("Clearing work folder.")

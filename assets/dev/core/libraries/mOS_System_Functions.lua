@@ -128,11 +128,14 @@ System.config = function(operator, value)
 				exit()
 			end
 		end
-		say(operator .. " has been set to " .. value)
+		say(operator .. " has been set to " .. value .. ".")
 
 	-- Change GTK settings.
 	elseif gtkConfigSheet[operator] == true then
 		writeSetting("gtk", operator, value)
+		say(operator .. " has chabged to " .. value .. ".")
+	else
+		fault("Invalid info operator: " .. operator)
 	end
 end
 
@@ -162,7 +165,7 @@ System.service = function(operator, value)
 			xs(string.format(commandInfo[1], value))
 		end
 	else
-		fault("Invalid operator: " .. operator)
+		fault("Invalid service operator: " .. operator)
 		exit()
 	end
 end
@@ -202,6 +205,8 @@ System.graphics = function(operator, value)
 		else
 			fault("Invalid GPU mode: " .. value)
 		end
+	else
+		fault("Invalid graphics operator: " .. operator)
 	end
 end
 
@@ -271,6 +276,8 @@ System.software = function(operator, channel, packageList)
 		else
 			fault("SystemD not found, unable to clear journal logs.")
 		end
+	else
+		fault("Invalid software operator: " .. operator)
 	end
 end
 
@@ -281,22 +288,30 @@ System.update = function(updateType, dev)
 		local devString = ""
 		if dev == true then
 			devString = "dev"
+			say("Developer mode enabled.")
+		end
+		say("Update mizOS? (y/n)")
+		if not string.lower(read()) == "y" then
+			fault("mizOS System Update aborted.")
+			exit()
 		end
 		x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && ./install " .. devString .. " && rm -rf /var/mizOS/src/*")
 	elseif updateType == "packages" then
 		listInstalled()
 		say("Update installed mizOS packages? (y/n)")
-		if not read() == "y" then
+		if not string.lower(read()) == "y" then
 			say("mizOS package update aborted.")
 			exit()
 		end
 		local packages = splitString(readCommand("ls /var/mizOS/packages"))
-		for _,package in pairs(packages) do
+		for _,package in pairs(packages) do7
 			local splitName = splitString(package, "_")
 			if splitName[1] and splitName[2] then
-				updateMPackage(splitName[1] .. "/" .. splitName[2])
+				updateMPackage(trimWhite(splitName[1] .. "/" .. splitName[2]))
 			end
 		end
+	else
+		fault("Invslid update type: " .. updateType)
 	end
 end
 
