@@ -24,7 +24,7 @@ System.info = function(operator)
 			else
 				manager = "(Pacman)"
 			end
-			say2(string.format("%s %-s", desktop[1], manager))
+			say2(string.format("%-20s %s", desktop[1], manager))
 		end
 
 	-- List installed mizOS packages.
@@ -42,7 +42,7 @@ System.info = function(operator)
 			settingName = trimWhite(settingName)
 			local settingFile = io.open("/var/mizOS/config/i3/settings/" .. settingName, "r")
 			local settingValue = settingFile:read("*all")
-			say2(string.format("%s: %-s", settingName, settingValue))
+			say2(string.format("%-20s: %s", settingName, settingValue))
 			settingFile:close()
 		end
 
@@ -53,7 +53,7 @@ System.info = function(operator)
 			settingName = trimWhite(settingName)
 			local settingFile = io.open("/var/mizOS/config/gtk/settings/" .. settingName, "r")
 			local settingValue = settingFile:read("*all")
-			say2(string.format("%s: %-s", settingName, settingValue))
+			say2(string.format("%-20s: %s", settingName, settingValue))
 			settingFile:close()
 		end
 	end
