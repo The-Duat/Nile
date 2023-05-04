@@ -85,8 +85,6 @@ else
 	echo "  > Creating /var/mizOS/core"
 fi
 mkdir /var/mizOS/core
-cp -r assets/os/core/libraries /var/mizOS/core
-cp assets/os/core/mizOS.lua /var/mizOS/core
 
 echo "| Checking src folder."
 if [ -d "/var/mizOS/src" ]; then
@@ -287,7 +285,8 @@ echo "  > Installing the mizOS.lua backend."
 if [ -f "/var/mizOS/core/mizOS.lua" ]; then
 	rm /var/mizOS/core/mizOS.lua
 fi
-cp assets/os/mizOS.lua /var/mizOS/core
+cp assets/os/core/mizOS.lua /var/mizOS/core
+cp -r assets/os/core/libraries /var/mizOS/core
 
 echo "  > Installing the miz frontend."
 if [ -f "/usr/bin/miz" ]; then
