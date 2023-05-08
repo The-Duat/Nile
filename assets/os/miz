@@ -51,7 +51,7 @@ local function sendGraphics()
 		value = {}
 		local i = 3
 		while i <= argCount do
-			table.insert(value, arg[1])
+			table.insert(value, arg[i])
 			i = i + 1
 		end
 	else
