@@ -335,8 +335,28 @@ echo "  > /var/mizOS     -  root:root"
 sudo chown -R root:root /var/mizOS
 
 echo "| Setting mizOS filesystem permissions."
-echo "  > /var/mizOS  -  755"
-echo "  > /var/mizOS"
+echo "  > /var/mizOS           -  755"
+sudo chmod -R 755 /var/mizOS
+echo "  > /var/mizOS/core      -  755"
+sudo chmod -R 755 /var/mizOS/core
+echo "  > /var/mizOS/init      -  755"
+sudo chmod -R 755 /var/mizOS/init
+echo "  > /var/mizOS/repo      -  755"
+sudo chmod -R 755 /var/mizOS/repo
+echo "  > /var/mizOS/packages  -  755"
+sudo chmod -R 755 /var/mizOS/packages
+echo "  > /var/mizOS/security  -  755"
+sudo chmod -R 755 /var/mizOS/security
+echo "  > /var/mizOS/work      -  755"
+sudo chmod -R 755 /var/mizOS/work
+echo "  > /var/mizOS/src       -  755"
+sudo chmod -R 755 /var/mizOS/src
+echo "  > /var/mizOS/backup    -  777"
+sudo chmod -R 777 /var/mizOS/backup
+echo "  > /var/mizOS/config    -  777"
+sudo chmod -R 777 /var/mizOS/config
+echo "  > /var/mizOS/download  -  777"
+sudo chmod -R 777 /var/mizOS/download
 
 echo -e "\n\n"
 if [ "$installType" = "install" ]; then

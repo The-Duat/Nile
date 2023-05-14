@@ -85,8 +85,10 @@ System.config = function(operator, value)
 		or value == "moderate"
 		or value == "none" then
 			local currentLevel = dofile("/var/mizOS/security/active/type.lua")
+			sudo(function()
 			x("rm /var/mizOS/security/active/*")
 			x("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
+		end)
 			say("Package security level changed from " .. currentLevel .. " to " .. value .. ".")
 		else
 			fault("Invalid security type: " .. value)

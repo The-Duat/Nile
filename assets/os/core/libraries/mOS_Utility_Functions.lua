@@ -69,6 +69,18 @@ Functions.rPkg = function(packages, manager)
 	os.execute(baseCommand .. " -Rn " .. packageString)
 end
 
+-- The Sudo function. Temporarily run Lua code as root.
+Functions.sudo = function(fn)
+	local fnData = string.dump(fn)
+	local hexfnData = ""
+	for i = 1, #fnData do
+		local byte = string.byte(fnData, i)
+		hexfnData = hexfnData .. string.format("\\x%02x", byte)
+	end
+	local cmd = "sudo lua -e \"load('" .. hexfnData .. "')()\""
+	os.execute(cmd)
+end
+
 
 --[=[ File Manipulation ]=]--
 
