@@ -22,6 +22,8 @@ echo "Checking install type."
 if [ -d "/var/mizOS" ]; then
 	echo "| Performing system update."
 	installType="update"
+	sudo chmod -R 777 /var/mizOS
+	sudo chmod -R 777 /var/mizOS/*
 else
 	echo "| Performing system install."
 	installType="install"
@@ -69,7 +71,8 @@ else
 
 	echo "  > Creating /var/mizOS"
 	sudo mkdir /var/mizOS
-	sudo chmod 777 /var/mizOS
+	sudo chown -R root:root /var/mizOS
+	sudo chmod -R 777 /var/mizOS
 	echo "  > Enabling fish."
 	echo "fish" >> $HOME/.bashrc
 fi
@@ -326,6 +329,14 @@ if [ -d "/var/mizOS/src/mizOS" ]; then
 else
 	echo "  > Source folder not found, enjoy your mizOS installation :)"
 fi
+
+echo "| Setting mizOS filesystem ownership."
+echo "  > /var/mizOS     -  root:root"
+sudo chown -R root:root /var/mizOS
+
+echo "| Setting mizOS filesystem permissions."
+echo "  > /var/mizOS  -  755"
+echo "  > /var/mizOS"
 
 echo -e "\n\n"
 if [ "$installType" = "install" ]; then
