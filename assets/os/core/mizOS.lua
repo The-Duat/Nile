@@ -31,6 +31,7 @@ runAsRoot    = UtilityFunctions.runAsRoot
 readCommand  = UtilityFunctions.readCommand
 iPkg         = UtilityFunctions.iPkg
 rPkg         = UtilityFunctions.rPkg
+sudo         = UtilityFunctions.sudo
 checkFile    = UtilityFunctions.checkFile
 readFile     = UtilityFunctions.readFile
 writeFile    = UtilityFunctions.writeFile

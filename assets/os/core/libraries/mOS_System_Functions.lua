@@ -289,7 +289,7 @@ System.update = function(updateType, dev)
 	if updateType == "system" then
 		local devString = ""
 		if dev == true then
-			devString = "dev"
+			devString = "git checkout development &&"
 			say("Developer mode enabled.")
 		end
 		say("Update mizOS? (y/n)")
@@ -297,7 +297,7 @@ System.update = function(updateType, dev)
 			fault("mizOS System Update aborted.")
 			exit()
 		end
-		x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && ./install " .. devString .. " && rm -rf /var/mizOS/src/*")
+		x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS && " .. devString .. " cd /var/mizOS/src/mizOS && ./install && rm -rf /var/mizOS/src/*")
 	elseif updateType == "packages" then
 		listInstalled()
 		say("Update installed mizOS packages? (y/n)")
