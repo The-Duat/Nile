@@ -193,15 +193,15 @@ System.graphics = function(operator, value)
 	-- Change the graphics mode.
 	elseif operator == "mode" then
 		if value == "i" then
-			say(readCommand("supergfxctl --mode integrated"))
+			say(readCommand("supergfxctl --mode Integrated"))
 		elseif value == "d" then
-			say(readCommand("supergfxctl --mode dedicated"))
+			say(readCommand("supergfxctl --mode Dedicated"))
 		elseif value == "h" then
-			say(readCommand("supergfxctl --mode hybrid"))
+			say(readCommand("supergfxctl --mode Hybrid"))
 		elseif value == "c" then
-			say(readCommand("supergfxctl --mode compute"))
+			say(readCommand("supergfxctl --mode Compute"))
 		elseif value == "v" then
-			say(readCommand("supergfxctl --mode vfio"))
+			say(readCommand("supergfxctl --mode Vfio"))
 		else
 			fault("Invalid GPU mode: " .. value)
 		end
