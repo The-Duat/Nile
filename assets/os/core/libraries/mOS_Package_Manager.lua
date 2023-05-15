@@ -19,7 +19,7 @@ Manager.installMPackage = function(packageName)
 	xs("rm -rf /var/mizOS/work/*")
 
 	say("Downloading package.")
-	xs("cd /var/mizOS/work && git clone https://github.com/" .. developerName .. "/" .. softwareName)
+	x("cd /var/mizOS/work && sudo git clone https://github.com/" .. developerName .. "/" .. softwareName)
 
 	say("Validating package.")
 	if not dofile(downloadDir .. "/MIZOSPKG.lua") == true then
@@ -56,7 +56,7 @@ Manager.installMPackage = function(packageName)
 	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
 	xs("chown -R root:root " .. infoDir)
 	xs("chmod -R 755 " .. infoDir)
-	x("sudo chmod -R 777 " .. downloadDir .." && cd " .. downloadDir .. " && ./install")
+	xs("sudo chmod -R 777 " .. downloadDir .." && cd " .. downloadDir .. " && ./install")
 end
 
 --[=[ Remove mizOS package ]=]--
@@ -120,13 +120,13 @@ Manager.updateMPackage = function(packageName)
 	say("Updating " .. packageName .. ".")
 
 	say("Clearing work folder.")
-	x("rm -rf /var/mizOS/work/*")
+	xs("rm -rf /var/mizOS/work/*")
 
 	say("Deleting old info directory.")
 	xs("rm -rf " .. infoDir)
 
 	say("Downloading package.")
-	xs("cd /var/mizOS/work && git clone https://github.com/" .. developerName .. "/" .. softwareName)
+	x("cd /var/mizOS/work && sudo git clone https://github.com/" .. developerName .. "/" .. softwareName)
 
 	say("Creating new info file.")
 	xs("mkdir " .. infoDir)
