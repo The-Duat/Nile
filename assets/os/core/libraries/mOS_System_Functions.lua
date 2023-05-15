@@ -287,7 +287,7 @@ System.update = function(updateType, dev)
 	if updateType == "system" then
 		local devString = ""
 		if dev == true then
-			devString = "git checkout development &&"
+			devString = "sudo git checkout development &&"
 			say("Developer mode enabled.")
 		end
 		say("Update mizOS? (y/n)")
