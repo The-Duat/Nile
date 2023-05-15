@@ -153,7 +153,7 @@ end
 --[=[ Check installable package's required security level ]=]--
 Manager.checkPkgSecLevel = function(packageName)
 	say("Downloading package repo.")
-	xs("rm -rf /var/mizOS/repo/* && wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
+	xs("rm -rf /var/mizOS/repo/* && sudo wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
 	local mizOSRepo = dofile("/var/mizOS/repo/repo.lua")
 
 	local packageName = trimWhite(packageName)
