@@ -295,7 +295,7 @@ System.update = function(updateType, dev)
 			fault("mizOS System Update aborted.")
 			exit()
 		end
-		xs("cd /var/mizOS/src && sudo git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && " .. devString .. " ./install && sudo rm -rf /var/mizOS/src/*")
+		x("cd /var/mizOS/src && sudo git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && " .. devString .. " ./install && sudo rm -rf /var/mizOS/src/*")
 	elseif updateType == "packages" then
 		listInstalled()
 		say("Update installed mizOS packages? (y/n)")
