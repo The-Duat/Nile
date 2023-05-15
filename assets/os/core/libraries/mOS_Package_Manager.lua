@@ -16,10 +16,10 @@ Manager.installMPackage = function(packageName)
 	end
 
 	say("Clearing work folder.")
-	x("rm -rf /var/mizOS/work/*")
+	xs("rm -rf /var/mizOS/work/*")
 
 	say("Downloading package.")
-	x("cd /var/mizOS/work && git clone https://github.com/" .. developerName .. "/" .. softwareName)
+	xs("cd /var/mizOS/work && git clone https://github.com/" .. developerName .. "/" .. softwareName)
 
 	say("Validating package.")
 	if not dofile(downloadDir .. "/MIZOSPKG.lua") == true then
@@ -54,7 +54,9 @@ Manager.installMPackage = function(packageName)
 
 	xs("mkdir " .. infoDir)
 	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
-	x("cd " .. downloadDir .. " && ./install")
+	xs("chown -R root:root " .. infoDir)
+	xs("chmod -R 755 " .. infoDir)
+	x("sudo chmod -R 777 " .. downloadDir .." && cd " .. downloadDir .. " && ./install")
 end
 
 --[=[ Remove mizOS package ]=]--
@@ -129,6 +131,7 @@ Manager.updateMPackage = function(packageName)
 	say("Creating new info file.")
 	xs("mkdir " .. infoDir)
 	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
+	xs("chmod -R 755 " .. infoDir)
 
 	local packageInfo = dofile(downloadDir .. "/info.lua")
 
