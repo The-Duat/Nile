@@ -126,7 +126,7 @@ Manager.updateMPackage = function(packageName)
 	xs("rm -rf " .. infoDir)
 
 	say("Downloading package.")
-	x("cd /var/mizOS/work && git clone https://github.com/" .. developerName .. "/" .. softwareName)
+	xs("cd /var/mizOS/work && git clone https://github.com/" .. developerName .. "/" .. softwareName)
 
 	say("Creating new info file.")
 	xs("mkdir " .. infoDir)
