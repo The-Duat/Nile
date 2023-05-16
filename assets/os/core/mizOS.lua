@@ -12,6 +12,7 @@ end
 
 
 local GlobalData = dofile("/var/mizOS/core/libraries/mOS_Global_Data.lua")
+userName              = GlobalData.userName
 homeDir               = GlobalData.homeDir
 initSystem            = GlobalData.initSystem
 packageSecType        = GlobalData.packageSecType

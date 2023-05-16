@@ -174,7 +174,7 @@ if [ -d "/var/mizOS/config/$USER" ]; then
 		echo "  > Found, deleting."
 		rm -rf /var/mizOS/backup/$USER
 	fi
-	echo "Backing up current config to /var/mizOS/backup/$USER"
+	echo "| Backing up current config to /var/mizOS/backup/$USER"
 	mv /var/mizOS/config/$USER /var/mizOS/backup/
 fi
 
