@@ -51,7 +51,7 @@ System.info = function(operator)
 		say("Current GTK settings:")
 		for _,settingName in pairs(splitString(readCommand("ls /var/mizOS/config/" .. userName .. "/gtk/settings"))) do
 			settingName = trimWhite(settingName)
-			local settingFile = io.open("/var/mizOS/config/gtk/settings/" .. settingName, "r")
+			local settingFile = io.open("/var/mizOS/config/" .. userName .. "/gtk/settings/" .. settingName, "r")
 			local settingValue = settingFile:read("*all")
 			say2(string.format("%-18s %s", settingName, settingValue))
 			settingFile:close()
