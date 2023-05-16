@@ -141,8 +141,7 @@ fi
 
 echo "| Checking backup folder."
 if [ -d "/var/mizOS/backup" ]; then
-	echo "  > Backup folder present, clearing."
-	rm -rf /var/mizOS/backup/*
+	echo "  > Backup folder present."
 else
 	echo "  > Creating backup folder."
 	mkdir /var/mizOS/backup
@@ -150,8 +149,7 @@ fi
 
 echo "| Checking config folder."
 if [ -d "/var/mizOS/config" ]; then
-	echo "  > config folder found, backing up current configuration."
-	mv /var/mizOS/config/* /var/mizOS/backup/
+	echo "  > config folder present."
 else
 	echo "  > Creating config folder."
 	mkdir /var/mizOS/config
@@ -167,12 +165,25 @@ else
 fi
 
 
-
 echo -e "\nConfiguring system."
+echo "| Checking for existing configuration."
+if [ -d "/var/mizOS/config/$USER" ]; then
+	echo "  > Found."
+	echo "| Checking for existing backup."
+	if [ -d "/var/mizOS/backup/$USER" ]; then
+		echo "  > Found, deleting."
+		rm -rf /var/mizOS/backup/$USER
+	fi
+	echo "Backing up current config to /var/mizOS/backup/$USER"
+	mv /var/mizOS/config/$USER /var/mizOS/backup/
+fi
+
+mkdir /var/mizOS/config/$USER
+
 echo "| Copying mizOS config directory structure."
-cp -r assets/system_config/config/* /var/mizOS/config
+cp -r assets/system_config/config/* /var/mizOS/config/$USER
 echo "| Generating i3 config file."
-/var/mizOS/config/i3/genconf
+/var/mizOS/config/$USER/i3/genconf
 
 printf "\n\nWould you like to install GTK and icon themes? It may take a while. (y/n)\n\n> "
 read ans
@@ -229,7 +240,7 @@ echo "  > Overwriting old icon files."
 sudo -S /var/mizOS/download/cat-papi/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
 
 echo "| Writing GTK settings."
-/var/mizOS/config/gtk/genconf
+/var/mizOS/config/$USER/gtk/genconf
 fi
 
 echo "| Creating config file symlinks."
@@ -239,19 +250,19 @@ if [ -d "$HOME/.config/i3" ]; then
 else
 	mkdir $HOME/.config/i3
 fi
-ln -s /var/mizOS/config/i3/config $HOME/.config/i3/config
+ln -s /var/mizOS/config/$USER/i3/config $HOME/.config/i3/config
 
 echo "  > Creating gtk symlink."
 if [ -f "$HOME/.config/gtk-3.0/settings.ini" ]; then
 	rm $HOME/.config/gtk-3.0/settings.ini
 fi
-ln -s /var/mizOS/config/gtk/settings.ini $HOME/.config/gtk-3.0/settings.ini
+ln -s /var/mizOS/config/$USER/gtk/settings.ini $HOME/.config/gtk-3.0/settings.ini
 
 echo "  > Creating picom symlink."
 if [ -f "$HOME/.config/picom.conf" ]; then
 	rm $HOME/.config/picom.conf
 fi
-ln -s /var/mizOS/config/picom/picom.conf $HOME/.config/picom.conf
+ln -s /var/mizOS/config/$USER/picom/picom.conf $HOME/.config/picom.conf
 
 echo "  > Creating alacritty symlink."
 if [ -d "$HOME/.config/alacritty" ]; then
@@ -259,7 +270,7 @@ if [ -d "$HOME/.config/alacritty" ]; then
 else
 	mkdir $HOME/.config/alacritty
 fi
-ln -s /var/mizOS/config/alacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+ln -s /var/mizOS/config/$USER/alacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 
 echo "  > Creating fish symlink."
 if [ -d "$HOME/.config/fish" ]; then
@@ -267,7 +278,7 @@ if [ -d "$HOME/.config/fish" ]; then
 else
 	mkdir $HOME/.config/fish
 fi
-ln -s /var/mizOS/config/fish/config.fish $HOME/.config/fish/config.fish
+ln -s /var/mizOS/config/$USER/fish/config.fish $HOME/.config/fish/config.fish
 
 
 
@@ -330,7 +341,7 @@ else
 	echo "  > Source folder not found, enjoy your mizOS installation :)"
 fi
 
-echo "| Setting mizOS filesystem ownership."
+echo "| Setting mizOS filesystem base ownership."
 echo "  > /var/mizOS     -  root:root"
 sudo chown -R root:root /var/mizOS
 
@@ -351,12 +362,22 @@ echo "  > /var/mizOS/work      -  755"
 sudo chmod -R 755 /var/mizOS/work
 echo "  > /var/mizOS/src       -  755"
 sudo chmod -R 755 /var/mizOS/src
-echo "  > /var/mizOS/backup    -  777"
-sudo chmod -R 777 /var/mizOS/backup
-echo "  > /var/mizOS/config    -  777"
-sudo chmod -R 777 /var/mizOS/config
+echo "  > /var/mizOS/config    -  755"
+sudo chmod -R 755 /var/mizOS/config
+for d in /var/mizOS/config/*/; do
+	dn=$(basename $d)
+	echo "  > $d   - 755 (Ownership: $dn:$dn)"
+	sudo chown -R $dn:$dn $d
+	sudo chmod -R 755 $d
+done
 echo "  > /var/mizOS/download  -  777"
 sudo chmod -R 777 /var/mizOS/download
+for d in /var/mizOS/backup/*/; do
+	dn=$(basename $d)
+	echo "  > $d   - 755 (Ownership: $dn:$dn)"
+	sudo chown -R $dn:$dn $d
+	sudo chmod -R 755 $d
+done
 
 echo -e "\n\n"
 if [ "$installType" = "install" ]; then
