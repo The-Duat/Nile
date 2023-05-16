@@ -1,5 +1,6 @@
 local Data = {}
 
+Data.userName = os.getenv("USER")
 
 Data.homeDir = os.getenv("HOME")
 

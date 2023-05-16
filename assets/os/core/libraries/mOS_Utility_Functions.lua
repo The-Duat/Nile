@@ -180,11 +180,11 @@ end
 
 -- Change mizOS setting.
 Functions.writeSetting = function(program, setting, value)
-	local configFile = io.open("/var/mizOS/config/" .. program .. "/settings/" .. setting, "w")
+	local configFile = io.open(string.format("/var/mizOS/config/%s/%s/settings/%s", userName, program, setting), "w")
 	if configFile then
 		configFile:write(value)
 		configFile:close()
-		os.execute("cd /var/mizOS/config/" .. program .. " && ./genconf")
+		os.execute(string.format("cd /var/mizOS/config/%s/%s && ./genconf", userName, program))
 	else
 		fault("Error opening " .. setting .. " config file for " .. program .. ".")
 	end
