@@ -60,6 +60,7 @@ mizOS.System = {}
 local SystemFunctions = dofile("/var/mizOS/core/libraries/mOS_System_Functions.lua")
 mizOS.System.info     = SystemFunctions.info
 mizOS.System.config   = SystemFunctions.config
+mizOS.System.csafety  = SystemFunctions.csafety
 mizOS.System.service  = SystemFunctions.service
 mizOS.System.graphics = SystemFunctions.graphics
 mizOS.System.software = SystemFunctions.software
