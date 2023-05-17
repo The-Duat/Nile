@@ -190,6 +190,17 @@ Functions.writeSetting = function(program, setting, value)
 	end
 end
 
+-- Check "c.lua" existence. Used for system backups/restores.
+Functions.checkC = function(path)
+	if pcall(function()
+		dofile(path .. "/c.lua")
+	end) then
+		return true
+	else
+		return false
+	end
+end
+
 -- Install a DE/WM
 Functions.iDesktop = function(desktopName)
 	for _,desktop in pairs(UITable) do

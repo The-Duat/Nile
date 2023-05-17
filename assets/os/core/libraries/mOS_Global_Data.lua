@@ -12,27 +12,36 @@ Data.integerCharacterSheet = "0123456789"
 
 Data.hexCharacterSheet = "0123456789abcdef"
 
+Data.configurablePrograms = {
+	["alacritty"] = true,
+	["fish"]      = true,
+	["gtk"]       = true,
+	["i3"]        = true,
+	["picom"]     = true,
+	["wallpaper"  = true]
+}
+
 Data.i3ConfigSheet = {
-	["bar-color"] = "hex",
-	["bar-position"] = "special_bar",
+	["bar-color"]     = "hex",
+	["bar-position"]  = "special_bar",
 	["border-color1"] = "hex",
 	["border-color2"] = "hex",
 	["border-color3"] = "hex",
-	["border-size"] = "int",
-	["gaps-inner"] = "int",
-	["gaps-outer"] = "int",
-	["mod-key"] = "special_mod",
-	["ws-bg-color1"] = "hex",
-	["ws-bg-color2"] = "hex",
-	["ws-bg-color3"] = "hex",
+	["border-size"]   = "int",
+	["gaps-inner"]    = "int",
+	["gaps-outer"]    = "int",
+	["mod-key"]       = "special_mod",
+	["ws-bg-color1"]  = "hex",
+	["ws-bg-color2"]  = "hex",
+	["ws-bg-color3"]  = "hex",
 	["ws-txt-color1"] = "hex",
 	["ws-txt-color2"] = "hex",
 	["ws-txt-color3"] = "hex"
 }
 
 Data.gtkConfigSheet = {
-	["gtk-theme"] = true,
-	["icon-theme"] = true,
+	["gtk-theme"]    = true,
+	["icon-theme"]   = true,
 	["cursor-theme"] = true
 }
 
@@ -66,7 +75,7 @@ Data.runitCommandSheet = {
 
 Data.openrcCommandSheet = {
 	["linked"]  = {"runit_only"},
-	["unlink"]   = {"runit_only"},
+	["unlink"]  = {"runit_only"},
 	["disable"] = {"rc-update del %s default"},
 	["enable"]  = {"rc-update add %s default"},
 	["start"]   = {"rc-service %s start"},

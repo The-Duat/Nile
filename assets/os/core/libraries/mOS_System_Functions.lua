@@ -133,9 +133,56 @@ System.config = function(operator, value)
 	-- Change GTK settings.
 	elseif gtkConfigSheet[operator] == true then
 		writeSetting("gtk", operator, value)
-		say(operator .. " has chabged to " .. value .. ".")
+		say(operator .. " has changed to " .. value .. ".")
 	else
 		fault("Invalid info operator: " .. operator)
+	end
+end
+
+
+
+--[=[ Config backup/restore ]=]--
+System.csafety = function(operator, value)
+	local program = userName
+	if value then
+		if not configurablePrograms[value] then
+			fault("Invalid program: " .. value)
+			exit()
+		end
+		program = userName .. "/" .. value
+	end
+
+	if operator == "backup" then
+		local to = "/var/mizOS/backup/"
+		if value then to = to .. userName end
+		say("Backup settings for " .. program .. "? (y/n)")
+		say("Old backups will be lost.")
+		if string.lower(read()) ~= "y" then
+			fault("Backup aborted.")
+			exit()
+		end
+		if checkC("/var/mizOS/backup/" .. userName) == false then
+			x("mkdir /var/mizOS/backup/" .. userName)
+		end
+		if checkC("/var/mizOS/backup/" .. program) == true then
+			x("rm -rf /var/mizOS/backup/" .. program)
+		end
+		x(string.format("cp -r /var/mizOS/config/%s %s", program, to))
+	elseif operator == "restore" then
+		local to = "/var/mizOS/config/"
+		if value then to = to .. userName end
+		say("Restore settings for " .. program .. "? (y/n)")
+		say("Current settings will be lost.")
+		if string.lower(read()) ~= "y" then
+			fault("Restoration aborted.")
+			exit()
+		end
+		if checkC("/var/mizOS/backup/" .. program) == false then
+			fault("Backup for " .. program .. " doesn't exist.")
+			exit()
+		end
+		x("rm -rf /var/mizOS/config/" .. program)
+		x("cp -r /var/mizOS/backup/" .. program .. " " .. to)
 	end
 end
 
