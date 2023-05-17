@@ -42,10 +42,10 @@ local function sendConfig()
 end
 
 local function sendCsafety()
-	if args[2] then
-		mizOS.System.csafety(args[1], args[2])
+	if arg[2] then
+		mizOS.System.csafety(arg[1], arg[2])
 	else
-		mizOS.System.csafety(args[1], nil)
+		mizOS.System.csafety(arg[1], nil)
 	end
 end
 
