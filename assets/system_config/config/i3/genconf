@@ -149,7 +149,7 @@ bar {
 	urgent_workspace $ws_bg_color3 $ws_bg_color3 $ws_txt_color3
 	}
 }
-exec feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wall*
+exec feh --bg-fill --zoom fill /var/mizOS/config/$USER/wallpaper/wall*
 
 gaps inner ${gaps_inner}px
 gaps outer ${gaps_outer}px
