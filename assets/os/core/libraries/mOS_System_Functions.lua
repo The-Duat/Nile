@@ -143,6 +143,7 @@ end
 
 --[=[ Config backup/restore ]=]--
 System.csafety = function(operator, value)
+	-- Determine program to restore/backup
 	local program = userName
 	if value then
 		if not configurablePrograms[value] then
@@ -152,6 +153,7 @@ System.csafety = function(operator, value)
 		program = userName .. "/" .. value
 	end
 
+	-- Backup given program.
 	if operator == "backup" then
 		local to = "/var/mizOS/backup/"
 		if value then to = to .. userName end
@@ -167,7 +169,9 @@ System.csafety = function(operator, value)
 		if checkC("/var/mizOS/backup/" .. program) == true then
 			x("rm -rf /var/mizOS/backup/" .. program)
 		end
-		x(string.format("cp -r /var/mizOS/config/%s %s", program, to))
+		x("cp -r /var/mizOS/config/" .. program .. " " .. to)
+
+	-- Restore given program.
 	elseif operator == "restore" then
 		local to = "/var/mizOS/config/"
 		if value then to = to .. userName end
