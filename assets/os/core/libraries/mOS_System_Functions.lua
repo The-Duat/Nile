@@ -38,9 +38,9 @@ System.info = function(operator)
 	-- Display current i3 settings.
 	elseif operator == "i3settings" then
 		say("Current i3 settings:")
-		for _,settingName in pairs(splitString(readCommand("ls /var/mizOS/config/i3/settings"))) do
+		for _,settingName in pairs(splitString(readCommand("ls /var/mizOS/config/" .. userName .. "/i3/settings"))) do
 			settingName = trimWhite(settingName)
-			local settingFile = io.open("/var/mizOS/config/i3/settings/" .. settingName, "r")
+			local settingFile = io.open("/var/mizOS/config/" .. userName .. "/i3/settings/" .. settingName, "r")
 			local settingValue = settingFile:read("*all")
 			say2(string.format("%-18s %s", settingName, settingValue))
 			settingFile:close()
@@ -49,9 +49,9 @@ System.info = function(operator)
 	-- Display current GTK settings.
 	elseif operator == "gtksettings" then
 		say("Current GTK settings:")
-		for _,settingName in pairs(splitString(readCommand("ls /var/mizOS/config/gtk/settings"))) do
+		for _,settingName in pairs(splitString(readCommand("ls /var/mizOS/config/" .. userName .. "/gtk/settings"))) do
 			settingName = trimWhite(settingName)
-			local settingFile = io.open("/var/mizOS/config/gtk/settings/" .. settingName, "r")
+			local settingFile = io.open("/var/mizOS/config/" .. userName .. "/gtk/settings/" .. settingName, "r")
 			local settingValue = settingFile:read("*all")
 			say2(string.format("%-18s %s", settingName, settingValue))
 			settingFile:close()
@@ -72,9 +72,9 @@ System.config = function(operator, value)
 			fault("Incorrect filetype: " .. fileType)
 			exit()
 		end
-		x("rm -rf /var/mizOS/config/wallpaper/*")
-		x("cp " .. value .. " /var/mizOS/config/wallpaper/")
-		x("mv /var/mizOS/config/wallpaper/" .. wallpaperName .. " /var/mizOS/config/wallpaper/wallpaper." .. fileType)
+		x("rm -rf /var/mizOS/config/" .. userName .. "/wallpaper/*")
+		x(string.format("cp %s /var/mizOS/config/%s/wallpaper/", value, userName))
+		x(string.format("mv /var/mizOS/config/%s/wallpaper/%s /var/mizOS/config/%s/wallpaper/wallpaper.%s", userName, wallpaperName, userName, fileType))
 		x("pkill -fi feh")
 		x("feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wallpaper.*")
 		say("Wallpaper changed to " .. value)
@@ -85,8 +85,8 @@ System.config = function(operator, value)
 		or value == "moderate"
 		or value == "none" then
 			local currentLevel = dofile("/var/mizOS/security/active/type.lua")
-			x("rm /var/mizOS/security/active/*")
-			x("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
+			xs("rm /var/mizOS/security/active/*")
+			xs("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
 			say("Package security level changed from " .. currentLevel .. " to " .. value .. ".")
 		else
 			fault("Invalid security type: " .. value)
@@ -133,9 +133,60 @@ System.config = function(operator, value)
 	-- Change GTK settings.
 	elseif gtkConfigSheet[operator] == true then
 		writeSetting("gtk", operator, value)
-		say(operator .. " has chabged to " .. value .. ".")
+		say(operator .. " has changed to " .. value .. ".")
 	else
 		fault("Invalid info operator: " .. operator)
+	end
+end
+
+
+
+--[=[ Config backup/restore ]=]--
+System.csafety = function(operator, value)
+	-- Determine program to restore/backup
+	local program = userName
+	if value then
+		if not configurablePrograms[value] then
+			fault("Invalid program: " .. value)
+			exit()
+		end
+		program = userName .. "/" .. value
+	end
+
+	-- Backup given program.
+	if operator == "backup" then
+		local to = "/var/mizOS/backup/"
+		if value then to = to .. userName end
+		say("Backup settings for " .. program .. "? (y/n)")
+		say("Old backups will be lost.")
+		if string.lower(read()) ~= "y" then
+			fault("Backup aborted.")
+			exit()
+		end
+		if checkC("/var/mizOS/backup/" .. userName) == false then
+			x("mkdir /var/mizOS/backup/" .. userName)
+		end
+		if checkC("/var/mizOS/backup/" .. program) == true then
+			x("rm -rf /var/mizOS/backup/" .. program)
+		end
+		x("cp -r /var/mizOS/config/" .. program .. " " .. to)
+
+	-- Restore given program.
+	elseif operator == "restore" then
+		local to = "/var/mizOS/config/"
+		if value then to = to .. userName end
+		say("Restore settings for " .. program .. "? (y/n)")
+		say("Current settings will be lost.")
+		if string.lower(read()) ~= "y" then
+			fault("Restoration aborted.")
+			exit()
+		end
+		if checkC("/var/mizOS/backup/" .. program) == false then
+			fault("Backup for " .. program .. " doesn't exist.")
+			exit()
+		end
+		x("rm -rf /var/mizOS/config/" .. program)
+		x("cp -r /var/mizOS/backup/" .. program .. " " .. to)
 	end
 end
 
@@ -287,7 +338,7 @@ System.update = function(updateType, dev)
 	if updateType == "system" then
 		local devString = ""
 		if dev == true then
-			devString = "git checkout development &&"
+			devString = "sudo git checkout development &&"
 			say("Developer mode enabled.")
 		end
 		say("Update mizOS? (y/n)")
@@ -295,7 +346,7 @@ System.update = function(updateType, dev)
 			fault("mizOS System Update aborted.")
 			exit()
 		end
-		x("cd /var/mizOS/src && git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && " .. devString .. " ./install && rm -rf /var/mizOS/src/*")
+		x("cd /var/mizOS/src && sudo git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && " .. devString .. " ./install && sudo rm -rf /var/mizOS/src/*")
 	elseif updateType == "packages" then
 		listInstalled()
 		say("Update installed mizOS packages? (y/n)")
