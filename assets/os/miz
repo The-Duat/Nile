@@ -41,6 +41,14 @@ local function sendConfig()
 	mizOS.System.config(arg[2], arg[3])
 end
 
+local function sendCsafety()
+	if arg[2] then
+		mizOS.System.csafety(arg[1], arg[2])
+	else
+		mizOS.System.csafety(arg[1], nil)
+	end
+end
+
 local function sendService()
 	mizOS.System.service(arg[2], arg[3])
 end
@@ -91,14 +99,16 @@ end
 
 --[=[ Command processor ]=]--
 local firstArgSheet = {
-	["info"] = sendInfo,
-	["config"] = sendConfig,
-	["sv"] = sendService,
-	["gfx"] = sendGraphics,
-	["fetch"] = sendSoftware,
-	["remove"] = sendSoftware,
-	["cc"] = sendSoftware,
-	["update"] = sendUpdate
+	["info"]    = sendInfo,
+	["config"]  = sendConfig,
+	["backup"]  = sendCsafety,
+	["restore"] = sendCsafety,
+	["sv"]      = sendService,
+	["gfx"]     = sendGraphics,
+	["fetch"]   = sendSoftware,
+	["remove"]  = sendSoftware,
+	["cc"]      = sendSoftware,
+	["update"]  = sendUpdate
 }
 
 if firstArgSheet[arg[1]] then

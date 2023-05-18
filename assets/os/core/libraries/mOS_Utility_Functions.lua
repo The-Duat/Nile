@@ -69,6 +69,18 @@ Functions.rPkg = function(packages, manager)
 	os.execute(baseCommand .. " -Rn " .. packageString)
 end
 
+-- The Sudo function. Temporarily run Lua code as root.
+Functions.sudo = function(fn)
+	local fnData = string.dump(fn)
+	local hexfnData = ""
+	for i = 1, #fnData do
+		local byte = string.byte(fnData, i)
+		hexfnData = hexfnData .. string.format("\\x%02x", byte)
+	end
+	local cmd = "sudo lua -e \"load('" .. hexfnData .. "')()\""
+	os.execute(cmd)
+end
+
 
 --[=[ File Manipulation ]=]--
 
@@ -168,13 +180,24 @@ end
 
 -- Change mizOS setting.
 Functions.writeSetting = function(program, setting, value)
-	local configFile = io.open("/var/mizOS/config/" .. program .. "/settings/" .. setting, "w")
+	local configFile = io.open(string.format("/var/mizOS/config/%s/%s/settings/%s", userName, program, setting), "w")
 	if configFile then
 		configFile:write(value)
 		configFile:close()
-		os.execute("cd /var/mizOS/config/" .. program .. " && ./genconf")
+		os.execute(string.format("cd /var/mizOS/config/%s/%s && ./genconf", userName, program))
 	else
 		fault("Error opening " .. setting .. " config file for " .. program .. ".")
+	end
+end
+
+-- Check "c.lua" existence. Used for system backups/restores.
+Functions.checkC = function(path)
+	if pcall(function()
+		dofile(path .. "/c.lua")
+	end) then
+		return true
+	else
+		return false
 	end
 end
 

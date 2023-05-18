@@ -16,10 +16,10 @@ Manager.installMPackage = function(packageName)
 	end
 
 	say("Clearing work folder.")
-	x("rm -rf /var/mizOS/work/*")
+	xs("rm -rf /var/mizOS/work/*")
 
 	say("Downloading package.")
-	x("cd /var/mizOS/work && git clone https://github.com/" .. developerName .. "/" .. softwareName)
+	x("cd /var/mizOS/work && sudo git clone https://github.com/" .. developerName .. "/" .. softwareName)
 
 	say("Validating package.")
 	if not dofile(downloadDir .. "/MIZOSPKG.lua") == true then
@@ -54,7 +54,9 @@ Manager.installMPackage = function(packageName)
 
 	xs("mkdir " .. infoDir)
 	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
-	x("cd " .. downloadDir .. " && ./install")
+	xs("chown -R root:root " .. infoDir)
+	xs("chmod -R 755 " .. infoDir)
+	xs("sudo chmod -R 777 " .. downloadDir .." && cd " .. downloadDir .. " && ./install")
 end
 
 --[=[ Remove mizOS package ]=]--
@@ -118,17 +120,18 @@ Manager.updateMPackage = function(packageName)
 	say("Updating " .. packageName .. ".")
 
 	say("Clearing work folder.")
-	x("rm -rf /var/mizOS/work/*")
+	xs("rm -rf /var/mizOS/work/*")
 
 	say("Deleting old info directory.")
 	xs("rm -rf " .. infoDir)
 
 	say("Downloading package.")
-	x("cd /var/mizOS/work && git clone https://github.com/" .. developerName .. "/" .. softwareName)
+	x("cd /var/mizOS/work && sudo git clone https://github.com/" .. developerName .. "/" .. softwareName)
 
 	say("Creating new info file.")
 	xs("mkdir " .. infoDir)
 	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
+	xs("chmod -R 755 " .. infoDir)
 
 	local packageInfo = dofile(downloadDir .. "/info.lua")
 
@@ -150,7 +153,7 @@ end
 --[=[ Check installable package's required security level ]=]--
 Manager.checkPkgSecLevel = function(packageName)
 	say("Downloading package repo.")
-	x("rm -rf /var/mizOS/repo/* && wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
+	xs("rm -rf /var/mizOS/repo/* && sudo wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
 	local mizOSRepo = dofile("/var/mizOS/repo/repo.lua")
 
 	local packageName = trimWhite(packageName)
@@ -176,7 +179,7 @@ end
 --[=[ Get list of packages in the Duat's repo ]=]--
 Manager.listRepo = function()
 	say("Downloading package repo.")
-	x("rm -rf /var/mizOS/repo/* && wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
+	xs("rm -rf /var/mizOS/repo/* && sudo wget https://entertheduat.org/packages/repo.lua -P /var/mizOS/repo/")
 
 	local mizOSRepo = dofile("/var/mizOS/repo/repo.lua")
 

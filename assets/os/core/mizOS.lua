@@ -12,9 +12,11 @@ end
 
 
 local GlobalData = dofile("/var/mizOS/core/libraries/mOS_Global_Data.lua")
+userName              = GlobalData.userName
 homeDir               = GlobalData.homeDir
 initSystem            = GlobalData.initSystem
 packageSecType        = GlobalData.packageSecType
+configurablePrograms  = GlobalData.configurablePrograms
 i3ConfigSheet         = GlobalData.i3ConfigSheet
 gtkConfigSheet        = GlobalData.gtkConfigSheet
 systemdCommandSheet   = GlobalData.systemdCommandSheet
@@ -31,6 +33,7 @@ runAsRoot    = UtilityFunctions.runAsRoot
 readCommand  = UtilityFunctions.readCommand
 iPkg         = UtilityFunctions.iPkg
 rPkg         = UtilityFunctions.rPkg
+sudo         = UtilityFunctions.sudo
 checkFile    = UtilityFunctions.checkFile
 readFile     = UtilityFunctions.readFile
 writeFile    = UtilityFunctions.writeFile
@@ -39,6 +42,7 @@ trimWhite    = UtilityFunctions.trimWhite
 isInt        = UtilityFunctions.isInt
 isHex        = UtilityFunctions.isHex
 writeSetting = UtilityFunctions.writeSetting
+checkC       = UtilityFunctions.checkC
 iDesktop     = UtilityFunctions.iDesktop
 rDesktop     = UtilityFunctions.rDesktop
 exit         = UtilityFunctions.exit
@@ -56,6 +60,7 @@ mizOS.System = {}
 local SystemFunctions = dofile("/var/mizOS/core/libraries/mOS_System_Functions.lua")
 mizOS.System.info     = SystemFunctions.info
 mizOS.System.config   = SystemFunctions.config
+mizOS.System.csafety  = SystemFunctions.csafety
 mizOS.System.service  = SystemFunctions.service
 mizOS.System.graphics = SystemFunctions.graphics
 mizOS.System.software = SystemFunctions.software
