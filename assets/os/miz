@@ -114,5 +114,5 @@ local firstArgSheet = {
 if firstArgSheet[arg[1]] then
 	firstArgSheet[arg[1]]()
 else
-	frontend_IO.err(arg[1] .. "is not a valid \"miz\" command.")
+	frontend_IO.err(arg[1] .. " is not a valid \"miz\" command.")
 end
