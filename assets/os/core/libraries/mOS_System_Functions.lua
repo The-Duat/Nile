@@ -12,7 +12,7 @@ System.info = function(operator)
 		say("Discord server:")
 		say2("https://discord.gg/AVSuRZsTXp")
 		say("Github:")
-		say2("https://github.com/Mizosu97/mizOS")
+		say2("https://github.com/The-Duat/mizOS")
 
 	-- Display installable DE/WMs
 	elseif operator == "uilist" then
@@ -346,7 +346,7 @@ System.update = function(updateType, dev)
 			fault("mizOS System Update aborted.")
 			exit()
 		end
-		x("cd /var/mizOS/src && sudo git clone https://github.com/Mizosu97/mizOS && cd /var/mizOS/src/mizOS && " .. devString .. " ./install && sudo rm -rf /var/mizOS/src/*")
+		x("cd /var/mizOS/src && sudo git clone https://github.com/The-Duat/mizOS && cd /var/mizOS/src/mizOS && " .. devString .. " ./install && sudo rm -rf /var/mizOS/src/*")
 	elseif updateType == "packages" then
 		listInstalled()
 		say("Update installed mizOS packages? (y/n)")
