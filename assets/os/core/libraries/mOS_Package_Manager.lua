@@ -153,7 +153,7 @@ end
 --[=[ Check installable package's required security level ]=]--
 Manager.checkPkgSecLevel = function(packageName)
 	say("Downloading package repo.")
-	xs("rm -rf /var/mizOS/repo/* && sudo curl https://entertheduat.org/packages/repo.lua -o /var/mizOS/repo/")
+	xs("rm -rf /var/mizOS/repo/* && sudo wget https://entertheduat.org/packages/repo.lua -O /var/mizOS/repo/ --no-verbose")
 	local mizOSRepo = dofile("/var/mizOS/repo/repo.lua")
 
 	local packageName = trimWhite(packageName)
@@ -179,7 +179,7 @@ end
 --[=[ Get list of packages in the Duat's repo ]=]--
 Manager.listRepo = function()
 	say("Downloading package repo.")
-	xs("rm -rf /var/mizOS/repo/* && sudo curl https://entertheduat.org/packages/repo.lua -o /var/mizOS/repo/")
+	xs("rm -rf /var/mizOS/repo/* && sudo wget https://entertheduat.org/packages/repo.lua -O /var/mizOS/repo/ --no-verbose")
 
 	local mizOSRepo = dofile("/var/mizOS/repo/repo.lua")
 
