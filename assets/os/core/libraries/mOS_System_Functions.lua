@@ -256,6 +256,31 @@ System.graphics = function(operator, value)
 		else
 			fault("Invalid GPU mode: " .. value)
 		end
+
+	-- Setup graphics
+	elseif operator == "setup" then
+		local gpupacksheet = {
+			amdGpuDriverPackages,
+			nvidiaPropDriverPackages,
+			nvidiaFossDriverPackages,
+			intelDriverPackages
+		}
+		say("Please select all needed gpu drivers.")
+		say("Available drivers:")
+		say2("1. (AMD) AMDGPU")
+		say2("2. (Nvidia Proprietary) Nvidia")
+		say2("3. (Nvidia FOSS) Nouveau")
+		say2("4. (Intel) Intel")
+		say("Enter a number selection (e.x. \"1 3 4\")")
+		local gpusel = read()
+		for _,sel in pairs(splitString(trimWhite(gpusel))) do
+			local seln = tonumber(sel)
+			if gpupacksheet[seln] then
+				iPkg(gpupacksheet[seln], "pacman", false)
+			else
+				fault("Invalid driver selection: " .. sel)
+			end
+		end
 	else
 		fault("Invalid graphics operator: " .. operator)
 	end

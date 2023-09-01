@@ -87,6 +87,38 @@ Data.openrcCommandSheet = {
 	}}
 }
 
+Data.amdGpuDriverPackages = {
+	"amdgpu",
+	"mesa",
+	"lib32-mesa",
+	"xf86-video-amdgpu",
+	"vulkan-radeon",
+	"lib32-vulkan-radeon",
+	"libva-mesa-driver",
+	"lib32-libva-mesa-driver",
+	"mesa-vdpau",
+	"lib32-mesa-vdpau"
+}
+
+Data.nvidiaPropDriverPackages = {
+	"nvidia",
+	"nvidia-utils",
+	"lib32-nvidia-utils"
+}
+
+Data.nvidiaFossDriverPackages = {
+	"noveau",
+	"mesa",
+	"lib32-mesa"
+}
+
+Data.intelDriverPackages = {
+	"mesa",
+	"lib32-mesa",
+	"vulkan-intel",
+	"lib32-vulkan-intels"
+}
+
 Data.UITable = {
         {"budgie", "budgie-desktop", false},
         {"cinnamon", "cinnamon", false},

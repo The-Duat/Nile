@@ -12,23 +12,28 @@ end
 
 
 local GlobalData = dofile("/var/mizOS/core/libraries/mOS_Global_Data.lua")
-userName              = GlobalData.userName
-homeDir               = GlobalData.homeDir
-initSystem            = GlobalData.initSystem
-packageSecType        = GlobalData.packageSecType
-configurablePrograms  = GlobalData.configurablePrograms
-i3ConfigSheet         = GlobalData.i3ConfigSheet
-gtkConfigSheet        = GlobalData.gtkConfigSheet
-systemdCommandSheet   = GlobalData.systemdCommandSheet
-runitCommandSheet     = GlobalData.runitCommandSheet
-openrcCommandSheet    = GlobalData.openrcCommandSheet
-UITable               = GlobalData.UITable
-integerCharacterSheet = GlobalData.integerCharacterSheet
-hexCharacterSheet     = GlobalData.hexCharacterSheet
+userName                 = GlobalData.userName
+homeDir                  = GlobalData.homeDir
+initSystem               = GlobalData.initSystem
+packageSecType           = GlobalData.packageSecType
+configurablePrograms     = GlobalData.configurablePrograms
+i3ConfigSheet            = GlobalData.i3ConfigSheet
+gtkConfigSheet           = GlobalData.gtkConfigSheet
+systemdCommandSheet      = GlobalData.systemdCommandSheet
+runitCommandSheet        = GlobalData.runitCommandSheet
+openrcCommandSheet       = GlobalData.openrcCommandSheet
+amdGpuDriverPackages     = GlobalData.amdGpuDriverPackages
+nvidiaPropDriverPackages = GlobalData.nvidiaPropDriverPackages
+nvidiaFossDriverPackages = GlobalData.nvidiaFossDriverPackages
+intelDriverPackages      = GlobalData.intelDriverPackages
+UITable                  = GlobalData.UITable
+integerCharacterSheet    = GlobalData.integerCharacterSheet
+hexCharacterSheet        = GlobalData.hexCharacterSheet
 
 local UtilityFunctions = dofile("/var/mizOS/core/libraries/mOS_Utility_Functions.lua")
 x            = UtilityFunctions.x
 xs           = UtilityFunctions.xs
+xaf          = UtilityFunctions.xaf
 runAsRoot    = UtilityFunctions.runAsRoot
 readCommand  = UtilityFunctions.readCommand
 iPkg         = UtilityFunctions.iPkg

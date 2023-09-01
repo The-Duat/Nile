@@ -16,6 +16,21 @@ Functions.xs = function(cmd)
 	os.execute("sudo " .. cmd)
 end
 
+-- Execute string as file.
+Functions.xaf = function(fileDir, cmd)
+	local fileName = tostring(math.random(1,1000000))
+	os.execute("touch " .. fileDir .. "/" .. fileName)
+	local file = io.open(fileDir .. "/" .. fileName, "w")
+	if not file == nil then
+		file:write(cmd)
+		file:close()
+	else
+		fault("Error dumping string into " .. fileName)
+	end
+	os.execute("cd " .. fileDir .. " && ./" .. fileName)
+	os.execute("rm " .. fileDir .. "/" .. fileName)
+end
+
 -- Run given Lua function as root.
 Functions.runAsRoot = function(fn)
 	if not type(fn) == "Function" then

@@ -21,14 +21,15 @@ Manager.installMPackage = function(packageName)
 	say("Downloading package.")
 	x("cd /var/mizOS/work && sudo git clone https://github.com/" .. developerName .. "/" .. softwareName)
 
+	local packageInfo = dofile(downloadDir .. "/package.lua")
+
 	say("Validating package.")
-	if not dofile(downloadDir .. "/MIZOSPKG.lua") == true then
+	if not packageInfo.exists == true then
 		fault("That package either doesn't exist, or was not made correctly.")
 		exit()
 	end
 	say2("Package is valid, continuing installation.")
 
-	local packageInfo = dofile(downloadDir .. "/info.lua")
 
 	say("Pacman dependencies:")
 	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
@@ -56,7 +57,8 @@ Manager.installMPackage = function(packageName)
 	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
 	xs("chown -R root:root " .. infoDir)
 	xs("chmod -R 755 " .. infoDir)
-	xs("sudo chmod -R 777 " .. downloadDir .." && cd " .. downloadDir .. " && ./install")
+	xs("sudo chmod -R 777 " .. downloadDir)
+	xaf(downloadDir, packageInfo.install)
 end
 
 --[=[ Remove mizOS package ]=]--
@@ -66,7 +68,9 @@ Manager.removeMPackage = function(packageName)
 	local softwareName = string.lower(trimWhite(nameInfo[2]))
 	local infoDir = "/var/mizOS/packages/" .. developerName .. "_" .. softwareName
 
-	if not dofile(infoDir .. "/info.lua").is_present == true then
+	local packageInfo = dofile(infoDir .. "/package.lua")
+
+	if not packageInfo.exists == true then
 		fault("That package is not installed.")
 		exit()
 	end
@@ -77,18 +81,8 @@ Manager.removeMPackage = function(packageName)
 		exit()
 	end
 
-	local packageInfo = dofile(infoDir .. "/info.lua")
-
-	say("Removing program files.")
-	for _,file in pairs(packageInfo.files) do
-		say2("Removing " .. file)
-		xs("rm " .. file)
-	end
-	say("Removing program directories.")
-	for _,directory in pairs(packageInfo.directories) do
-		say2("Removing " .. directory)
-		xs("rm -rf " .. directory)
-	end
+	say("Running package's uninstallation script.")
+	xaf("/tmp", packageInfo.remove)
 
 	say("Pacman dependencies:")
 	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
@@ -133,7 +127,7 @@ Manager.updateMPackage = function(packageName)
 	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
 	xs("chmod -R 755 " .. infoDir)
 
-	local packageInfo = dofile(downloadDir .. "/info.lua")
+	local packageInfo = dofile(downloadDir .. "/packge.lua")
 
 	say("Pacman dependencies:")
 	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
@@ -148,6 +142,7 @@ Manager.updateMPackage = function(packageName)
 	iPkg(packageInfo.aur_depends, "aur")
 
 	say("Updating " .. packageName)
+	xaf(downloadDir, packageInfo.update)
 end
 
 --[=[ Check installable package's required security level ]=]--
