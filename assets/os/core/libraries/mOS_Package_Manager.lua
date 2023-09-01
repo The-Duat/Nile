@@ -54,7 +54,7 @@ Manager.installMPackage = function(packageName)
 	end
 
 	xs("mkdir " .. infoDir)
-	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
+	xs("cp " .. downloadDir .. "/package.lua " .. infoDir)
 	xs("chown -R root:root " .. infoDir)
 	xs("chmod -R 755 " .. infoDir)
 	xs("sudo chmod -R 777 " .. downloadDir)
@@ -143,6 +143,8 @@ Manager.updateMPackage = function(packageName)
 
 	say("Updating " .. packageName)
 	xaf(downloadDir, packageInfo.update)
+
+	x("sudo cp "  .. downloadDir .. "/package.lua" .. infoDir)
 end
 
 --[=[ Check installable package's required security level ]=]--
