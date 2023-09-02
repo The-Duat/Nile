@@ -20,6 +20,7 @@ end
 Functions.xaf = function(fileDir, cmd)
 	local fileName = tostring(math.random(1,1000000))
 	os.execute("touch " .. fileDir .. "/" .. fileName)
+	os.execute("sudo chmod 777 " .. fileDir .. "/" .. fileName)
 	local file = io.open(fileDir .. "/" .. fileName, "w")
 	if not file == nil then
 		file:write(cmd)
