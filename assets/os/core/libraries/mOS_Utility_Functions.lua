@@ -28,6 +28,7 @@ Functions.xaf = function(fileDir, cmd)
 	else
 		fault("Error dumping string into " .. fileName)
 	end
+	os.execute("sleep 1")
 	os.execute("cd " .. fileDir .. " && sudo chmod 777 " .. fileName .. " && ./" .. fileName)
 	os.execute("rm " .. fileDir .. "/" .. fileName)
 end
