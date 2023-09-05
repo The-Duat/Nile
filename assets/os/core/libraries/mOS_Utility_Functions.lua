@@ -20,20 +20,21 @@ end
 Functions.xaf = function(fileDir, cmd)
 	local fileName = tostring(math.random(1,1000000))
 	os.execute("touch " .. fileDir .. "/" .. fileName)
-	os.execute("sudo chmod 777 " .. fileDir .. "/" .. fileName)
+	os.execute("sudo chown -R " .. userName .. ":" .. userName .. " " .. fileDir .. "/" .. fileName)
+	os.execute("sudo chmod -R 777 " .. fileDir .. "/" .. fileName)
 	local file = io.open(fileDir .. "/" .. fileName, "w")
 	if not file == nil then
 		file:write(cmd)
-		file:close()
 	else
 		fault("Error dumping string into " .. fileName)
 	end
+	file:close()
 	os.execute("sleep 1")
-	os.execute("cd " .. fileDir .. " && sudo chmod 777 " .. fileName .. " && ./" .. fileName)
+	os.execute("cd " .. fileDir .. " && ./" .. fileName)
 	os.execute("rm " .. fileDir .. "/" .. fileName)
 end
 
--- Run given Lua function as root.
+-- Run given Lua function as root.S
 Functions.runAsRoot = function(fn)
 	if not type(fn) == "Function" then
 		fault("Error.")

@@ -57,7 +57,7 @@ Manager.installMPackage = function(packageName)
 	xs("cp " .. downloadDir .. "/package.lua " .. infoDir)
 	xs("chown -R root:root " .. infoDir)
 	xs("chmod -R 755 " .. infoDir)
-	xs("sudo chmod -R 777 " .. downloadDir)
+	xs("chmod -R 777 " .. downloadDir)
 	xaf(downloadDir, packageInfo.install)
 end
 
