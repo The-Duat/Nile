@@ -294,12 +294,16 @@ elif test -f "/usr/bin/rc-service"; then
         echo "  > OpenRC detected."
         cp assets/os/init/openrc/init.lua /var/mizOS/init
 fi
-echo "| Installing frontend and backend."
+echo "| Installing core mizOS system software."
 echo "  > Installing the mizOS.lua backend."
 if [ -f "/var/mizOS/core/mizOS.lua" ]; then
 	rm /var/mizOS/core/mizOS.lua
 fi
 cp assets/os/core/mizOS.lua /var/mizOS/core
+echo "  > Installing mizOS system libraries."
+if [ -d "/var/mizOS/core/libraries" ]; then
+	sudo rm -rf /var/mizOS/core/libraries
+fi
 cp -r assets/os/core/libraries /var/mizOS/core
 
 echo "  > Installing the miz frontend."
