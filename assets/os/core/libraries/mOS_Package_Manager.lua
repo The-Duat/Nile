@@ -155,9 +155,9 @@ Manager.checkPkgSecLevel = function(packageName)
 
 	local packageName = trimWhite(packageName)
 
-	if mizOSRepo["official"][packageName][2] then
+	if mizOSRepo["official"][packageName][2] ~= nil then
 		return "strict"
-	elseif mizOSRepo["community"][packageName][2] then
+	elseif mizOSRepo["community"][packageName][2] ~= nil then
 		return "moderate"
 	else
 		return "none"
