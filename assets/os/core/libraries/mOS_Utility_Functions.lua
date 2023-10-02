@@ -23,7 +23,7 @@ Functions.xaf = function(fileDir, cmd)
 	os.execute("sudo chown -R " .. userName .. ":" .. userName .. " " .. fileDir .. "/" .. fileName)
 	os.execute("sudo chmod -R 777 " .. fileDir .. "/" .. fileName)
 	local file = io.open(fileDir .. "/" .. fileName, "w")
-	if not file == nil then
+	if file ~= nil then
 		file:write(cmd)
 	else
 		fault("Error dumping string into " .. fileName)
