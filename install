@@ -27,22 +27,8 @@ if [ -d "/var/mizOS" ]; then
 else
 	echo "| Performing system install."
 	installType="install"
-	printf "\n\n\nAre you installing SystemD mizOS onto an Asus laptop? (y/n)\n\n> "
-	read ans
-
-	if [ $ans == "y" ]; then
-		echo "Installing Asus laptop utilities."
-		sudo -S pacman -S asusctl supergfxctl
-		echo "Enabling asusctl and supergfxctl."
-		printf "\n\n\n Are you using the ISO image? (y/n)"
-		read ans
-		if [ $ans == "y" ]; then
-			echo " !! After installation, run miz gfx setup !!"
-		else
-			sudo -S systemctl enable --now power-profiles-daemon.service
-			sudo -S systemctl enable --now supergfxd
-		fi
-	fi
+	printf "\n\n\nWould you like to install Asus laptop utilities? [asusctl] (y/n)\n\n> "
+	read asusans
 
 	echo -e "Checking $HOME filesystem."
 	echo "| Checking $HOME/.config"
@@ -382,6 +368,11 @@ for d in /var/mizOS/backup/*/; do
 	sudo chown -R $dn:$dn $d
 	sudo chmod -R 755 $d
 done
+
+if [ $asusans == "y" ]; then
+	echo -e "\n\n"
+	miz fetch -m the-duat/mizos-asusctl
+fi
 
 echo -e "\n\n"
 if [ "$installType" = "install" ]; then
