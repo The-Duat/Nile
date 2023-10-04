@@ -294,7 +294,7 @@ System.network = function(operator, value)
 			wifiManager("scan", nil, nil)
 		else
 			say("Scanning IP Address " .. value)
-			x("wget https://freegeoip.app/json/" .. value .. " -O /var/mizOS/download/ipinfo")
+			x("wget https://freegeoip.app/json/" .. value .. " -O /var/mizOS/download/ipinfo --no-verbose")
 			local IPData = jsonParse(readCommand("cat /var/mizOS/download/ipinfo"))
 			say("General IP information:")
 			for data,val in pairs(IPData) do
