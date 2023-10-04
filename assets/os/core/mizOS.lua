@@ -10,6 +10,9 @@ mizOS.initializeIO = function(frontend_IO)
 	fault = frontend_IO.err
 end
 
+local json = dofile("/var/mizOS/core/libraries/json.lua")
+jsonStringify = json.stringify
+jsonParse     = json.parse
 
 local GlobalData = dofile("/var/mizOS/core/libraries/mOS_Global_Data.lua")
 userName                 = GlobalData.userName
@@ -46,6 +49,7 @@ splitString  = UtilityFunctions.splitString
 trimWhite    = UtilityFunctions.trimWhite
 isInt        = UtilityFunctions.isInt
 isHex        = UtilityFunctions.isHex
+wifiManager  = UtilityFunctions.wifiManager
 writeSetting = UtilityFunctions.writeSetting
 checkC       = UtilityFunctions.checkC
 iDesktop     = UtilityFunctions.iDesktop
@@ -68,6 +72,7 @@ mizOS.System.config   = SystemFunctions.config
 mizOS.System.csafety  = SystemFunctions.csafety
 mizOS.System.service  = SystemFunctions.service
 mizOS.System.graphics = SystemFunctions.graphics
+mizOS.System.network  = SystemFunctions.network
 mizOS.System.software = SystemFunctions.software
 mizOS.System.update   = SystemFunctions.update
 

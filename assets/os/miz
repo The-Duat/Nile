@@ -68,6 +68,14 @@ local function sendGraphics()
 	mizOS.System.graphics(arg[2], value)
 end
 
+local function sendNetwork()
+	if arg[3] then
+		mizOS.System.network(arg[2], arg[3])
+	else
+		mizOS.System.network(arg[2], nil)
+	end
+end
+
 local function sendSoftware()
 	if arg[2] == "cc" then
 		mizOS.System.software("clear cache")
@@ -105,6 +113,7 @@ local firstArgSheet = {
 	["restore"] = sendCsafety,
 	["sv"]      = sendService,
 	["gfx"]     = sendGraphics,
+	["net"]     = sendNetwork,
 	["fetch"]   = sendSoftware,
 	["remove"]  = sendSoftware,
 	["cc"]      = sendSoftware,

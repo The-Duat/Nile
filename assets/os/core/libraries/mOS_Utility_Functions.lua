@@ -194,6 +194,40 @@ Functions.isHex = function(str)
 end
 
 
+--[=[ Network ]=]--
+Functions.wifiManager = function(action, ssid, password)
+	local netmanager = " "
+	local file = io.open("/usr/bin/iwctl")
+	if file then
+		netmanager = "iwd"
+	end
+	file:close()
+	local file = io.open("/usr/bin/nmcli")
+	if file then
+		netmanager = "ntm"
+	end
+	file:close()
+
+	if netmanager == " " then
+		fault("No compatible network management program has been found.")
+	end
+
+	if action == "scan" then
+		if netmanager == "ntm" then
+			os.execute("nmcli device wifi list")
+		else
+			os.execute("iwctl station wlan0 scan && iwctl station wlan0 get-networks")
+		end
+	elseif action == "connect" then
+		if netmanager == "ntm" then
+			os.execute("nmcli device wifi connect " .. ssid .. " password " .. password)
+		else
+			os.execute("iwctl --passphrase " .. password .. " station wlan0 connect " .. ssid)
+		end
+	end
+end
+
+
 --[=[ Other ]=]--
 
 -- Change mizOS setting.

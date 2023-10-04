@@ -287,6 +287,29 @@ System.graphics = function(operator, value)
 end
 
 
+--[=[ Network management. ]=]--
+System.network = function(operator, value)
+	if operator == "scan" then
+		if value == "area" then
+			wifiManager("scan", nil, nil)
+		else
+			x("wget https://freegeoip.app/json/" .. value .. " -O /var/mizOS/download/ipinfo")
+			local IPData = jsonParse(readFile("/var/mizOS/download/ipinfo"))
+			say("the stuff")
+			for _,m in pairs(IPData) do
+				say2(_)
+				say2(m)
+			end
+			x("rm /var/mizOS/download/ipinfo")
+		end
+	elseif operator == "connect" then
+		say("Please enter the password for " .. value .. ".")
+		local password = read()
+		wifiManager("connect", value, password)
+	end
+end
+
+
 --[=[ System software management. ]=]--
 System.software = function(operator, channel, packageList)
 
