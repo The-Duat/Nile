@@ -299,7 +299,11 @@ System.network = function(operator, value)
 			say("General IP information:")
 			for data,val in pairs(IPData) do
 				data2 = tostring(data)
-				val2 = tostring(val)
+				if type(val) == "table" then
+					val2 = "N/A"
+				else
+					val2 = tostring(val)
+				end
 				if type(data2) == "string" and type(val2) == "string" then
 					say2(data2 .. ": " .. val2)
 				end
