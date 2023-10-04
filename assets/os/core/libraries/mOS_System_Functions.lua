@@ -293,12 +293,16 @@ System.network = function(operator, value)
 		if value == "area" then
 			wifiManager("scan", nil, nil)
 		else
+			say("Scanning IP Address " .. value)
 			x("wget https://freegeoip.app/json/" .. value .. " -O /var/mizOS/download/ipinfo")
 			local IPData = jsonParse(readCommand("cat /var/mizOS/download/ipinfo"))
-			say("the stuff")
-			for _,m in pairs(IPData) do
-				say2(_)
-				say2(m)
+			say("General IP information:")
+			for data,val in pairs(IPData) do
+				data2 = tostring(data)
+				val2 = tostring(val)
+				if type(data2) == "string" and type(val2) == "string" then
+					say2(data2 .. ": " .. val2)
+				end
 			end
 			x("rm /var/mizOS/download/ipinfo")
 		end
