@@ -13,7 +13,7 @@ sudo -S pacman -S --needed alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-wm
 if [ -d "$HOME/.mizOS" ]; then
 	mv $HOME/.mizOS $HOME/mizOS
 	mv $HOME/mizOS /var/
-	sudo chmod 777 /var/mizOS
+	sudo -S chmod 777 /var/mizOS
 fi
 
 installType=""
@@ -22,8 +22,8 @@ echo "Checking install type."
 if [ -d "/var/mizOS" ]; then
 	echo "| Performing system update."
 	installType="update"
-	sudo chmod -R 777 /var/mizOS
-	sudo chmod -R 777 /var/mizOS/*
+	sudo -S chmod -R 777 /var/mizOS
+	sudo -S chmod -R 777 /var/mizOS/*
 else
 	echo "| Performing system install."
 	installType="install"
@@ -56,9 +56,9 @@ else
 	fi
 
 	echo "  > Creating /var/mizOS"
-	sudo mkdir /var/mizOS
-	sudo chown -R root:root /var/mizOS
-	sudo chmod -R 777 /var/mizOS
+	sudo -S mkdir /var/mizOS
+	sudo -S chown -R root:root /var/mizOS
+	sudo -S chmod -R 777 /var/mizOS
 	echo "  > Enabling fish."
 	echo "fish" >> $HOME/.bashrc
 fi
@@ -288,7 +288,7 @@ fi
 cp assets/os/core/mizOS.lua /var/mizOS/core
 echo "  > Installing mizOS system libraries."
 if [ -d "/var/mizOS/core/libraries" ]; then
-	sudo rm -rf /var/mizOS/core/libraries
+	sudo -S rm -rf /var/mizOS/core/libraries
 fi
 cp -r assets/os/core/libraries /var/mizOS/core
 
@@ -319,7 +319,7 @@ sudo -S cp assets/details/neofetch /usr/bin
 if [[ $1 == "dev" ]]; then
 	echo -e "\nDev mode active."
 	sudo -S cp assets/dev/miz /usr/bin/
-	sudo rm -rf /var/mizOS/core
+	sudo -S rm -rf /var/mizOS/core
 	cp -r assets/dev/core /var/mizOS
 fi
 
@@ -333,40 +333,40 @@ fi
 
 echo "| Setting mizOS filesystem base ownership."
 echo "  > /var/mizOS     -  root:root"
-sudo chown -R root:root /var/mizOS
+sudo -S chown -R root:root /var/mizOS
 
 echo "| Setting mizOS filesystem permissions."
 echo "  > /var/mizOS           -  755"
-sudo chmod -R 755 /var/mizOS
+sudo -S chmod -R 755 /var/mizOS
 echo "  > /var/mizOS/core      -  755"
-sudo chmod -R 755 /var/mizOS/core
+sudo -S chmod -R 755 /var/mizOS/core
 echo "  > /var/mizOS/init      -  755"
-sudo chmod -R 755 /var/mizOS/init
+sudo -S chmod -R 755 /var/mizOS/init
 echo "  > /var/mizOS/repo      -  755"
-sudo chmod -R 755 /var/mizOS/repo
+sudo -S chmod -R 755 /var/mizOS/repo
 echo "  > /var/mizOS/packages  -  755"
-sudo chmod -R 755 /var/mizOS/packages
+sudo -S chmod -R 755 /var/mizOS/packages
 echo "  > /var/mizOS/security  -  755"
-sudo chmod -R 755 /var/mizOS/security
+sudo -S chmod -R 755 /var/mizOS/security
 echo "  > /var/mizOS/work      -  755"
-sudo chmod -R 755 /var/mizOS/work
+sudo -S chmod -R 755 /var/mizOS/work
 echo "  > /var/mizOS/src       -  755"
-sudo chmod -R 755 /var/mizOS/src
+sudo -S chmod -R 755 /var/mizOS/src
 echo "  > /var/mizOS/config    -  755"
-sudo chmod -R 755 /var/mizOS/config
+sudo -S chmod -R 755 /var/mizOS/config
 for d in /var/mizOS/config/*/; do
 	dn=$(basename $d)
 	echo "  > $d   - 755 (Ownership: $dn:$dn)"
-	sudo chown -R $dn:$dn $d
-	sudo chmod -R 755 $d
+	sudo -S chown -R $dn:$dn $d
+	sudo -S chmod -R 755 $d
 done
 echo "  > /var/mizOS/download  -  777"
-sudo chmod -R 777 /var/mizOS/download
+sudo -S chmod -R 777 /var/mizOS/download
 for d in /var/mizOS/backup/*/; do
 	dn=$(basename $d)
 	echo "  > $d   - 755 (Ownership: $dn:$dn)"
-	sudo chown -R $dn:$dn $d
-	sudo chmod -R 755 $d
+	sudo -S chown -R $dn:$dn $d
+	sudo -S chmod -R 755 $d
 done
 
 if [ $asusans == "y" ]; then
