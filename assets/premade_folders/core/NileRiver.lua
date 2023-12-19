@@ -1,8 +1,8 @@
-local mizOS = {}
+local NileRiver = {}
 
 
 
-mizOS.initializeIO = function(frontend_IO)
+NileRiver.initializeIO = function(frontend_IO)
 	read  = frontend_IO.inp
 	write = frontend_IO.outp
 	say   = frontend_IO.foutp
@@ -10,11 +10,11 @@ mizOS.initializeIO = function(frontend_IO)
 	fault = frontend_IO.err
 end
 
-local json = dofile("/var/mizOS/core/libraries/json.lua")
+local json = dofile("/var/NileRiver/core/libraries/json.lua")
 jsonStringify = json.stringify
 jsonParse     = json.parse
 
-local GlobalData = dofile("/var/mizOS/core/libraries/mOS_Global_Data.lua")
+local GlobalData = dofile("/var/NileRiver/core/libraries/Nile_Global_Data.lua")
 userName                 = GlobalData.userName
 homeDir                  = GlobalData.homeDir
 initSystem               = GlobalData.initSystem
@@ -33,7 +33,7 @@ UITable                  = GlobalData.UITable
 integerCharacterSheet    = GlobalData.integerCharacterSheet
 hexCharacterSheet        = GlobalData.hexCharacterSheet
 
-local UtilityFunctions = dofile("/var/mizOS/core/libraries/mOS_Utility_Functions.lua")
+local UtilityFunctions = dofile("/var/NileRiver/core/libraries/Nile_Utility_Functions.lua")
 x            = UtilityFunctions.x
 xs           = UtilityFunctions.xs
 xaf          = UtilityFunctions.xaf
@@ -56,7 +56,7 @@ iDesktop     = UtilityFunctions.iDesktop
 rDesktop     = UtilityFunctions.rDesktop
 exit         = UtilityFunctions.exit
 
-local PackageManager = dofile("/var/mizOS/core/libraries/mOS_Package_Manager.lua")
+local PackageManager = dofile("/var/NileRiver/core/libraries/Nile_OPMS.lua")
 installMPackage  = PackageManager.installMPackage
 removeMPackage   = PackageManager.removeMPackage
 updateMPackage   = PackageManager.updateMPackage
@@ -64,18 +64,18 @@ checkPkgSecLevel = PackageManager.checkPkgSecLevel
 listInstalled    = PackageManager.listInstalled
 listRepo         = PackageManager.listRepo
 
-mizOS.System = {}
+NileRiver.System = {}
 
-local SystemFunctions = dofile("/var/mizOS/core/libraries/mOS_System_Functions.lua")
-mizOS.System.info     = SystemFunctions.info
-mizOS.System.config   = SystemFunctions.config
-mizOS.System.csafety  = SystemFunctions.csafety
-mizOS.System.service  = SystemFunctions.service
-mizOS.System.graphics = SystemFunctions.graphics
-mizOS.System.network  = SystemFunctions.network
-mizOS.System.software = SystemFunctions.software
-mizOS.System.update   = SystemFunctions.update
+local SystemFunctions = dofile("/var/NileRiver/core/libraries/Nile_System_Functions.lua")
+NileRiver.System.info     = SystemFunctions.info
+NileRiver.System.config   = SystemFunctions.config
+NileRiver.System.csafety  = SystemFunctions.csafety
+NileRiver.System.service  = SystemFunctions.service
+NileRiver.System.graphics = SystemFunctions.graphics
+NileRiver.System.network  = SystemFunctions.network
+NileRiver.System.software = SystemFunctions.software
+NileRiver.System.update   = SystemFunctions.update
 
 
 
-return mizOS
+return NileRiver

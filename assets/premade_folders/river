@@ -4,7 +4,7 @@
 local argCount = #arg
 
 --[=[ Backend setup ]=]--
-local mizOS = dofile("/var/mizOS/core/mizOS.lua")
+local NileRiver = dofile("/var/NileRiver/core/NileRiver.lua")
 
 
 -- [ Input/Output setup. ] --
@@ -29,28 +29,28 @@ frontend_IO.err = function(text) -- Print error output.
 	print("\x1b[38;2;243;139;168m!![Error]> \x1b[38;2;203;160;247m" .. text .. "\x1b[38;2;255;255;255m")
 end
 
-mizOS.initializeIO(frontend_IO)
+NileRiver.initializeIO(frontend_IO)
 
 
 --[=[ System function handler ]=]--
 local function sendInfo()
-	mizOS.System.info(arg[2])
+	NileRiver.System.info(arg[2])
 end
 
 local function sendConfig()
-	mizOS.System.config(arg[2], arg[3])
+	NileRiver.System.config(arg[2], arg[3])
 end
 
 local function sendCsafety()
 	if arg[2] then
-		mizOS.System.csafety(arg[1], arg[2])
+		NileRiver.System.csafety(arg[1], arg[2])
 	else
-		mizOS.System.csafety(arg[1], nil)
+		NileRiver.System.csafety(arg[1], nil)
 	end
 end
 
 local function sendService()
-	mizOS.System.service(arg[2], arg[3])
+	NileRiver.System.service(arg[2], arg[3])
 end
 
 local function sendGraphics()
@@ -65,20 +65,20 @@ local function sendGraphics()
 	else
 		value = arg[3]
 	end
-	mizOS.System.graphics(arg[2], value)
+	NileRiver.System.graphics(arg[2], value)
 end
 
 local function sendNetwork()
 	if arg[3] then
-		mizOS.System.network(arg[2], arg[3])
+		NileRiver.System.network(arg[2], arg[3])
 	else
-		mizOS.System.network(arg[2], nil)
+		NileRiver.System.network(arg[2], nil)
 	end
 end
 
 local function sendSoftware()
 	if arg[2] == "cc" then
-		mizOS.System.software("clear cache")
+		NileRiver.System.software("clear cache")
 		os.exit()
 	end
 	local packageList = {}
@@ -87,12 +87,12 @@ local function sendSoftware()
 		argCount = argCount - 1
 	end
 	local channelTranslation = {
-		["-m"] = "mizos",
+		["-m"] = "opms",
 		["-p"] = "pacman",
 		["-a"] = "aur",
 		["-d"] = "desktop"
 	}
-	mizOS.System.software(arg[1], channelTranslation[arg[2]], packageList)
+	NileRiver.System.software(arg[1], channelTranslation[arg[2]], packageList)
 end
 
 local function sendUpdate()
@@ -100,8 +100,8 @@ local function sendUpdate()
 	if arg[2] == "dev" then
 		dev = true
 	end
-	mizOS.System.update("system", dev)
-	mizOS.System.update("packages", dev)
+	NileRiver.System.update("system", dev)
+	NileRiver.System.update("packages", dev)
 end
 
 

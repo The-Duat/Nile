@@ -1,0 +1,4 @@
+DISTRIB_ID="NILE"
+DISTRIB_RELEASE="rolling"
+DISTRIB_DESCRIPTION="Nile Integrated Linux Environment"
+DISTRIB_CODENAME=nile

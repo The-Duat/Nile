@@ -230,13 +230,13 @@ end
 
 --[=[ Other ]=]--
 
--- Change mizOS setting.
+-- Change NILE setting.
 Functions.writeSetting = function(program, setting, value)
-	local configFile = io.open(string.format("/var/mizOS/config/%s/%s/settings/%s", userName, program, setting), "w")
+	local configFile = io.open(string.format("/var/NileRiver/config/%s/%s/settings/%s", userName, program, setting), "w")
 	if configFile then
 		configFile:write(value)
 		configFile:close()
-		os.execute(string.format("cd /var/mizOS/config/%s/%s && ./genconf", userName, program))
+		os.execute(string.format("cd /var/NileRiver/config/%s/%s && ./genconf", userName, program))
 	else
 		fault("Error opening " .. setting .. " config file for " .. program .. ".")
 	end

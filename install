@@ -8,22 +8,16 @@ echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
 echo "Installing dependencies."
-sudo -S pacman -S --needed wget alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-wm i3status lua luarocks maim neofetch neovim noto-fonts papirus-icon-theme picom thunar unzip xclip
-
-if [ -d "$HOME/.mizOS" ]; then
-	mv $HOME/.mizOS $HOME/mizOS
-	mv $HOME/mizOS /var/
-	sudo -S chmod 777 /var/mizOS
-fi
+sudo -S pacman -S wget alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-wm i3status lua luarocks maim neofetch neovim noto-fonts papirus-icon-theme picom thunar unzip xclip
 
 installType=""
 
 echo "Checking install type."
-if [ -d "/var/mizOS" ]; then
+if [ -d "/var/NileRiver" ]; then
 	echo "| Performing system update."
 	installType="update"
-	sudo -S chmod -R 777 /var/mizOS
-	sudo -S chmod -R 777 /var/mizOS/*
+	sudo -S chmod -R 777 /var/NileRiver
+	sudo -S chmod -R 777 /var/NileRiver/*
 else
 	echo "| Performing system install."
 	installType="install"
@@ -55,10 +49,10 @@ else
 		mkdir $HOME/.icons
 	fi
 
-	echo "  > Creating /var/mizOS"
-	sudo -S mkdir /var/mizOS
-	sudo -S chown -R root:root /var/mizOS
-	sudo -S chmod -R 777 /var/mizOS
+	echo "  > Creating /var/NileRiver"
+	sudo -S mkdir /var/NileRiver
+	sudo -S chown -R root:root /var/NileRiver
+	sudo -S chmod -R 777 /var/NileRiver
 	echo "  > Enabling fish."
 	echo "fish" >> $HOME/.bashrc
 fi
@@ -67,126 +61,126 @@ fi
 
 echo -e "\nChecking filesystem."
 echo "| Checking core folder."
-if [ -d "/var/mizOS/core" ]; then
+if [ -d "/var/NileRiver/core" ]; then
 	echo "  > core folder present, updating."
-	rm -rf /var/mizOS/core
+	rm -rf /var/NileRiver/core
 else
-	echo "  > Creating /var/mizOS/core"
+	echo "  > Creating /var/NileRiver/core"
 fi
-mkdir /var/mizOS/core
+mkdir /var/NileRiver/core
 
 echo "| Checking src folder."
-if [ -d "/var/mizOS/src" ]; then
+if [ -d "/var/NileRiver/src" ]; then
 	echo "  > src folder present."
 else
-	echo "  > Creating /var/mizOS/src"
-	mkdir /var/mizOS/src
+	echo "  > Creating /var/NileRiver/src"
+	mkdir /var/NileRiver/src
 fi
 
 echo "| Checking packages folder."
-if [ -d "/var/mizOS/packages" ]; then
+if [ -d "/var/NileRiver/packages" ]; then
 	echo "  > Packages folder present."
 else
-	echo "  > Creating /var/mizOS/packages"
-	mkdir /var/mizOS/packages
+	echo "  > Creating /var/NileRiver/packages"
+	mkdir /var/NileRiver/packages
 fi
 
 echo "| Checking repo folder."
-if [ -d "/var/mizOS/repo" ]; then
+if [ -d "/var/NileRiver/repo" ]; then
 	echo "  > repo folder present."
 else
-	echo "  > Creating /var/mizOS/repo"
-	mkdir /var/mizOS/repo
+	echo "  > Creating /var/NileRiver/repo"
+	mkdir /var/NileRiver/repo
 fi
 
 echo "| Checking work folder."
-if [ -d "/var/mizOS/work" ]; then
+if [ -d "/var/NileRiver/work" ]; then
 	echo "  > work folder present."
 else
-	echo "  > Creating /var/mizOS/work"
-	mkdir /var/mizOS/work
+	echo "  > Creating /var/NileRiver/work"
+	mkdir /var/NileRiver/work
 fi
 
 echo "| Checking init folder."
-if [ -d "/var/mizOS/init" ]; then
+if [ -d "/var/NileRiver/init" ]; then
 	echo "  > init folder present."
 	echo "  > Clearing old init folder."
-	rm -rf /var/mizOS/init/*
+	rm -rf /var/NileRiver/init/*
 else
 	echo "  > Creating init folder."
-	mkdir /var/mizOS/init
+	mkdir /var/NileRiver/init
 fi
 
 echo "| Checking security folder."
-if [ -d "/var/mizOS/security" ]; then
+if [ -d "/var/NileRiver/security" ]; then
 	echo "  > security folder present."
 else
 	echo "  > Creating security folder."
-	cp -r assets/os/security /var/mizOS
+	cp -r assets/premade_folders/security /var/NileRiver
 fi
 
 echo "| Checking backup folder."
-if [ -d "/var/mizOS/backup" ]; then
+if [ -d "/var/NileRiver/backup" ]; then
 	echo "  > Backup folder present."
 else
 	echo "  > Creating backup folder."
-	mkdir /var/mizOS/backup
+	mkdir /var/NileRiver/backup
 fi
 
 echo "| Checking config folder."
-if [ -d "/var/mizOS/config" ]; then
+if [ -d "/var/NileRiver/config" ]; then
 	echo "  > config folder present."
 else
 	echo "  > Creating config folder."
-	mkdir /var/mizOS/config
+	mkdir /var/NileRiver/config
 fi
 
 echo "| Checking download folder."
-if [ -d "/var/mizOS/download" ]; then
+if [ -d "/var/NileRiver/download" ]; then
 	echo "  > download folder present, clearing."
-	rm -rf /var/mizOS/download/*
+	rm -rf /var/NileRiver/download/*
 else
 	echo "  > Creating download folder."
-	mkdir /var/mizOS/download
+	mkdir /var/NileRiver/download
 fi
 
 
 echo -e "\nConfiguring system."
 echo "| Checking for existing configuration."
-if [ -d "/var/mizOS/config/$USER" ]; then
+if [ -d "/var/NileRiver/config/$USER" ]; then
 	echo "  > Found."
 	echo "| Checking for existing backup."
-	if [ -d "/var/mizOS/backup/$USER" ]; then
+	if [ -d "/var/NileRiver/backup/$USER" ]; then
 		echo "  > Found, deleting."
-		rm -rf /var/mizOS/backup/$USER
+		rm -rf /var/NileRiver/backup/$USER
 	fi
-	echo "| Backing up current config to /var/mizOS/backup/$USER"
-	mv /var/mizOS/config/$USER /var/mizOS/backup/
+	echo "| Backing up current config to /var/NileRiver/backup/$USER"
+	mv /var/NileRiver/config/$USER /var/NileRiver/backup/
 fi
 
-mkdir /var/mizOS/config/$USER
+mkdir /var/NileRiver/config/$USER
 
-echo "| Copying mizOS config directory structure."
-cp -r assets/system_config/config/* /var/mizOS/config/$USER
+echo "| Copying NILE config directory structure."
+cp -r assets/system_config/config/* /var/NileRiver/config/$USER
 echo "| Generating i3 config file."
-/var/mizOS/config/$USER/i3/genconf
+/var/NileRiver/config/$USER/i3/genconf
 
 printf "\n\nWould you like to install GTK and icon themes? It may take a while. (y/n)\n\n> "
 read ans
 if [ $ans == "y" ]; then
 echo "| Installing GTK theme."
 echo "  > Preparing theme folder."
-if [ ! -d "/var/mizOS/download/cat" ]; then
-	mkdir /var/mizOS/download/cat
+if [ ! -d "/var/NileRiver/download/cat" ]; then
+	mkdir /var/NileRiver/download/cat
 fi
 echo "  > Downloading theme."
-wget https://github.com/catppuccin/gtk/releases/download/v0.4.3/Catppuccin-Mocha-Standard-Pink-Dark.zip -O /var/mizOS/download/catppuccin.zip
+wget https://github.com/catppuccin/gtk/releases/download/v0.4.3/Catppuccin-Mocha-Standard-Pink-Dark.zip -O /var/NileRiver/download/catppuccin.zip
 echo "  > Extracting theme."
-unzip /var/mizOS/download/catppuccin.zip -d /var/mizOS/download/cat
+unzip /var/NileRiver/download/catppuccin.zip -d /var/NileRiver/download/cat
 echo "  > Renaming theme files."
-mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark /var/mizOS/download/cat/Catppuccin
-mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /var/mizOS/download/cat/Catppuccin-hdpi
-mv /var/mizOS/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-xhdpi /var/mizOS/download/cat/Catppuccin-xhdpi
+mv /var/NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark /var/NileRiver/download/cat/Catppuccin
+mv /var/NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /var/NileRiver/download/cat/Catppuccin-hdpi
+mv /var/NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-xhdpi /var/NileRiver/download/cat/Catppuccin-xhdpi
 echo "  > Installing theme."
 if [ -d "$HOME/.themes/catppuccin" ]; then
     rm -rf $HOME/.themes/Catppuccin
@@ -197,36 +191,36 @@ fi
 if [ -d "$HOME/.themes/catppuccin-xhdpi" ]; then
     rm -rf $HOME/.themes/Catppuccin-xhdpi
 fi
-mv /var/mizOS/download/cat/* $HOME/.themes
+mv /var/NileRiver/download/cat/* $HOME/.themes
 echo "  > Removing theme zip file."
-rm /var/mizOS/download/catppuccin.zip
+rm /var/NileRiver/download/catppuccin.zip
 
 echo "| Installing cursor theme."
-if [ ! -d "/var/mizOS/download/cat-cursor" ]; then
-	mkdir /var/mizOS/download/cat-cursor
+if [ ! -d "/var/NileRiver/download/cat-cursor" ]; then
+	mkdir /var/NileRiver/download/cat-cursor
 fi
 echo "  > Downloading theme."
-wget https://github.com/catppuccin/cursors/raw/main/cursors/Catppuccin-Mocha-Lavender-Cursors.zip -O /var/mizOS/download/cursor.zip
+wget https://github.com/catppuccin/cursors/raw/main/cursors/Catppuccin-Mocha-Lavender-Cursors.zip -O /var/NileRiver/download/cursor.zip
 echo "  > Extracting theme."
-unzip /var/mizOS/download/cursor.zip -d /var/mizOS/download/cat-cursor
+unzip /var/NileRiver/download/cursor.zip -d /var/NileRiver/download/cat-cursor
 echo "  > Renaming theme file."
-mv /var/mizOS/download/cat-cursor/Catppuccin-Mocha-Lavender-Cursors /var/mizOS/download/cat-cursor/catppuccin-cursor
+mv /var/NileRiver/download/cat-cursor/Catppuccin-Mocha-Lavender-Cursors /var/NileRiver/download/cat-cursor/catppuccin-cursor
 echo "  > Installing cursor theme."
 if [ -d "$HOME/.icons/cat-cursor" ]; then
 	rm -rf $HOME/.icons/cat-cursor
 fi
-sudo -S mv /var/mizOS/download/cat-cursor/catppuccin-cursor $HOME/.icons
+sudo -S mv /var/NileRiver/download/cat-cursor/catppuccin-cursor $HOME/.icons
 
 echo "| Configuring Papirus icon pack."
 echo "  > Downloading configurations."
-git clone https://github.com/catppuccin/papirus-folders /var/mizOS/download/cat-papi
+git clone https://github.com/catppuccin/papirus-folders /var/NileRiver/download/cat-papi
 echo "  > Copying new icon files."
-sudo -S cp -r /var/mizOS/download/cat-papi/src/* /usr/share/icons/Papirus
+sudo -S cp -r /var/NileRiver/download/cat-papi/src/* /usr/share/icons/Papirus
 echo "  > Overwriting old icon files."
-sudo -S /var/mizOS/download/cat-papi/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
+sudo -S /var/NileRiver/download/cat-papi/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
 
 echo "| Writing GTK settings."
-/var/mizOS/config/$USER/gtk/genconf
+/var/NileRiver/config/$USER/gtk/genconf
 fi
 
 echo "| Creating config file symlinks."
@@ -236,19 +230,19 @@ if [ -d "$HOME/.config/i3" ]; then
 else
 	mkdir $HOME/.config/i3
 fi
-ln -s /var/mizOS/config/$USER/i3/config $HOME/.config/i3/config
+ln -s /var/NileRiver/config/$USER/i3/config $HOME/.config/i3/config
 
 echo "  > Creating gtk symlink."
 if [ -f "$HOME/.config/gtk-3.0/settings.ini" ]; then
 	rm $HOME/.config/gtk-3.0/settings.ini
 fi
-ln -s /var/mizOS/config/$USER/gtk/settings.ini $HOME/.config/gtk-3.0/settings.ini
+ln -s /var/NileRiver/config/$USER/gtk/settings.ini $HOME/.config/gtk-3.0/settings.ini
 
 echo "  > Creating picom symlink."
 if [ -f "$HOME/.config/picom.conf" ]; then
 	rm $HOME/.config/picom.conf
 fi
-ln -s /var/mizOS/config/$USER/picom/picom.conf $HOME/.config/picom.conf
+ln -s /var/NileRiver/config/$USER/picom/picom.conf $HOME/.config/picom.conf
 
 echo "  > Creating alacritty symlink."
 if [ -d "$HOME/.config/alacritty" ]; then
@@ -256,7 +250,7 @@ if [ -d "$HOME/.config/alacritty" ]; then
 else
 	mkdir $HOME/.config/alacritty
 fi
-ln -s /var/mizOS/config/$USER/alacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+ln -s /var/NileRiver/config/$USER/alacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
 
 echo "  > Creating fish symlink."
 if [ -d "$HOME/.config/fish" ]; then
@@ -264,7 +258,7 @@ if [ -d "$HOME/.config/fish" ]; then
 else
 	mkdir $HOME/.config/fish
 fi
-ln -s /var/mizOS/config/$USER/fish/config.fish $HOME/.config/fish/config.fish
+ln -s /var/NileRiver/config/$USER/fish/config.fish $HOME/.config/fish/config.fish
 
 
 
@@ -272,40 +266,40 @@ echo -e "\nInstalling core system."
 echo "| Detecting init system."
 if test -f "/usr/bin/sv"; then
         echo "  > Runit detected."
-        cp assets/os/init/runit/init.lua /var/mizOS/init
+        cp assets/premade_folders/init/runit/init.lua /var/NileRiver/init
 elif test -f "/usr/bin/systemctl"; then
         echo "  > SystemD detected."
-        cp assets/os/init/systemd/init.lua /var/mizOS/init
+        cp assets/premade_folders/init/systemd/init.lua /var/NileRiver/init
 elif test -f "/usr/bin/rc-service"; then
         echo "  > OpenRC detected."
-        cp assets/os/init/openrc/init.lua /var/mizOS/init
+        cp assets/premade_folders/init/openrc/init.lua /var/NileRiver/init
 fi
-echo "| Installing core mizOS system software."
-echo "  > Installing the mizOS.lua backend."
-if [ -f "/var/mizOS/core/mizOS.lua" ]; then
-	rm /var/mizOS/core/mizOS.lua
+echo "| Installing core NILE system software."
+echo "  > Installing the NileRiver.lua backend."
+if [ -f "/var/NileRiver/core/NileRiver.lua" ]; then
+	rm /var/NileRiver/core/NileRiver.lua
 fi
-cp assets/os/core/mizOS.lua /var/mizOS/core
-echo "  > Installing mizOS system libraries."
-if [ -d "/var/mizOS/core/libraries" ]; then
-	sudo -S rm -rf /var/mizOS/core/libraries
+cp assets/premade_folders/core/NileRiver.lua /var/NileRiver/core
+echo "  > Installing NILE system libraries."
+if [ -d "/var/NileRiver/core/libraries" ]; then
+	sudo -S rm -rf /var/NileRiver/core/libraries
 fi
-cp -r assets/os/core/libraries /var/mizOS/core
+cp -r assets/premade_folders/core/libraries /var/NileRiver/core
 
-echo "  > Installing the miz frontend."
-if [ -f "/usr/bin/miz" ]; then
-	sudo -S rm /usr/bin/miz
+echo "  > Installing the river frontend."
+if [ -f "/usr/bin/river" ]; then
+	sudo -S rm /usr/bin/river
 fi
-chmod +x assets/os/miz
-sudo -S cp assets/os/miz /usr/bin
+chmod +x assets/premade_folders/river
+sudo -S cp assets/premade_folders/river /usr/bin
 
 
 
 echo -e "\nFinishing up."
 echo "| Installing system identification files."
-echo "  > Replacing /etc/os-release"
-sudo -S rm /etc/os-release
-sudo -S cp assets/details/os-release /etc
+echo "  > Replacing /etc/premade_folders-release"
+sudo -S rm /etc/premade_folders-release
+sudo -S cp assets/details/premade_folders-release /etc
 
 echo "  > Replacing /etc/lsb-release"
 sudo -S rm /etc/lsb-release
@@ -318,51 +312,51 @@ sudo -S cp assets/details/neofetch /usr/bin
 
 if [[ $1 == "dev" ]]; then
 	echo -e "\nDev mode active."
-	sudo -S cp assets/dev/miz /usr/bin/
-	sudo -S rm -rf /var/mizOS/core
-	cp -r assets/dev/core /var/mizOS
+	sudo -S cp assets/dev/river /usr/bin/
+	sudo -S rm -rf /var/NileRiver/core
+	cp -r assets/dev/core /var/NileRiver
 fi
 
 echo "| Checking source folder."
-if [ -d "/var/mizOS/src/mizOS" ]; then
+if [ -d "/var/NileRiver/src/NILE" ]; then
 	echo "  > Cleaning source folder."
-	rm -rf /var/mizOS/src/mizOS
+	rm -rf /var/NileRiver/src/NILE
 else
-	echo "  > Source folder not found, enjoy your mizOS installation :)"
+	echo "  > Source folder not found, enjoy your NILE installation :)"
 fi
 
-echo "| Setting mizOS filesystem base ownership."
-echo "  > /var/mizOS     -  root:root"
-sudo -S chown -R root:root /var/mizOS
+echo "| Setting NILE filesystem base ownership."
+echo "  > /var/NileRiver     -  root:root"
+sudo -S chown -R root:root /var/NileRiver
 
-echo "| Setting mizOS filesystem permissions."
-echo "  > /var/mizOS           -  755"
-sudo -S chmod -R 755 /var/mizOS
-echo "  > /var/mizOS/core      -  755"
-sudo -S chmod -R 755 /var/mizOS/core
-echo "  > /var/mizOS/init      -  755"
-sudo -S chmod -R 755 /var/mizOS/init
-echo "  > /var/mizOS/repo      -  755"
-sudo -S chmod -R 755 /var/mizOS/repo
-echo "  > /var/mizOS/packages  -  755"
-sudo -S chmod -R 755 /var/mizOS/packages
-echo "  > /var/mizOS/security  -  755"
-sudo -S chmod -R 755 /var/mizOS/security
-echo "  > /var/mizOS/work      -  755"
-sudo -S chmod -R 755 /var/mizOS/work
-echo "  > /var/mizOS/src       -  755"
-sudo -S chmod -R 755 /var/mizOS/src
-echo "  > /var/mizOS/config    -  755"
-sudo -S chmod -R 755 /var/mizOS/config
-for d in /var/mizOS/config/*/; do
+echo "| Setting NILE filesystem permissions."
+echo "  > /var/NileRiver           -  755"
+sudo -S chmod -R 755 /var/NileRiver
+echo "  > /var/NileRiver/core      -  755"
+sudo -S chmod -R 755 /var/NileRiver/core
+echo "  > /var/NileRiver/init      -  755"
+sudo -S chmod -R 755 /var/NileRiver/init
+echo "  > /var/NileRiver/repo      -  755"
+sudo -S chmod -R 755 /var/NileRiver/repo
+echo "  > /var/NileRiver/packages  -  755"
+sudo -S chmod -R 755 /var/NileRiver/packages
+echo "  > /var/NileRiver/security  -  755"
+sudo -S chmod -R 755 /var/NileRiver/security
+echo "  > /var/NileRiver/work      -  755"
+sudo -S chmod -R 755 /var/NileRiver/work
+echo "  > /var/NileRiver/src       -  755"
+sudo -S chmod -R 755 /var/NileRiver/src
+echo "  > /var/NileRiver/config    -  755"
+sudo -S chmod -R 755 /var/NileRiver/config
+for d in /var/NileRiver/config/*/; do
 	dn=$(basename $d)
 	echo "  > $d   - 755 (Ownership: $dn:$dn)"
 	sudo -S chown -R $dn:$dn $d
 	sudo -S chmod -R 755 $d
 done
-echo "  > /var/mizOS/download  -  777"
-sudo -S chmod -R 777 /var/mizOS/download
-for d in /var/mizOS/backup/*/; do
+echo "  > /var/NileRiver/download  -  777"
+sudo -S chmod -R 777 /var/NileRiver/download
+for d in /var/NileRiver/backup/*/; do
 	dn=$(basename $d)
 	echo "  > $d   - 755 (Ownership: $dn:$dn)"
 	sudo -S chown -R $dn:$dn $d
@@ -371,7 +365,7 @@ done
 
 if [ "$asusans" = "y" ]; then
 	echo -e "\n\n"
-	miz fetch -m the-duat/mizos-asusctl
+	river fetch -m the-duat/NILE-asusctl
 fi
 
 echo -e "\n\n"
@@ -380,7 +374,7 @@ if [ "$installType" = "install" ]; then
 	echo "  "
 	echo "If you are currently using i3-gaps, reload with MOD+shift+c."
 	echo " "
-	echo -e "mizOS theming is installed on a per-user basis. If you want mizOS theming on another user, run \"miz update\" from that user."
+	echo -e "NILE theming is installed on a per-user basis. If you want NILE theming on another user, run \"river update\" from that user."
 	echo " "
-	echo -e "Remember, \"sudo pacman -Syu\" does not update mizOS, use \"miz update\" instead."
+	echo -e "Remember, \"sudo pacman -Syu\" does not update the NILE, use \"river update\" instead."
 fi

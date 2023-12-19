@@ -4,9 +4,9 @@ Data.userName = os.getenv("USER")
 
 Data.homeDir = os.getenv("HOME")
 
-Data.initSystem = dofile("/var/mizOS/init/init.lua")
+Data.initSystem = dofile("/var/NileRiver/init/init.lua")
 
-Data.packageSecType = dofile("/var/mizOS/security/active/type.lua")
+Data.packageSecType = dofile("/var/NileRiver/security/active/type.lua")
 
 Data.integerCharacterSheet = "0123456789"
 

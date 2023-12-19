@@ -1,5 +1,5 @@
-NAME="mizOS"
-PRETTY_NAME="mizOS"
+NAME="NILE"
+PRETTY_NAME="Nile Integrated Linux Environment"
 ID=mizos
 BUILD_ID=rolling
 ANSI_COLOR="0;36"
@@ -7,5 +7,5 @@ HOME_URL="https://entertheduat.org"
 DOCUMENTATION_URL="https://github.com/Mizosu97/mizOS"
 SUPPORT_URL="https://github.com/Mizosu97/mizOS"
 BUG_REPORT_URL="https://github.com/Mizosu97/mizOS"
-LOGO=mizos
+LOGO=nile
 VERSION_ID=20220713

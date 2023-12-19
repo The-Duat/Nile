@@ -27,7 +27,7 @@ System.info = function(operator)
 			say2(string.format("%-18s %s", desktop[1], manager))
 		end
 
-	-- List installed mizOS packages.
+	-- List installed OPMS packages.
 	elseif operator == "pkgs" then
 		listInstalled()
 
@@ -38,9 +38,9 @@ System.info = function(operator)
 	-- Display current i3 settings.
 	elseif operator == "i3settings" then
 		say("Current i3 settings:")
-		for _,settingName in pairs(splitString(readCommand("ls /var/mizOS/config/" .. userName .. "/i3/settings"))) do
+		for _,settingName in pairs(splitString(readCommand("ls /var/NileRiver/config/" .. userName .. "/i3/settings"))) do
 			settingName = trimWhite(settingName)
-			local settingFile = io.open("/var/mizOS/config/" .. userName .. "/i3/settings/" .. settingName, "r")
+			local settingFile = io.open("/var/NileRiver/config/" .. userName .. "/i3/settings/" .. settingName, "r")
 			local settingValue = settingFile:read("*all")
 			say2(string.format("%-18s %s", settingName, settingValue))
 			settingFile:close()
@@ -49,9 +49,9 @@ System.info = function(operator)
 	-- Display current GTK settings.
 	elseif operator == "gtksettings" then
 		say("Current GTK settings:")
-		for _,settingName in pairs(splitString(readCommand("ls /var/mizOS/config/" .. userName .. "/gtk/settings"))) do
+		for _,settingName in pairs(splitString(readCommand("ls /var/NileRiver/config/" .. userName .. "/gtk/settings"))) do
 			settingName = trimWhite(settingName)
-			local settingFile = io.open("/var/mizOS/config/" .. userName .. "/gtk/settings/" .. settingName, "r")
+			local settingFile = io.open("/var/NileRiver/config/" .. userName .. "/gtk/settings/" .. settingName, "r")
 			local settingValue = settingFile:read("*all")
 			say2(string.format("%-18s %s", settingName, settingValue))
 			settingFile:close()
@@ -72,11 +72,11 @@ System.config = function(operator, value)
 			fault("Incorrect filetype: " .. fileType)
 			exit()
 		end
-		x("rm -rf /var/mizOS/config/" .. userName .. "/wallpaper/*")
-		x(string.format("cp %s /var/mizOS/config/%s/wallpaper/", value, userName))
-		x(string.format("mv /var/mizOS/config/%s/wallpaper/%s /var/mizOS/config/%s/wallpaper/wallpaper.%s", userName, wallpaperName, userName, fileType))
+		x("rm -rf /var/NileRiver/config/" .. userName .. "/wallpaper/*")
+		x(string.format("cp %s /var/NileRiver/config/%s/wallpaper/", value, userName))
+		x(string.format("mv /var/NileRiver/config/%s/wallpaper/%s /var/NileRiver/config/%s/wallpaper/wallpaper.%s", userName, wallpaperName, userName, fileType))
 		x("pkill -fi feh")
-		x("feh --bg-fill --zoom fill /var/mizOS/config/wallpaper/wallpaper.*")
+		x("feh --bg-fill --zoom fill /var/NileRiver/config/wallpaper/wallpaper.*")
 		say("Wallpaper changed to " .. value)
 
 	-- Change the package security level.
@@ -84,9 +84,9 @@ System.config = function(operator, value)
 		if value == "strict"
 		or value == "moderate"
 		or value == "none" then
-			local currentLevel = dofile("/var/mizOS/security/active/type.lua")
-			xs("rm /var/mizOS/security/active/*")
-			xs("cp /var/mizOS/security/storage/" .. value .. "/type.lua /var/mizOS/security/active")
+			local currentLevel = dofile("/var/NileRiver/security/active/type.lua")
+			xs("rm /var/NileRiver/security/active/*")
+			xs("cp /var/NileRiver/security/storage/" .. value .. "/type.lua /var/NileRiver/security/active")
 			say("Package security level changed from " .. currentLevel .. " to " .. value .. ".")
 		else
 			fault("Invalid security type: " .. value)
@@ -155,7 +155,7 @@ System.csafety = function(operator, value)
 
 	-- Backup given program.
 	if operator == "backup" then
-		local to = "/var/mizOS/backup/"
+		local to = "/var/NileRiver/backup/"
 		if value then to = to .. userName end
 		say("Backup settings for " .. program .. "? (y/n)")
 		say("Old backups will be lost.")
@@ -163,17 +163,17 @@ System.csafety = function(operator, value)
 			fault("Backup aborted.")
 			exit()
 		end
-		if checkC("/var/mizOS/backup/" .. userName) == false then
-			x("mkdir /var/mizOS/backup/" .. userName)
+		if checkC("/var/NileRiver/backup/" .. userName) == false then
+			x("mkdir /var/NileRiver/backup/" .. userName)
 		end
-		if checkC("/var/mizOS/backup/" .. program) == true then
-			x("rm -rf /var/mizOS/backup/" .. program)
+		if checkC("/var/NileRiver/backup/" .. program) == true then
+			x("rm -rf /var/NileRiver/backup/" .. program)
 		end
-		x("cp -r /var/mizOS/config/" .. program .. " " .. to)
+		x("cp -r /var/NileRiver/config/" .. program .. " " .. to)
 
 	-- Restore given program.
 	elseif operator == "restore" then
-		local to = "/var/mizOS/config/"
+		local to = "/var/NileRiver/config/"
 		if value then to = to .. userName end
 		say("Restore settings for " .. program .. "? (y/n)")
 		say("Current settings will be lost.")
@@ -181,17 +181,17 @@ System.csafety = function(operator, value)
 			fault("Restoration aborted.")
 			exit()
 		end
-		if checkC("/var/mizOS/backup/" .. program) == false then
+		if checkC("/var/NileRiver/backup/" .. program) == false then
 			fault("Backup for " .. program .. " doesn't exist.")
 			exit()
 		end
-		x("rm -rf /var/mizOS/config/" .. program)
-		x("cp -r /var/mizOS/backup/" .. program .. " " .. to)
+		x("rm -rf /var/NileRiver/config/" .. program)
+		x("cp -r /var/NileRiver/backup/" .. program .. " " .. to)
 	end
 end
 
 
---[=[ mizOS service management ]=]--
+--[=[ Init System service management ]=]--
 System.service = function(operator, value)
 	local commandSheet
 	if initSystem == "systemd" then
@@ -222,7 +222,7 @@ System.service = function(operator, value)
 end
 
 
---[=[ mizOS graphics management ]=]--
+--[=[ Graphics management ]=]--
 System.graphics = function(operator, value)
 
 	-- If present, construct the command to be ran.
@@ -294,8 +294,8 @@ System.network = function(operator, value)
 			wifiManager("scan", nil, nil)
 		else
 			say("Scanning IP Address " .. value)
-			x("wget https://freegeoip.app/json/" .. value .. " -O /var/mizOS/download/ipinfo --no-verbose")
-			local IPData = jsonParse(readCommand("cat /var/mizOS/download/ipinfo"))
+			x("wget https://freegeoip.app/json/" .. value .. " -O /var/NileRiver/download/ipinfo --no-verbose")
+			local IPData = jsonParse(readCommand("cat /var/NileRiver/download/ipinfo"))
 			say("General IP information:")
 			for data,val in pairs(IPData) do
 				data2 = tostring(data)
@@ -308,7 +308,7 @@ System.network = function(operator, value)
 					say2(data2 .. ": " .. val2)
 				end
 			end
-			x("rm /var/mizOS/download/ipinfo")
+			x("rm /var/NileRiver/download/ipinfo")
 		end
 	elseif operator == "connect" then
 		say("Please enter the password for " .. value .. ".")
@@ -321,17 +321,17 @@ end
 --[=[ System software management. ]=]--
 System.software = function(operator, channel, packageList)
 
-	-- If channel is mizOS, convert packagelist table to string.
+	-- If channel is opms, convert packagelist table to string.
 	local packageString
 	if packageList then
-		if channel == "mizos" or channel == "desktop" then
+		if channel == "opms" or channel == "desktop" then
 			packageString = packageList[1]
 		end
 	end
 
 	-- Install a package.
 	if operator == "fetch" then
-		if channel == "mizos" then
+		if channel == "opms" then
 			say("Current security level: " .. packageSecType)
 			say("Checking required security level for " .. packageString .. ".")
 			local requiredSecLevel = checkPkgSecLevel(packageString)
@@ -389,7 +389,7 @@ System.software = function(operator, channel, packageList)
 end
 
 
---[=[ mizOS system updates ]=]--
+--[=[ System updates ]=]--
 System.update = function(updateType, dev)
 	if updateType == "system" then
 		local devString = ""
@@ -397,21 +397,21 @@ System.update = function(updateType, dev)
 			devString = "sudo git checkout development &&"
 			say("Developer mode enabled.")
 		end
-		say("Update mizOS? (y/n)")
+		say("Update the NILE? (y/n)")
 		if string.lower(read()) ~= "y" then
-			fault("mizOS System Update aborted.")
+			fault("NILE System Update aborted.")
 			exit()
 		end
-		x("cd /var/mizOS/src && sudo git clone https://github.com/The-Duat/mizOS && cd /var/mizOS/src/mizOS && " .. devString .. " ./install && sudo rm -rf /var/mizOS/src/*")
+		x("cd /var/NileRiver/src && sudo git clone https://github.com/The-Duat/mizOS && cd /var/NileRiver/src/NILE && " .. devString .. " ./install && sudo rm -rf /var/NileRiver/src/*")
 	elseif updateType == "packages" then
 		listInstalled()
-		say("Update installed mizOS packages? (y/n)")
+		say("Update installed Osiris packages? (y/n)")
 		if string.lower(read()) ~= "y" then
-			fault("mizOS package update aborted.")
+			fault("Osiris package update aborted.")
 			fault("It is considered dangerous to update the system and not the packages, or vice versa.")
 			exit()
 		end
-		local packages = splitString(readCommand("ls /var/mizOS/packages"))
+		local packages = splitString(readCommand("ls /var/NileRiver/packages"))
 		for _,package in pairs(packages) do
 			local splitName = splitString(package, "_")
 			if splitName[1] and splitName[2] then
