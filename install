@@ -7,7 +7,7 @@ $devcurn=$(pwd)
 echo "Updating your current install to the latest packages."
 sudo -S pacman -Syu
 
-echo "Installing dependencies."
+echo "Installing needed NILE dependencies."
 sudo -S pacman -S wget alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-wm i3status lua luarocks maim neofetch neovim noto-fonts papirus-icon-theme picom thunar unzip xclip
 
 installType=""
@@ -165,9 +165,7 @@ cp -r assets/system_config/config/* /var/NileRiver/config/$USER
 echo "| Generating i3 config file."
 /var/NileRiver/config/$USER/i3/genconf
 
-printf "\n\nWould you like to install GTK and icon themes? It may take a while. (y/n)\n\n> "
-read ans
-if [ $ans == "y" ]; then
+echo -e "\n\nInstalling theming."
 echo "| Installing GTK theme."
 echo "  > Preparing theme folder."
 if [ ! -d "/var/NileRiver/download/cat" ]; then
@@ -221,7 +219,6 @@ sudo -S /var/NileRiver/download/cat-papi/papirus-folders -C cat-mocha-pink --the
 
 echo "| Writing GTK settings."
 /var/NileRiver/config/$USER/gtk/genconf
-fi
 
 echo "| Creating config file symlinks."
 echo "  > Creating i3 symlink."
@@ -299,15 +296,15 @@ echo -e "\nFinishing up."
 echo "| Installing system identification files."
 echo "  > Replacing /etc/premade_folders-release"
 sudo -S rm /etc/premade_folders-release
-sudo -S cp assets/details/premade_folders-release /etc
+sudo -S cp assets/system_info/premade_folders-release /etc
 
 echo "  > Replacing /etc/lsb-release"
 sudo -S rm /etc/lsb-release
-sudo -S cp assets/details/lsb-release /etc
+sudo -S cp assets/system_info/lsb-release /etc
 
 echo "  > Replacing /usr/bin/neofetch"
 sudo -S rm /usr/bin/neofetch
-sudo -S cp assets/details/neofetch /usr/bin
+sudo -S cp assets/system_info/neofetch /usr/bin
 
 
 if [[ $1 == "dev" ]]; then
