@@ -294,9 +294,9 @@ sudo -S cp assets/premade_folders/river /usr/bin
 
 echo -e "\nFinishing up."
 echo "| Installing system identification files."
-echo "  > Replacing /etc/premade_folders-release"
-sudo -S rm /etc/premade_folders-release
-sudo -S cp assets/system_info/premade_folders-release /etc
+echo "  > Replacing /etc/os-release"
+sudo -S rm /etc/os-release
+sudo -S cp assets/system_info/os-release /etc
 
 echo "  > Replacing /etc/lsb-release"
 sudo -S rm /etc/lsb-release
