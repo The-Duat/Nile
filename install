@@ -318,9 +318,9 @@ if [[ $1 == "dev" ]]; then
 fi
 
 echo "| Checking source folder."
-if [ -d "/var/NileRiver/src/NILE" ]; then
+if [ -d "/var/NileRiver/src/Nile" ]; then
 	echo "  > Cleaning source folder."
-	rm -rf /var/NileRiver/src/NILE
+	rm -rf /var/NileRiver/src/Nile
 else
 	echo "  > Source folder not found, enjoy your NILE installation :)"
 fi

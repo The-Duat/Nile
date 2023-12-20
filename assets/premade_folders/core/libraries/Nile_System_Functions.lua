@@ -402,7 +402,7 @@ System.update = function(updateType, dev)
 			fault("NILE System Update aborted.")
 			exit()
 		end
-		x("cd /var/NileRiver/src && sudo git clone https://github.com/The-Duat/mizOS && cd /var/NileRiver/src/NILE && " .. devString .. " ./install && sudo rm -rf /var/NileRiver/src/*")
+		x("cd /var/NileRiver/src && sudo git clone https://github.com/The-Duat/Nile && cd /var/NileRiver/src/Nile && " .. devString .. " ./install && sudo rm -rf /var/NileRiver/src/*")
 	elseif updateType == "packages" then
 		listInstalled()
 		say("Update installed Osiris packages? (y/n)")
