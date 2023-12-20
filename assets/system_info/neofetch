@@ -982,7 +982,8 @@ get_distro() {
                     on|tiny) distro="Red Star OS" ;;
                     *) distro="Red Star OS $(awk -F'[^0-9*]' '$0=$2' /etc/redstar-release)"
                 esac
-
+            elif [[ -d /var/NileRiver ]]; then
+                distro="Nile"
             elif [[ -f /etc/armbian-release ]]; then
                 . /etc/armbian-release
                 distro="Armbian $DISTRIBUTION_CODENAME (${VERSION:-})"
@@ -5552,7 +5553,7 @@ h//NNNNh  ossss` +h  md- .hm/ `sNNNNN:+y
 EOF
         ;;
 
-	"mizOS"*)
+	"Nile"*)
 		set_colors 4 5
 		read -rd '' ascii_data <<'EOF'
 ${c1}     ,nnxnnxxxnxnxnnx..
