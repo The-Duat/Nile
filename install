@@ -294,32 +294,11 @@ sudo -S cp assets/premade_folders/river /usr/bin
 
 echo -e "\nFinishing up."
 echo "| Installing system identification files."
-echo "  > Replacing /etc/os-release"
-modify_os_release() {
-    os_release_file="/etc/os-release"
+echo "  > Modifying /etc/os-release"
+sudo -S mv assets/system_info/nile-os-release /etc
+sudo -S lua assets/system_info/rewrite_os-release.lua
 
-    if [ ! -f "$os_release_file" ]; then
-        echo "Error: os-release file not found!"
-        return 1
-    fi
-
-    name_string=$(grep "^NAME=" "$os_release_file")
-
-    first_four_chars=$(echo "$name_string" | cut -c 7-10)
-
-    if [ "$first_four_chars" == "Nile" ]; then
-        echo "The first 4 characters of NAME are already 'Nile'. Exiting..."
-        return 0
-    fi
-
-    original_name=$(echo "$name_string" | cut -d '"' -f 2)
-    original_pretty_name=$(grep "^PRETTY_NAME=" "$os_release_file" | cut -d '"' -f 2)
-
-    sudo -S sed -i "s|^NAME=.*$|NAME=\"Nile-$original_name\"|" "$os_release_file"
-    sudo -S sed -i "s|^PRETTY_NAME=.*$|PRETTY_NAME=\"Nile-$original_pretty_name\"|" "$os_release_file"
-    sudo -S sed -i 's|^LOGO=.*$|LOGO="nile-logo"|' "$os_release_file"
-}
-echo "  > Replacing /usr/bin/neofetch"
+echo "  > Overwriting /usr/bin/neofetch"
 sudo -S rm /usr/bin/neofetch
 sudo -S cp assets/system_info/neofetch /usr/bin
 

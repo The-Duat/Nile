@@ -1,14 +1,15 @@
-local file = io.open("/etc/os-release", "r")
+local original = io.open("/etc/os-release", "r")
 local copy = io.open("/etc/nile-os-release", "w")
 
 local splitString = dofile("/var/NileRiver/core/libraries/Nile_Utility_Functions.lua").splitString
 
-if file == nil then
+if original == nil then
 	print("/etc/os-release not found. Changes not made.")
 	os.exit()
 end
 
-local releaseContents = file:read("*all")
+local releaseContents = original:read("*all")
+original:close()
 local newContents = ""
 
 local function addEntry(str)
@@ -36,3 +37,8 @@ for _,line in ipairs(reLines) do
 		addEntry(key .. "=" .. value .. "\n")
 	end
 end
+
+copy:write(newContents)
+copy:close()
+os.execute("sudo rm /etc/os-release && sudo mv /etc/nile-os-release /etc/os-release")
+
