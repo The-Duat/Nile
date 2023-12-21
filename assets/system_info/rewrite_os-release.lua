@@ -32,9 +32,9 @@ for _,line in ipairs(reLines) do
 		local append = string.sub(value, 2, #value)
 		addEntry(key .. "=" .. "\"Nile - " .. append)
 	elseif key == "LOGO" then
-		addEntry(key .. "=nile-logo\n")
+		addEntry(key .. "=nile-logo")
 	else
-		addEntry(key .. "=" .. value .. "\n")
+		addEntry(key .. "=" .. value)
 	end
 end
 
