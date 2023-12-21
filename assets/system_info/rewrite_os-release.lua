@@ -17,7 +17,7 @@ local function addEntry(str)
 end
 
 
-local relLines = splitString(releaseContents, "\n")
+local reLines = splitString(releaseContents, "\n")
 
 if string.sub(reLines[1], 7, 10) == "NILE" then
 	print("Already overwritten.")
