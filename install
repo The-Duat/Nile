@@ -294,9 +294,26 @@ sudo -S cp assets/premade_folders/river /usr/bin
 
 echo -e "\nFinishing up."
 echo "| Installing system identification files."
+
 echo "  > Modifying /etc/os-release"
-sudo -S mv assets/system_info/nile-os-release /etc
-sudo -S lua assets/system_info/rewrite_os-release.lua
+
+
+if [ -f "/etc/os-release" ]; then
+	dir="/etc/"
+elif [ -f "/usr/lib/os-release" ]; then
+	dir="/usr/lib/"
+elif [ -f "/usr/libexec/os-release" ]; then
+	dir="/usr/libexec/"
+else
+	dir="unknown"
+fi
+if [ "$dir" != "unknown" ]; then
+	sudo -S mv assets/system_info/nile-os-release $dir
+	sudo -S lua assets/system_info/rewrite_os-release.lua $dir
+	ln -s "${dir}os-release" "/var/NileRiver/os-release"
+else
+	echo "> os-release file not found."
+fi 
 
 echo "  > Overwriting /usr/bin/neofetch"
 sudo -S rm /usr/bin/neofetch

@@ -1,10 +1,12 @@
-local original = io.open("/etc/os-release", "r")
-local copy = io.open("/etc/nile-os-release", "w")
+local dir = arg[1]
+
+local original = io.open(dir .. "os-release", "r")
+local copy = io.open(dir .. "nile-os-release", "w")
 
 local splitString = dofile("/var/NileRiver/core/libraries/Nile_Utility_Functions.lua").splitString
 
 if original == nil then
-	print("/etc/os-release not found. Changes not made.")
+	print(dir .. "os-release not found. Changes not made.")
 	os.exit()
 end
 
@@ -40,5 +42,5 @@ end
 
 copy:write(newContents)
 copy:close()
-os.execute("sudo rm /etc/os-release && sudo mv /etc/nile-os-release /etc/os-release")
+os.execute("sudo rm " .. dir .. "os-release && sudo mv " .. dir .. "nile-os-release " .. dir .. "os-release")
 
