@@ -77,22 +77,17 @@ local function sendNetwork()
 end
 
 local function sendSoftware()
-	if arg[2] == "cc" then
-		NileRiver.System.software("clear cache")
-		os.exit()
-	end
+	local hasRequestedToUseAUR = false
 	local packageList = {}
-	while argCount > 2 do
-		table.insert(packageList, arg[argCount])
+	while argCount > 1 do
+		if arg[argCount] ~= "-aur" then
+			table.insert(packageList, arg[argCount])
+		else
+			hasRequestedToUseAUR = true
+		end
 		argCount = argCount - 1
 	end
-	local channelTranslation = {
-		["-m"] = "opms",
-		["-p"] = "pacman",
-		["-a"] = "aur",
-		["-d"] = "desktop"
-	}
-	NileRiver.System.software(arg[1], channelTranslation[arg[2]], packageList)
+	NileRiver.System.software(arg[1], packageList, hasRequestedToUseAUR)
 end
 
 local function sendUpdate()
@@ -116,7 +111,6 @@ local firstArgSheet = {
 	["net"]     = sendNetwork,
 	["fetch"]   = sendSoftware,
 	["remove"]  = sendSoftware,
-	["cc"]      = sendSoftware,
 	["update"]  = sendUpdate
 }
 

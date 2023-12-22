@@ -53,38 +53,36 @@ Functions.readCommand = function(cmd)
 	return out
 end
 
--- Install pacman/AUR packages.
-Functions.iPkg = function(packages, manager, noask)
-	local noconfirm = ""
-	if noask == true then
-		noconfirm = "--noconfirm"
-	end
+-- Install packages from the native package manager.
+Functions.iPkg = function(packages, aurmode)
 	local baseCommand
-	if manager == "pacman" then
-		baseCommand = "sudo pacman"
-	elseif manager == "aur" then
-		baseCommand = "yay"
+	if nativePkgManager == "pacman" then
+		baseCommand = "sudo pacman -S"
+		if aurmode == true then
+			baseCommand = "yay -S"
+		end
 	end
 	local packageString = ""
 	for _,package in pairs(packages) do
 		packageString = packageString .. package .. " "
 	end
-	os.execute(baseCommand .. " -S " .. noconfirm .. " " .. packageString)
+	os.execute(baseCommand .. " " .. packageString)
 end
 
 -- Remove pacman/AUR package
-Functions.rPkg = function(packages, manager)
+Functions.rPkg = function(packages, aurmode)
 	local baseCommand
-	if manager == "pacman" then
-		baseCommand = "sudo pacman"
-	elseif manager == "aur" then
-		baseCommand = "yay"
+	if nativePkgManager == "pacman" then
+		baseCommand = "sudo pacman -Rn"
+		if aurmode == true then
+			baseCommand = "yay -Rn"
+		end
 	end
 	local packageString = ""
 	for _,package in pairs(packages) do
 		packageString = packageString .. package .. " "
 	end
-	os.execute(baseCommand .. " -Rn " .. packageString)
+	os.execute(baseCommand .. " " .. packageString)
 end
 
 -- The Sudo function. Temporarily run Lua code as root.

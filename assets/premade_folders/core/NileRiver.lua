@@ -18,6 +18,7 @@ local GlobalData = dofile("/var/NileRiver/core/libraries/Nile_Global_Data.lua")
 userName                 = GlobalData.userName
 homeDir                  = GlobalData.homeDir
 initSystem               = GlobalData.initSystem
+nativePkgManager     = GlobalData.nativePkgManager
 packageSecType           = GlobalData.packageSecType
 configurablePrograms     = GlobalData.configurablePrograms
 i3ConfigSheet            = GlobalData.i3ConfigSheet

@@ -319,19 +319,23 @@ end
 
 
 --[=[ System software management. ]=]--
-System.software = function(operator, channel, packageList)
+System.software = function(operator, packageList, aurmode)
 
 	-- If channel is opms, convert packagelist table to string.
 	local packageString
+	local packageType
 	if packageList then
-		if channel == "opms" or channel == "desktop" then
+		if #splitString(packageList[1], "/") == 2 then -- Check if the package is using the OPMS format (repoName/softwareName)
+			packageType = "osiris"
 			packageString = packageList[1]
+		else
+			packageType = "native"
 		end
 	end
 
 	-- Install a package.
 	if operator == "fetch" then
-		if channel == "opms" then
+		if packageType == "osiris" then
 			say("Current security level: " .. packageSecType)
 			say("Checking required security level for " .. packageString .. ".")
 			local requiredSecLevel = checkPkgSecLevel(packageString)
@@ -358,30 +362,16 @@ System.software = function(operator, channel, packageList)
 				fault("Unable to install " .. packageString .. " with the \"" .. packageSecType .. "\" security type.")
 				exit()	
 			end
-		elseif channel == "pacman" or channel == "aur" then
-			iPkg(packageList, channel)
-		elseif channel == "dekstop" then
-			iDesktop(packageString)
+		elseif packageType == "native" then
+			iPkg(packageList, aurmode)
 		end
 	
 	-- Remove a package.
 	elseif operator == "remove" then
-		if channel == "mizos" then
+		if packageType == "osiris" then
 			removeMPackage(packageString)
-		elseif channel == "pacman" or channel == "aur" then
-			rPkg(packageList, channel)
-		elseif channel == "desktop" then
-			rDesktop(packageString)
-		end
-
-	-- Clear package cache, and journal logs if SystemD is present.
-	elseif operator == "clear cache" then
-		say("Clearing package cache.")
-		x("yay -Scc")
-		if initSystem == "systemd" then
-			xs("journalctl --vacuum-time=21days")
-		else
-			fault("SystemD not found, unable to clear journal logs.")
+		elseif packageType == "pacman" then
+			rPkg(packageList, aurmode)
 		end
 	else
 		fault("Invalid software operator: " .. operator)

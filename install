@@ -4,14 +4,39 @@
 
 
 $devcurn=$(pwd)
-echo "Updating your current install to the latest packages."
-sudo -S pacman -Syu
 
-echo "Installing needed NILE dependencies."
-sudo -S pacman -S wget alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-wm i3status lua luarocks maim neofetch neovim noto-fonts papirus-icon-theme picom thunar unzip xclip
+
+if [ -f "/usr/bin/sv"]; then
+	init="runit"
+elif [ -f "/usr/bin/systemctl"]; then
+    init="systemd"
+elif [ -f "/usr/bin/rc-service"]; then
+    init="openrc"
+else
+	echo "The Nile Integrated Linux Environment does not support this Linux distribution."
+	echo "Please refer to the NILE documentation at https://entertheduat.org for a list of system requirements."
+	exit
+fi
+
+if [ -f "/usr/bin/pacman" ]; then
+	manager="pacman"
+fi
+
+if [ "$manager" == "pacman" ]; then
+	echo "Updating your system to the latest packages."
+	sudo -S pacman -Syu
+	echo "Installing needed NILE dependencies."
+	sudo -S pacman -S wget alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-wm i3status lua luarocks maim neofetch neovim noto-fonts papirus-icon-theme picom thunar unzip xclip	
+else
+	echo "The Nile Integrated Linux Environment does not support this Linux distribution."
+	echo "Please refer to the NILE documentation at https://entertheduat.org for a list of system requirements."
+	exit
+fi
+
+
+
 
 installType=""
-
 echo "Checking install type."
 if [ -d "/var/NileRiver" ]; then
 	echo "| Performing system update."
@@ -109,6 +134,16 @@ if [ -d "/var/NileRiver/init" ]; then
 else
 	echo "  > Creating init folder."
 	mkdir /var/NileRiver/init
+fi
+
+echo "| Checking pkgmanager folder."
+if [ -d "/var/NileRiver/pkgmanager" ]; then
+	echo "  > pkgmanager folder present."
+	echo "  > Clearing old pkgmanager folder."
+	rm -rf /var/NileRiver/pkgmanager/*
+else
+	echo "  > Creating pkgmanager folder."
+	mkdir /var/NileRiver/pkgmanager
 fi
 
 echo "| Checking security folder."
@@ -260,16 +295,21 @@ ln -s /var/NileRiver/config/$USER/fish/config.fish $HOME/.config/fish/config.fis
 
 
 echo -e "\nInstalling core system."
-echo "| Detecting init system."
-if test -f "/usr/bin/sv"; then
+echo "| Installing init system identification files."
+if [ "$init" == "runit" ]; then
         echo "  > Runit detected."
         cp assets/premade_folders/init/runit/init.lua /var/NileRiver/init
-elif test -f "/usr/bin/systemctl"; then
+elif [ "$init" == "systemd" ]; then
         echo "  > SystemD detected."
         cp assets/premade_folders/init/systemd/init.lua /var/NileRiver/init
-elif test -f "/usr/bin/rc-service"; then
+elif [ "$init" == "openrc" ]; then
         echo "  > OpenRC detected."
         cp assets/premade_folders/init/openrc/init.lua /var/NileRiver/init
+fi
+echo "| Installing package manager identification files."
+if [ "$manager" == "pacman" ]; then
+        echo "  > pacman detected."
+        cp assets/premade_folders/pkgmanager/pacman/pm.lua /var/NileRiver/pkgmanager
 fi
 echo "| Installing core NILE system software."
 echo "  > Installing the NileRiver.lua backend."
@@ -296,8 +336,6 @@ echo -e "\nFinishing up."
 echo "| Installing system identification files."
 
 echo "  > Modifying /etc/os-release"
-
-
 if [ -f "/etc/os-release" ]; then
 	dir="/etc/"
 elif [ -f "/usr/lib/os-release" ]; then
@@ -340,23 +378,25 @@ echo "  > /var/NileRiver     -  root:root"
 sudo -S chown -R root:root /var/NileRiver
 
 echo "| Setting NILE filesystem permissions."
-echo "  > /var/NileRiver           -  755"
+echo "  > /var/NileRiver            -  755"
 sudo -S chmod -R 755 /var/NileRiver
-echo "  > /var/NileRiver/core      -  755"
+echo "  > /var/NileRiver/core       -  755"
 sudo -S chmod -R 755 /var/NileRiver/core
-echo "  > /var/NileRiver/init      -  755"
+echo "  > /var/NileRiver/init       -  755"
 sudo -S chmod -R 755 /var/NileRiver/init
-echo "  > /var/NileRiver/repo      -  755"
+echo "  > /var/NileRiver/pkgmanager -  755"
+sudo -S chmod -R 755 /var/NileRiver/pkgmanager
+echo "  > /var/NileRiver/repo       -  755"
 sudo -S chmod -R 755 /var/NileRiver/repo
-echo "  > /var/NileRiver/packages  -  755"
+echo "  > /var/NileRiver/packages   -  755"
 sudo -S chmod -R 755 /var/NileRiver/packages
-echo "  > /var/NileRiver/security  -  755"
+echo "  > /var/NileRiver/security   -  755"
 sudo -S chmod -R 755 /var/NileRiver/security
-echo "  > /var/NileRiver/work      -  755"
+echo "  > /var/NileRiver/work       -  755"
 sudo -S chmod -R 755 /var/NileRiver/work
-echo "  > /var/NileRiver/src       -  755"
+echo "  > /var/NileRiver/src        -  755"
 sudo -S chmod -R 755 /var/NileRiver/src
-echo "  > /var/NileRiver/config    -  755"
+echo "  > /var/NileRiver/config     -  755"
 sudo -S chmod -R 755 /var/NileRiver/config
 for d in /var/NileRiver/config/*/; do
 	dn=$(basename $d)
