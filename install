@@ -6,11 +6,11 @@
 $devcurn=$(pwd)
 
 
-if [ -f "/usr/bin/sv"]; then
+if [ -f "/usr/bin/sv" ]; then
 	init="runit"
-elif [ -f "/usr/bin/systemctl"]; then
+elif [ -f "/usr/bin/systemctl" ]; then
     init="systemd"
-elif [ -f "/usr/bin/rc-service"]; then
+elif [ -f "/usr/bin/rc-service" ]; then
     init="openrc"
 else
 	echo "The Nile Integrated Linux Environment does not support this Linux distribution."
