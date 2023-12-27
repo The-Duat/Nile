@@ -20,7 +20,8 @@ Data.configurablePrograms = {
 	["gtk"]       = true,
 	["i3"]        = true,
 	["picom"]     = true,
-	["wallpaper"] = true
+	["wallpaper"] = true,
+	["*"]         = true
 }
 
 Data.i3ConfigSheet = {

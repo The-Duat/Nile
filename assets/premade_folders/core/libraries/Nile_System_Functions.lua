@@ -305,27 +305,25 @@ end
 
 --[=[ Network management. ]=]--
 System.network = function(operator, value)
-	if operator == "scan" then
-		if value == "area" then
-			wifiManager("scan", nil, nil)
-		else
-			say("Scanning IP Address " .. value)
-			x("wget https://freegeoip.app/json/" .. value .. " -O /var/NileRiver/download/ipinfo --no-verbose")
-			local IPData = jsonParse(readCommand("cat /var/NileRiver/download/ipinfo"))
-			say("General IP information:")
-			for data,val in pairs(IPData) do
-				data2 = tostring(data)
-				if type(val) == "table" then
-					val2 = "N/A"
-				else
-					val2 = tostring(val)
-				end
-				if type(data2) == "string" and type(val2) == "string" then
-					say2(data2 .. ": " .. val2)
-				end
+	if operator == "scan-ip" then
+		say("Scanning IP Address " .. value)
+		x("wget https://freegeoip.app/json/" .. value .. " -O /var/NileRiver/download/ipinfo --no-verbose")
+		local IPData = jsonParse(readCommand("cat /var/NileRiver/download/ipinfo"))
+		say("General IP information:")
+		for data,val in pairs(IPData) do
+			data2 = tostring(data)
+			if type(val) == "table" then
+				val2 = "N/A"
+			else
+				val2 = tostring(val)
 			end
-			x("rm /var/NileRiver/download/ipinfo")
+			if type(data2) == "string" and type(val2) == "string" then
+				say2(data2 .. ": " .. val2)
+			end
 		end
+		x("rm /var/NileRiver/download/ipinfo")
+	elseif operator == "scan-wifi" then
+		wifiManager("getlocalnetworks", nil, nil)
 	elseif operator == "connect" then
 		say("Please enter the password for " .. value .. ".")
 		local password = read()

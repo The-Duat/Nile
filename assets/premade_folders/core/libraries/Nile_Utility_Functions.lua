@@ -195,22 +195,19 @@ end
 --[=[ Network ]=]--
 Functions.wifiManager = function(action, ssid, password)
 	local netmanager = " "
-	local file = io.open("/usr/bin/iwctl")
-	if file then
-		netmanager = "iwd"
-	end
-	file:close()
-	local file = io.open("/usr/bin/nmcli")
-	if file then
-		netmanager = "ntm"
-	end
-	file:close()
-
+	if os.execute("ps -C iwd > /dev/null") == 0 then
+        netmanager = "iwd"
+    elseif os.execute("ps -C nmcli > /dev/null") == 0 then
+        netmanager = "ntm"
+    end
 	if netmanager == " " then
-		fault("No compatible network management program has been found.")
+		fault("No compatible network management program is running.")
+		say("Compatible network management programs:")
+		say2("IWD")
+		say2("NetworkManager")
 	end
 
-	if action == "scan" then
+	if action == "getlocalnetworks" then
 		if netmanager == "ntm" then
 			os.execute("nmcli device wifi list")
 		else
@@ -218,9 +215,9 @@ Functions.wifiManager = function(action, ssid, password)
 		end
 	elseif action == "connect" then
 		if netmanager == "ntm" then
-			os.execute("nmcli device wifi connect " .. ssid .. " password " .. password)
+			os.execute("nmcli device wifi connect \"" .. ssid .. "\" password \"" .. password .. "\"")
 		else
-			os.execute("iwctl --passphrase " .. password .. " station wlan0 connect " .. ssid)
+			os.execute("iwctl --passphrase \"" .. password .. "\" station wlan0 connect \"" .. ssid .. "\"")
 		end
 	end
 end
