@@ -164,12 +164,12 @@ System.csafety = function(operator, value)
 			exit()
 		end
 		if checkC("/var/NileRiver/backup/" .. userName) == false then
-			x("mkdir /var/NileRiver/backup/" .. userName)
+			x("sudo mkdir /var/NileRiver/backup/" .. userName)
 		end
 		if checkC("/var/NileRiver/backup/" .. program) == true then
-			x("rm -rf /var/NileRiver/backup/" .. program)
+			x("sudo rm -rf /var/NileRiver/backup/" .. program)
 		end
-		x("cp -r /var/NileRiver/config/" .. program .. " " .. to)
+		x("sudo cp -r /var/NileRiver/config/" .. program .. " " .. to)
 
 	-- Restore given program.
 	elseif operator == "restore" then
@@ -185,8 +185,8 @@ System.csafety = function(operator, value)
 			fault("Backup for " .. program .. " doesn't exist.")
 			exit()
 		end
-		x("rm -rf /var/NileRiver/config/" .. program)
-		x("cp -r /var/NileRiver/backup/" .. program .. " " .. to)
+		x("sudo rm -rf /var/NileRiver/config/" .. program)
+		x("sudo cp -r /var/NileRiver/backup/" .. program .. " " .. to)
 	end
 end
 
