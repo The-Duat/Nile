@@ -194,17 +194,18 @@ end
 
 --[=[ Network ]=]--
 Functions.wifiManager = function(action, ssid, password)
-	local netmanager = " "
+	local netmanager = nil
 	if os.execute("ps -C iwd > /dev/null") == 0 then
         netmanager = "iwd"
     elseif os.execute("ps -C nmcli > /dev/null") == 0 then
         netmanager = "ntm"
     end
-	if netmanager == " " then
+	if netmanager == nil then
 		fault("No compatible network management program is running.")
 		say("Compatible network management programs:")
 		say2("IWD")
 		say2("NetworkManager")
+		os.exit()
 	end
 
 	if action == "getlocalnetworks" then
