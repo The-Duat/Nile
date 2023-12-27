@@ -196,10 +196,10 @@ System.csafety = function(operator, value)
 		end
 		x("rm -rf /var/NileRiver/config/" .. program)
 		x("cp -r /var/NileRiver/backup/" .. program .. " " .. to)
-		if program == "i3" or program == "*" then
+		if value == "i3" or value == "*" then
 			x(string.format("cd /var/NileRiver/config/%s/i3/ && ./genconf", userName))
 		end
-		if program == "wallpaper" or program == "*" then
+		if value == "wallpaper" or value == "*" then
 			x("pkill -fi feh")
 			x(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", userName))
 		end
