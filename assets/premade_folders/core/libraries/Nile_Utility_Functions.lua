@@ -42,7 +42,7 @@ Functions.runAsRoot = function(fn)
 end
 
 -- Read output of a command.
-Functions.readCommand = function(cmd)
+local function readCommand(cmd)
 	local file = assert(io.popen(cmd, 'r'))
 	local out = assert(file:read('*a'))
 	file:close()
@@ -52,6 +52,7 @@ Functions.readCommand = function(cmd)
 	out = string.gsub(out, '[\n\r]+', ' ')
 	return out
 end
+Functions.readCommand = readCommand
 
 -- Install packages from the native package manager.
 Functions.iPkg = function(packages, aurmode)
@@ -195,9 +196,9 @@ end
 --[=[ Network ]=]--
 Functions.wifiManager = function(action, ssid, password)
 	local netmanager = "none"
-	if os.execute("ps -C iwd > /dev/null") == 0 then
+	if #readCommand("ps -C iwd > /dev/null") > 25 then
         netmanager = "iwd"
-    elseif os.execute("ps -C NetworkManager > /dev/null") == 0 then
+    elseif #readCommand("ps -C NetworkManager > /dev/null") > 25 then
         netmanager = "ntm"
     end
 	if netmanager == "none" then
