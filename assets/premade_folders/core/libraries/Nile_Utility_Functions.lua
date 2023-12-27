@@ -196,9 +196,9 @@ end
 --[=[ Network ]=]--
 Functions.wifiManager = function(action, ssid, password)
 	local netmanager = "none"
-	if #readCommand("ps -C iwd > /dev/null") > 25 then
+	if #readCommand("ps -C iwd") > 25 then
         netmanager = "iwd"
-    elseif #readCommand("ps -C NetworkManager > /dev/null") > 25 then
+    elseif #readCommand("ps -C NetworkManager") > 25 then
         netmanager = "ntm"
     end
 	if netmanager == "none" then
