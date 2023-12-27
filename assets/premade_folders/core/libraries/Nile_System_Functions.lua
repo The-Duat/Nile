@@ -158,35 +158,50 @@ System.csafety = function(operator, value)
 		local to = "/var/NileRiver/backup/"
 		if value then to = to .. userName end
 		say("Backup settings for " .. program .. "? (y/n)")
-		say("Old backups will be lost.")
+		say("Old backups for " .. program .. " will be lost.")
 		if string.lower(read()) ~= "y" then
 			fault("Backup aborted.")
 			exit()
 		end
 		if checkC("/var/NileRiver/backup/" .. userName) == false then
-			x("sudo mkdir /var/NileRiver/backup/" .. userName)
+			x("mkdir /var/NileRiver/backup/" .. userName)
+			x(string.format("sudo chown -R %s:%s /var/NileRiver/backup/" .. userName, userName, userName))
+			x("sudo chmod -R 755 /var/NileRiver/backup/" .. userName)
 		end
-		if checkC("/var/NileRiver/backup/" .. program) == true then
-			x("sudo rm -rf /var/NileRiver/backup/" .. program)
+		if value ~= "*" then
+			if checkC("/var/NileRiver/backup/" .. program) == true then
+				x("rm -rf /var/NileRiver/backup/" .. program)
+			end
+		else
+			x("rm -rf /var/NileRiver/backup/" .. program)
 		end
-		x("sudo cp -r /var/NileRiver/config/" .. program .. " " .. to)
+		x(string.format("cp -r /var/NileRiver/config/%s %s", program, to))
 
 	-- Restore given program.
 	elseif operator == "restore" then
 		local to = "/var/NileRiver/config/"
 		if value then to = to .. userName end
 		say("Restore settings for " .. program .. "? (y/n)")
-		say("Current settings will be lost.")
+		say("Current settings for " .. program .. " will be lost.")
 		if string.lower(read()) ~= "y" then
 			fault("Restoration aborted.")
 			exit()
 		end
-		if checkC("/var/NileRiver/backup/" .. program) == false then
-			fault("Backup for " .. program .. " doesn't exist.")
-			exit()
+		if value ~= "*" then
+			if checkC("/var/NileRiver/backup/" .. program) == false then
+				fault("Backup for " .. program .. " doesn't exist.")
+				exit()
+			end
 		end
-		x("sudo rm -rf /var/NileRiver/config/" .. program)
-		x("sudo cp -r /var/NileRiver/backup/" .. program .. " " .. to)
+		x("rm -rf /var/NileRiver/config/" .. program)
+		x("cp -r /var/NileRiver/backup/" .. program .. " " .. to)
+		if program == "i3" or program == "*" then
+			x(string.format("cd /var/NileRiver/config/%s/i3/ && ./genconf", userName))
+		end
+		if program == "wallpaper" or program == "*" then
+			x("pkill -fi feh")
+			x(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", userName))
+		end
 	end
 end
 

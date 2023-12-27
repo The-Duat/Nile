@@ -45,7 +45,7 @@ local function sendCsafety()
 	if arg[2] then
 		NileRiver.System.csafety(arg[1], arg[2])
 	else
-		NileRiver.System.csafety(arg[1], nil)
+		NileRiver.System.csafety(arg[1], "*")
 	end
 end
 
