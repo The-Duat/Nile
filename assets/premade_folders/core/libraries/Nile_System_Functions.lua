@@ -76,7 +76,7 @@ System.config = function(operator, value)
 		x(string.format("cp %s /var/NileRiver/config/%s/wallpaper/", value, userName))
 		x(string.format("mv /var/NileRiver/config/%s/wallpaper/%s /var/NileRiver/config/%s/wallpaper/wallpaper.%s", userName, wallpaperName, userName, fileType))
 		x("pkill -fi feh")
-		x("feh --bg-fill --zoom fill /var/NileRiver/config/wallpaper/wallpaper.*")
+		x(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", userName))
 		say("Wallpaper changed to " .. value)
 
 	-- Change the package security level.
