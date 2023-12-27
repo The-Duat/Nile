@@ -195,7 +195,7 @@ end
 --[=[ Network ]=]--
 Functions.wifiManager = function(action, ssid, password)
 	local netmanager = nil
-	if os.execute("ps -C iwctl > /dev/null") == 0 then
+	if os.execute("ps -C iwd > /dev/null") == 0 then
         netmanager = "iwd"
     elseif os.execute("ps -C NetworkManager > /dev/null") == 0 then
         netmanager = "ntm"
