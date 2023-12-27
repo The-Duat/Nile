@@ -145,13 +145,14 @@ end
 System.csafety = function(operator, value)
 	-- Determine program to restore/backup
 	local program = userName
-	if value then
+
+	if value ~= "*" then
 		if not configurablePrograms[value] then
 			fault("Invalid program: " .. value)
 			exit()
 		end
-		program = userName .. "/" .. value
 	end
+	program = userName .. "/" .. value
 
 	-- Backup given program.
 	if operator == "backup" then
