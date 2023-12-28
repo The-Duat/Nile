@@ -328,6 +328,8 @@ System.network = function(operator, value)
 		say("Please enter the password for " .. value .. ".")
 		local password = read()
 		wifiManager("connect", value, password)
+	elseif operator == "disconnect" then
+		wifiManager("disconnect", nil, nil)
 	end
 end
 

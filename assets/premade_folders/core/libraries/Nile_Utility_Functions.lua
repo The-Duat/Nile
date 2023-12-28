@@ -209,17 +209,28 @@ Functions.wifiManager = function(action, ssid, password)
 		os.exit()
 	end
 
+	local raw = io.popen("ip route | grep default | awk '{print $5}'")
+    local wirelessInterface = raw:read("*a")
+    raw:close()
+    wirelessInterface = wirelessInterface:gsub("%s+$", "")
+
 	if action == "getlocalnetworks" then
 		if netmanager == "ntm" then
 			os.execute("nmcli device wifi list")
 		else
-			os.execute("iwctl station wlan0 scan && iwctl station wlan0 get-networks")
+			os.execute(string.format("iwctl station %s scan && iwctl station %s get-networks", wirelessInterface, wirelessInterface))
 		end
 	elseif action == "connect" then
 		if netmanager == "ntm" then
-			os.execute("nmcli device wifi connect \"" .. ssid .. "\" password \"" .. password .. "\"")
+			os.execute(string.format("nmcli device wifi connect \"%s\" password \"%s\"", ssid, password))
 		else
-			os.execute("iwctl --passphrase \"" .. password .. "\" station wlan0 connect \"" .. ssid .. "\"")
+			os.execute(string.format("iwctl --passphrase \"%s\" station wlan0 connect \"%s\"", password, ssid))
+		end
+	elseif action == "disconnect" then
+		if netmanager == "ntm" then
+			os.execute("nmcli device disconnect iface " .. wirelessInterface)
+		else
+			os.execute("iwctl station " .. wirelessInterface .. " disconnect")
 		end
 	end
 end
