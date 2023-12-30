@@ -1,16 +1,16 @@
 #!/bin/bash
 
 
-gtk_theme=$(cat /var/mizOS/config/$USER/gtk/settings/gtk-theme)
-icon_theme=$(cat /var/mizOS/config/$USER/gtk/settings/icon-theme)
-cursor_theme=$(cat /var/mizOS/config/$USER/gtk/settings/cursor-theme)
+gtk_theme=$(cat /var/NileRiver/config/$USER/gtk/settings/gtk-theme)
+icon_theme=$(cat /var/NileRiver/config/$USER/gtk/settings/icon-theme)
+cursor_theme=$(cat /var/NileRiver/config/$USER/gtk/settings/cursor-theme)
 
 
-if [ -f "/var/mizOS/config/$USER/gtk/settings.ini" ]; then
-    rm /var/mizOS/config/$USER/gtk/settings.ini
+if [ -f "/var/NileRiver/config/$USER/gtk/settings.ini" ]; then
+    rm /var/NileRiver/config/$USER/gtk/settings.ini
 fi
 
-cat <<EOF > /var/mizOS/config/$USER/gtk/settings.ini
+cat <<EOF > /var/NileRiver/config/$USER/gtk/settings.ini
 [Settings]
 gtk-application-prefer-dark-theme=0
 gtk-button-images=true

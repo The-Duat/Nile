@@ -18,21 +18,47 @@ else
 	exit
 fi
 
-if [ -f "/usr/bin/pacman" ]; then
+if command -v pacman >/dev/null 2>&1; then
 	manager="pacman"
-fi
-
-if [ "$manager" == "pacman" ]; then
-	echo "Updating your system to the latest packages."
-	sudo -S pacman -Syu
-	echo "Installing needed NILE dependencies."
-	sudo -S pacman -S wget alacritty curl dmenu feh firefox fish gtk3 gtk4 i3-wm i3status lua luarocks maim neofetch neovim noto-fonts papirus-icon-theme picom thunar unzip xclip	
+		echo "Updating your system to the latest packages."
+			sudo -S pacman -Syu
+		echo "Installing needed NILE dependencies."
+			sudo -S pacman -S wget alacritty curl dmenu feh firefox fish gtk3 i3-wm i3status lua luarocks maim neofetch neovim noto-fonts papirus-icon-theme picom thunar unzip xclip	
+elif command -v apt >/dev/null 2>&1; then
+	manager="apt"
+		echo "Adding required Apt repositories."
+			sudo -S add-apt-repository ppa:aslatter/ppa -y
+			sudo -S add-apt-repository ppa:papirus/papirus
+		echo "Updating your system to the latest packages."
+			sudo -S apt update && sudo apt upgrade
+		echo "Installing needed NILE dependencies."
+			sudo -S apt install wget alacritty curl dmenu feh firefox fish libgtk-3-0 i3-wm i3status lua5.4 luarocks maim neofetch fonts-noto papirus-icon-theme picom thunar unzip xclip
+elif command -v xbps-install >/dev/null 2>&1; then
+	manager="xbps"
+		echo "Updating your system to the latest packages."
+			sudo -S xbps-install -Su
+		echo "Installing needed NILE dependencies."
+			sudo -S xbps-install -S wget alacritty curl dmenu feh firefox fish-shell gtk+3 i3-gaps i3status lua luarocks maim neofetch noto-fonts-ttf papirus-icon-theme picom thunar unzip xclip
+elif command -v dnf >/dev/null 2>&1; then
+	manager="dnf"
+		echo "Installing needed NILE dependencies."
+			sudo -S dnf install wget alacritty curl dmenu feh firefox fish gtk3 i3 i3status lua luarocks maim neofetch google-noto-fonts-common papirus-icon-theme picom thunar unzip xclip
+elif command -v zypper >/dev/null 2>&1; then
+	manager="zypper"
+		echo "Updating your system to the latest packages."
+		sudo -S zypper refresh
+			if grep -q 'ID="opensuse-leap"' /etc/os-release; then
+    			sudo -S zypper up
+			elif grep -q 'ID="opensuse-tumbleweed"' /etc/os-release; then
+				sudo -S zypper dup
+			fi
+		echo "Installing needed NILE dependencies."
+			sudo -S zypper install wget alacritty curl dmenu feh mozillafirefox fish gtk3-branding-upstream i3 i3status lua53 lua53-luarocks maim neofetch noto-mono-fonts papirus-icon-theme picom thunar unzip xclip
 else
 	echo "The Nile Integrated Linux Environment does not support this Linux distribution."
 	echo "Please refer to the NILE documentation at https://entertheduat.org for a list of system requirements."
 	exit
 fi
-
 
 
 
@@ -307,10 +333,8 @@ elif [ "$init" == "openrc" ]; then
         cp assets/premade_folders/init/openrc/init.lua /var/NileRiver/init
 fi
 echo "| Installing package manager identification files."
-if [ "$manager" == "pacman" ]; then
-        echo "  > pacman detected."
-        cp assets/premade_folders/pkgmanager/pacman/pm.lua /var/NileRiver/pkgmanager
-fi
+cp assets/premade_folders/pkgmanager/$manager/pm.lua /var/NileRiver/pkgmanager
+
 echo "| Installing core NILE system software."
 echo "  > Installing the NileRiver.lua backend."
 if [ -f "/var/NileRiver/core/NileRiver.lua" ]; then
@@ -420,11 +444,14 @@ fi
 
 echo -e "\n\n"
 if [ "$installType" = "install" ]; then
-	echo "My work here is done! You should probably reboot."
-	echo "  "
-	echo "If you are currently using i3-gaps, reload with MOD+shift+c."
-	echo " "
-	echo -e "NILE theming is installed on a per-user basis. If you want NILE theming on another user, run \"river update\" from that user."
-	echo " "
-	echo -e "Remember, \"sudo pacman -Syu\" does not update the NILE, use \"river update\" instead."
+	echo "The installation script for the Nile Integrated Linux Environment has finished execution."
+	echo "Documentation:  https://entertheduat.org"
+	echo "Source Code:    http://github.com/The-Duat/Nile"
+	echo "Discord Server: https://discord.com/invite/AVSuRZsTXp"
+	echo "It is recommended to reboot your device after installation."
+	echo -e "Reboot now? (y/n)\n\n> "
+	read ans  
+	if [ "$ans" == "y" ]; then
+		reboot
+	fi
 fi

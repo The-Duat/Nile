@@ -31,6 +31,7 @@ Manager.installMPackage = function(packageName)
 	say2("Package is valid, continuing installation.")
 
 
+	say("Installing installation dependencies for " .. developerName .. "/" .. softwareName)
 	say("Pacman dependencies:")
 	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
 		say2(pacmanDep)
