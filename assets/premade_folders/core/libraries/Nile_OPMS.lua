@@ -32,17 +32,17 @@ Manager.installMPackage = function(packageName)
 
 
 	say("Installing installation dependencies for " .. developerName .. "/" .. softwareName)
-	for _,dep in pairs(packageInfo["Installation Dependencies"].nativePkgManager) do
+	for _,dep in pairs(packageInfo.dependencies["Installation Dependencies"].nativePkgManager) do
 		say2(dep)
 	end
 	iPkg(packageInfo["Installation Dependencies"].nativePkgManager)
 	say("Needed package dependencies:")
-	for _,dep in pairs(packageInfo["Program Dependencies"].nativePkgManager) do
+	for _,dep in pairs(packageInfo.dependencies["Program Dependencies"].nativePkgManager) do
 		say2(dep)
 	end
 	say("Install needed dependencies for " .. packageName .. "? (y/n)")
 	if string.lower(read()) == "y" then
-		iPkg(packageInfo["Program Dependencies"].nativePkgManager, false)
+		iPkg(packageInfo.dependencies["Program Dependencies"].nativePkgManager, false)
 	else
 		say("Dependency installation skipped.")
 	end
