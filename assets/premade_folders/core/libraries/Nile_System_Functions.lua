@@ -430,5 +430,11 @@ System.update = function(updateType, dev)
 end
 
 
+--[=[ Start i3 ]=]--
+System.start = function()
+	x("startx /var/NileRiver/core/xinitrc")
+end
+
+
 
 return System

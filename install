@@ -346,6 +346,8 @@ if [ -d "/var/NileRiver/core/libraries" ]; then
 	sudo -S rm -rf /var/NileRiver/core/libraries
 fi
 cp -r assets/premade_folders/core/libraries /var/NileRiver/core
+touch /var/NileRiver/core/xinitrc
+echo "exec i3" > /var/NileRiver/core/xinitrc
 
 echo "  > Installing the river frontend."
 if [ -f "/usr/bin/river" ]; then
@@ -437,13 +439,17 @@ for d in /var/NileRiver/backup/*/; do
 	sudo -S chmod -R 755 $d
 done
 
-if [ "$asusans" = "y" ]; then
-	echo -e "\n\n"
-	river fetch -m the-duat/NILE-asusctl
+echo -e "| Disabling any preinstalled display managers."
+if ps -e | grep sddm; then
+	echo -e "  > Disabling sddm"
+	river sv disable sddm
+elif ps -e | grep gdm; then
+	echo -e "  > Disabling gdm"
+	river sv disable gdm
 fi
 
 echo -e "\n\n"
-if [ "$installType" = "install" ]; then
+if [ "$installType" == "install" ]; then
 	echo "The installation script for the Nile Integrated Linux Environment has finished execution."
 	echo "Documentation:  https://entertheduat.org"
 	echo "Source Code:    http://github.com/The-Duat/Nile"

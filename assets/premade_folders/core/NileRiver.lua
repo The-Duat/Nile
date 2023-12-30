@@ -76,6 +76,7 @@ NileRiver.System.graphics = SystemFunctions.graphics
 NileRiver.System.network  = SystemFunctions.network
 NileRiver.System.software = SystemFunctions.software
 NileRiver.System.update   = SystemFunctions.update
+NileRiver.System.start    = SystemFunctions.start
 
 
 
