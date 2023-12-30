@@ -21,7 +21,7 @@ Manager.installMPackage = function(packageName)
 	say("Downloading package.")
 	x("cd /var/NileRiver/work && sudo git clone https://github.com/" .. developerName .. "/" .. softwareName)
 
-	local packageInfo = dofile(downloadDir .. "/package.lua")
+	local packageInfo = dofile(downloadDir .. "/OPMS_Package_Info.lua")
 
 	say("Validating package.")
 	if not packageInfo.exists == true then
@@ -32,18 +32,17 @@ Manager.installMPackage = function(packageName)
 
 
 	say("Installing installation dependencies for " .. developerName .. "/" .. softwareName)
-	say("Pacman dependencies:")
-	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
-		say2(pacmanDep)
+	for _,dep in pairs(packageInfo["Installation Dependencies"].nativePkgManager) do
+		say2(dep)
 	end
-	say("AUR dependencies:")
-	for _,aurDep in pairs(packageInfo.aur_depends) do
-		say2(aurDep)
+	iPkg(packageInfo["Installation Dependencies"].nativePkgManager)
+	say("Needed package dependencies:")
+	for _,dep in pairs(packageInfo["Program Dependencies"].nativePkgManager) do
+		say2(dep)
 	end
-	say("Install dependencies for " .. packageName .. "? (y/n)")
+	say("Install needed dependencies for " .. packageName .. "? (y/n)")
 	if string.lower(read()) == "y" then
-		iPkg(packageInfo.pacman_depends, "pacman", true)
-		iPkg(packageInfo.aur_depends, "aur", true)
+		iPkg(packageInfo["Program Dependencies"].nativePkgManager, false)
 	else
 		say("Dependency installation skipped.")
 	end

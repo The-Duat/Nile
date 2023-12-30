@@ -90,39 +90,27 @@ Data.openrcCommandSheet = {
 	}}
 }
 
-Data.amdGpuDriverPackages = {
-	"amdgpu",
-	"mesa",
-	"lib32-mesa",
-	"xf86-video-amdgpu",
-	"vulkan-radeon",
-	"lib32-vulkan-radeon",
-	"libva-mesa-driver",
-	"lib32-libva-mesa-driver",
-	"mesa-vdpau",
-	"lib32-mesa-vdpau"
+Data.pmCommandSheet = {
+	["pacman"] = {
+		["install"] = "sudo pacman -S",
+		["remove"] = "sudo pacman -Rn"
+	},
+	["apt"] = {
+		["install"] = "sudo apt install",
+		["remove"] = "sudo apt remove"
+	},
+	["xbps"] = {
+		["install"] = "sudo xbps-install -S",
+		["remove"] = "sudo xbps-remove -Rf"
+	},
+	["dnf"] = {
+		["install"] = "sudo dnf install",
+		["remove"] = "sudo dnf remove"
+	},
+	["zypper"] = {
+		["install"] = "sudo zypper install",
+		["remove"] = "sudo zypper remove"
+	},
 }
-
-Data.nvidiaPropDriverPackages = {
-	"nvidia",
-	"nvidia-utils",
-	"lib32-nvidia-utils"
-}
-
-Data.nvidiaFossDriverPackages = {
-	"noveau",
-	"mesa",
-	"lib32-mesa"
-}
-
-Data.intelDriverPackages = {
-	"mesa",
-	"lib32-mesa",
-	"vulkan-intel",
-	"lib32-vulkan-intels"
-}
-
-
-
 
 return Data

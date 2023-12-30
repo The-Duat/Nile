@@ -58,7 +58,7 @@ Functions.readCommand = readCommand
 Functions.iPkg = function(packages, aurmode)
 	local baseCommand
 	if nativePkgManager == "pacman" then
-		baseCommand = "sudo pacman -S"
+		baseCommand = pmCommandSheet[nativePkgManager].install
 		if aurmode == true then
 			baseCommand = "yay -S"
 		end
@@ -74,7 +74,7 @@ end
 Functions.rPkg = function(packages, aurmode)
 	local baseCommand
 	if nativePkgManager == "pacman" then
-		baseCommand = "sudo pacman -Rn"
+		baseCommand = pmCommandSheet[nativePkgManager].remove
 		if aurmode == true then
 			baseCommand = "yay -Rn"
 		end

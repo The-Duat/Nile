@@ -18,7 +18,7 @@ local GlobalData = dofile("/var/NileRiver/core/libraries/Nile_Global_Data.lua")
 userName                 = GlobalData.userName
 homeDir                  = GlobalData.homeDir
 initSystem               = GlobalData.initSystem
-nativePkgManager     = GlobalData.nativePkgManager
+nativePkgManager         = GlobalData.nativePkgManager
 packageSecType           = GlobalData.packageSecType
 configurablePrograms     = GlobalData.configurablePrograms
 i3ConfigSheet            = GlobalData.i3ConfigSheet
@@ -33,6 +33,7 @@ intelDriverPackages      = GlobalData.intelDriverPackages
 UITable                  = GlobalData.UITable
 integerCharacterSheet    = GlobalData.integerCharacterSheet
 hexCharacterSheet        = GlobalData.hexCharacterSheet
+pmCommandSheet           = GlobalData.pmCommandSheet
 
 local UtilityFunctions = dofile("/var/NileRiver/core/libraries/Nile_Utility_Functions.lua")
 x            = UtilityFunctions.x
