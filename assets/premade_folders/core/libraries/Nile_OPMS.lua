@@ -61,6 +61,7 @@ Manager.installMPackage = function(packageName)
 	xaf(downloadDir, packageInfo.install)
 end
 
+
 --[=[ Remove an Osiris package ]=]--
 Manager.removeMPackage = function(packageName)
 	local nameInfo = splitString(packageName, "/")
@@ -102,6 +103,7 @@ Manager.removeMPackage = function(packageName)
 	say("Removing info directory.")
 	xs("rm -rf " .. infoDir)
 end
+
 
 --[=[ Update an Osiris Package ]=]--
 Manager.updateMPackage = function(packageName)
@@ -147,6 +149,7 @@ Manager.updateMPackage = function(packageName)
 	x("sudo cp "  .. downloadDir .. "/package.lua" .. infoDir)
 end
 
+
 --[=[ Check installable package's required security level ]=]--
 Manager.checkPkgSecLevel = function(packageName)
 	say("Downloading package repo.")
@@ -164,6 +167,7 @@ Manager.checkPkgSecLevel = function(packageName)
 	end
 end
 
+
 --[=[ Get list of installed packages ]=]-- 
 Manager.listInstalled = function()
 	say("Installed Osiris packages:")
@@ -172,6 +176,7 @@ Manager.listInstalled = function()
 		say2(pkgNameInfo[1] .. "/" .. pkgNameInfo[2])
 	end
 end
+
 
 --[=[ Get list of packages in the Duat's repo ]=]--
 Manager.listRepo = function()

@@ -117,8 +117,16 @@ if [ -d "/var/NileRiver/core" ]; then
 	rm -rf /var/NileRiver/core
 else
 	echo "  > Creating /var/NileRiver/core"
+	mkdir /var/NileRiver/core
 fi
-mkdir /var/NileRiver/core
+
+echo "| Checking plugins folder."
+if [ -d "/var/NileRiver/plugins" ]; then
+	echo "  > plugins folder present."
+else
+	echo "  > Creating /var/NileRiver/plugins"
+	mkdir /var/NileRiver/plugins
+fi
 
 echo "| Checking src folder."
 if [ -d "/var/NileRiver/src" ]; then
@@ -308,7 +316,7 @@ if [ -d "$HOME/.config/alacritty" ]; then
 else
 	mkdir $HOME/.config/alacritty
 fi
-ln -s /var/NileRiver/config/$USER/alacritty/alacritty.yml $HOME/.config/alacritty/alacritty.yml
+ln -s /var/NileRiver/config/$USER/alacritty/alacritty.toml $HOME/.config/alacritty/alacritty.toml
 
 echo "  > Creating fish symlink."
 if [ -d "$HOME/.config/fish" ]; then
@@ -408,6 +416,8 @@ echo "  > /var/NileRiver            -  755"
 sudo -S chmod -R 755 /var/NileRiver
 echo "  > /var/NileRiver/core       -  755"
 sudo -S chmod -R 755 /var/NileRiver/core
+echo "  > /var/NileRiver/plugins       -  755"
+sudo -S chmod -R 755 /var/NileRiver/plugins
 echo "  > /var/NileRiver/init       -  755"
 sudo -S chmod -R 755 /var/NileRiver/init
 echo "  > /var/NileRiver/pkgmanager -  755"
