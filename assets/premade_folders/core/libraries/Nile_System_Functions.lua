@@ -46,6 +46,17 @@ System.info = function(operator)
 			settingFile:close()
 		end
 
+	-- Display current Alacritty settings.
+	elseif operator == "alacrittysettings" then
+		say("Current Alacritty settings:")
+		for _,settingName in pairs(splitString(readCommand("ls /var/NileRiver/config/" .. userName .. "/alacritty/settings"))) do
+			settingName = trimWhite(settingName)
+			local settingFile = io.open("/var/NileRiver/config/" .. userName .. "/alacritty/settings/" .. settingName, "r")
+			local settingValue = settingFile:read("*all")
+			say2(string.format("%-18s %s", settingName, settingValue))
+			settingFile:close()
+		end
+
 	-- Display current GTK settings.
 	elseif operator == "gtksettings" then
 		say("Current GTK settings:")
