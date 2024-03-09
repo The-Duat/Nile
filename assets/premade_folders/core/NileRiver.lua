@@ -22,6 +22,7 @@ nativePkgManager         = GlobalData.nativePkgManager
 packageSecType           = GlobalData.packageSecType
 configurablePrograms     = GlobalData.configurablePrograms
 i3ConfigSheet            = GlobalData.i3ConfigSheet
+alacrittyConfigSheet     = GlobalData.alacrittyConfigSheet
 gtkConfigSheet           = GlobalData.gtkConfigSheet
 systemdCommandSheet      = GlobalData.systemdCommandSheet
 runitCommandSheet        = GlobalData.runitCommandSheet

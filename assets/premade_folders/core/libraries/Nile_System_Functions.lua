@@ -117,7 +117,7 @@ System.config = function(operator, value)
 			if isHex(value) == true then
 				writeSetting("i3", operator, "#" .. value)
 			else
-				fault("Invalid hex color: " .. value)
+				fault("Invalid hex color: #" .. value)
 				exit()
 			end
 		elseif dataType == "int" then
@@ -129,6 +129,17 @@ System.config = function(operator, value)
 			end
 		end
 		say(operator .. " has been set to " .. value .. ".")
+
+	-- Change Alacritty settings.
+	elseif alacrittyConfigSheet[operator] then
+		local dataType = alacrittyConfigSheet[operator]
+		if dataType == "hex" then
+			if isHex(value) == true then
+				writeSetting("alacritty", operator, "#" .. value)
+			else
+				fault("Invalid hex color: #" .. value)
+			end
+		end
 
 	-- Change GTK settings.
 	elseif gtkConfigSheet[operator] == true then
