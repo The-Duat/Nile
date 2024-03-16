@@ -72,8 +72,6 @@ if [ -d "/var/NileRiver" ]; then
 else
 	echo "| Performing system install."
 	installType="install"
-	printf "\n\n\nWould you like to install Asus laptop utilities? [asusctl] (y/n)\n\n> "
-	read asusans
 
 	echo -e "Checking $HOME filesystem."
 	echo "| Checking $HOME/.config"
@@ -114,7 +112,7 @@ echo -e "\nChecking filesystem."
 echo "| Checking core folder."
 if [ -d "/var/NileRiver/core" ]; then
 	echo "  > core folder present, updating."
-	rm -rf /var/NileRiver/core
+	rm -rf /var/NileRiver/core/*
 else
 	echo "  > Creating /var/NileRiver/core"
 	mkdir /var/NileRiver/core
@@ -348,12 +346,12 @@ echo "  > Installing the NileRiver.lua backend."
 if [ -f "/var/NileRiver/core/NileRiver.lua" ]; then
 	rm /var/NileRiver/core/NileRiver.lua
 fi
-cp assets/premade_folders/core/NileRiver.lua /var/NileRiver/core
+cp assets/premade_folders/core/NileRiver.lua /var/NileRiver/core/
 echo "  > Installing NILE system libraries."
 if [ -d "/var/NileRiver/core/libraries" ]; then
 	sudo -S rm -rf /var/NileRiver/core/libraries
 fi
-cp -r assets/premade_folders/core/libraries /var/NileRiver/core
+cp -r assets/premade_folders/core/libraries /var/NileRiver/core/
 touch /var/NileRiver/core/xinitrc
 echo "exec i3" > /var/NileRiver/core/xinitrc
 
