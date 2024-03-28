@@ -52,7 +52,8 @@ Manager.installMPackage = function(packageName, promptBypass)
 		["plugin"] = function()
 			xs(string.format("mv /var/NileRiver/work/%s/plugin/PluginLoader.lua /var/NileRiver/work/%s/plugin/%s.lua", softwareName, softwareName, packageInfo.PluginName))
 			xs(string.format("mv /var/NileRiver/work/%s/plugin/%s.lua /var/NileRiver/plugins/", softwareName, packageInfo.PluginName))
-			xs(string.format("mv /var/NileRiver/work/%s/plugin/libraries/* /var/NileRiver/core/libraries-thirdparty/plugin/", softwareName))
+			xs(string.format("mkdir /var/NileRiver/core/libraries-thirdparty/plugin/$s", packageInfo.PluginName))
+			xs(string.format("mv /var/NileRiver/work/%s/plugin/libraries/* /var/NileRiver/core/libraries-thirdparty/plugin/%s/", softwareName, packageInfo.PluginName))
 		end,
 		["frontend"] = function()
 			xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendprogram/* /usr/bin/", softwareName))
@@ -80,6 +81,30 @@ end
 
 --[=[ Remove an Osiris package ]=]--
 Manager.removeMPackage = function(packageName, promptBypass)
+	local nameInfo = splitString(packageName, "/")
+	local developerName = string.lower(trimWhite(nameInfo[1]))
+	local softwareName = string.lower(trimWhite(nameInfo[2]))
+	local packageInfo
+	local s, e = pcall(function()
+		packageInfo = dofile(string.format("/var/NileRiver/packages/%s_%s", developerName, softwareName))
+	end)
+	if not s then
+		fault("The given OPMS package is not installed on the system.")
+	end
+
+	local PackageType = packageInfo.PackageType
+
+	local uninstallType = {
+		["theme"] = function()
+			xs(string.format("rm -rf /var/NileRiver/themes/%s", packageInfo.ThemeName))
+		end,
+		["plugin"] = function()
+			xs(string.format("rm -rf /var/NileRiver/core/libraries-thirdparty/plugin/$s", packageInfo.PluginName))
+		end,
+		["frontend"] = function()
+			
+		end
+	}
 end
 
 
