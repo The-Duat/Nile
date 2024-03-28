@@ -3,7 +3,7 @@ local Manager = {}
 
 
 --[=[ Install an Osiris package ]=]--
-Manager.installMPackage = function(packageName)
+Manager.installMPackage = function(packageName, promptBypass)
 	local nameInfo = splitString(packageName, "/")
 	local developerName = string.lower(trimWhite(nameInfo[1]))
 	local softwareName = string.lower(trimWhite(nameInfo[2]))
@@ -11,12 +11,11 @@ Manager.installMPackage = function(packageName)
 	xs("rm -rf /var/NileRiver/work/*")
 	xs(string.format("cd /var/NileRiver/work && git clone https://github.com/%s/%s", developerName, softwareName))
 
-	
 	local s, e = pcall(function()
 		local test = dofile(string.format("/var/NileRiver/packages/%s_%s/OpmsPackageInfo.lua", developerName, softwareName))
 	end)
 
-	if.s then
+	if s then
 		fault("That Opms package is already installed.")
 		exit()
 	end
@@ -37,10 +36,12 @@ Manager.installMPackage = function(packageName)
 		exit()
 	end
 
-	say("Install the OPMS package " .. packageName .. " ? (y/n)")
-	if string.lower(read()) ~= "y" then
-		fault("Package installation aborted.")
-		exit()
+	if promptBypass ~= true then
+		say("Install the OPMS package " .. packageName .. " ? (y/n)")
+		if string.lower(read()) ~= "y" then
+			fault("Package installation aborted.")
+			exit()
+		end
 	end
 
 	local installType = {
@@ -60,7 +61,7 @@ Manager.installMPackage = function(packageName)
 	}
 
 	local s, e = pcall(function() 
-		if installtype[packageInfo.PackageType] ~= nil then
+		if installType[packageInfo.PackageType] ~= nil then
 			installType[packageInfo.PackageType]()
 		end
 	end)
@@ -78,52 +79,12 @@ end
 
 
 --[=[ Remove an Osiris package ]=]--
-Manager.removeMPackage = function(packageName)
+Manager.removeMPackage = function(packageName, promptBypass)
 end
 
 
 --[=[ Update an Osiris Package ]=]--
-Manager.updateMPackage = function(packageName)
-	local nameInfo = splitString(packageName, "/")
-	local developerName = trimWhite(nameInfo[1])
-	local softwareName = trimWhite(nameInfo[2])
-	local downloadDir = "/var/NileRiver/work/" .. softwareName
-	local infoDir = "/var/NileRiver/packages/" .. developerName .. "_" .. softwareName
-
-	say("Updating " .. packageName .. ".")
-
-	say("Clearing work folder.")
-	xs("rm -rf /var/NileRiver/work/*")
-
-	say("Deleting old info directory.")
-	xs("rm -rf " .. infoDir)
-
-	say("Downloading package.")
-	x("cd /var/NileRiver/work && sudo git clone https://github.com/" .. developerName .. "/" .. softwareName)
-
-	say("Creating new info file.")
-	xs("mkdir " .. infoDir)
-	xs("cp " .. downloadDir .. "/info.lua " .. infoDir)
-	xs("chmod -R 755 " .. infoDir)
-
-	local packageInfo = dofile(downloadDir .. "/packge.lua")
-
-	say("Pacman dependencies:")
-	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
-		say2(pacmanDep)
-	end
-	say("AUR dependencies:")
-	for _,aurDep in pairs(packageInfo.aur_depends) do
-		say2(pacmanDep)
-	end
-	say("Autoinstalling dependencies.")
-	iPkg(packageInfo.pacman_depends, "pacman")
-	iPkg(packageInfo.aur_depends, "aur")
-
-	say("Updating " .. packageName)
-	xaf(downloadDir, packageInfo.update)
-
-	x("sudo cp "  .. downloadDir .. "/package.lua" .. infoDir)
+Manager.updateMPackage = function(packageName, promptBypass)
 end
 
 

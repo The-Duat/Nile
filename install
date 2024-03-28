@@ -387,7 +387,9 @@ fi
 
 echo "  > Overwriting /usr/bin/neofetch"
 sudo -S rm /usr/bin/neofetch
-sudo -S cp assets/system_info/neofetch /usr/bin
+wget https://raw.githubusercontent.com/The-Duat/NileFetch/master/neofetch -O neofetch
+sudo -S chmod 777 neofetch
+sudo -S mv neofetch /usr/bin
 
 
 if [[ $1 == "dev" ]]; then
