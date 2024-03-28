@@ -7,101 +7,78 @@ Manager.installMPackage = function(packageName)
 	local nameInfo = splitString(packageName, "/")
 	local developerName = string.lower(trimWhite(nameInfo[1]))
 	local softwareName = string.lower(trimWhite(nameInfo[2]))
-	local downloadDir = "/var/NileRiver/work/" .. softwareName
-	local infoDir = "/var/NileRiver/packages/" .. developerName .. "_" .. softwareName
 
-	if not developerName and softwareName then
-		fault("Invalid package name format.")
-		exit()
-	end
-
-	say("Clearing work folder.")
 	xs("rm -rf /var/NileRiver/work/*")
+	xs(string.format("cd /var/NileRiver/work && git clone https://github.com/%s/%s", developerName, softwareName))
 
-	say("Downloading package.")
-	x("cd /var/NileRiver/work && sudo git clone https://github.com/" .. developerName .. "/" .. softwareName)
+	
+	local s, e = pcall(function()
+		local test = dofile(string.format("/var/NileRiver/packages/%s_%s/OpmsPackageInfo.lua", developerName, softwareName))
+	end)
 
-	local packageInfo = dofile(downloadDir .. "/OPMS_Package_Info.lua")
-
-	say("Validating package.")
-	if not packageInfo.exists == true then
-		fault("That package either doesn't exist, or was not made correctly.")
+	if.s then
+		fault("That Opms package is already installed.")
 		exit()
 	end
-	say2("Package is valid, continuing installation.")
 
 
-	say("Installing installation dependencies for " .. developerName .. "/" .. softwareName)
-	for _,dep in pairs(packageInfo.dependencies["Installation Dependencies"].nativePkgManager) do
-		say2(dep)
-	end
-	iPkg(packageInfo["Installation Dependencies"].nativePkgManager)
-	say("Needed package dependencies:")
-	for _,dep in pairs(packageInfo.dependencies["Program Dependencies"].nativePkgManager) do
-		say2(dep)
-	end
-	say("Install needed dependencies for " .. packageName .. "? (y/n)")
-	if string.lower(read()) == "y" then
-		iPkg(packageInfo.dependencies["Program Dependencies"].nativePkgManager, false)
-	else
-		say("Dependency installation skipped.")
+	local packageInfo
+	local s, e = pcall(function()
+		packageInfo = dofile(string.format("/var/NileRiver/work/%s/OpmsPackageInfo.lua", softwareName))
+	end)
+
+	if not s then
+		fault("OPMS Package " .. packageName .. " does not exist.")
+		exit()
 	end
 
-	say("Install " .. packageName .. "? (y/n)")
+	if not packageInfo.OpmsPackage or not packageInfo.PackageType then
+		fault("Broken or misconfigured OPMS package.")
+		exit()
+	end
+
+	say("Install the OPMS package " .. packageName .. " ? (y/n)")
 	if string.lower(read()) ~= "y" then
-		fault("Installation aborted.")
+		fault("Package installation aborted.")
 		exit()
 	end
 
-	xs("mkdir " .. infoDir)
-	xs("cp " .. downloadDir .. "/package.lua " .. infoDir)
-	xs("chown -R root:root " .. infoDir)
-	xs("chmod -R 755 " .. infoDir)
-	xs("chmod -R 777 " .. downloadDir)
-	xaf(downloadDir, packageInfo.install)
+	local installType = {
+		["theme"] = function()
+			xs("mkdir /var/NileRiver/themes/" .. packageInfo.ThemeName)
+			xs(string.format("mv /var/NileRiver/work/%s/theme/* /var/NileRiver/themes/%s/", packageName, packageInfo.ThemeName))
+		end,
+		["plugin"] = function()
+			xs(string.format("mv /var/NileRiver/work/%s/plugin/PluginLoader.lua /var/NileRiver/work/%s/plugin/%s.lua", softwareName, softwareName, packageInfo.PluginName))
+			xs(string.format("mv /var/NileRiver/work/%s/plugin/%s.lua /var/NileRiver/plugins/", softwareName, packageInfo.PluginName))
+			xs(string.format("mv /var/NileRiver/work/%s/plugin/libraries/* /var/NileRiver/core/libraries-thirdparty/plugin/", softwareName))
+		end,
+		["frontend"] = function()
+			xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendprogram/* /usr/bin/", softwareName))
+			xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendlibraries/* /var/NileRiver/core/libraries-thirdparty/", softwareName))
+		end
+	}
+
+	local s, e = pcall(function() 
+		if installtype[packageInfo.PackageType] ~= nil then
+			installType[packageInfo.PackageType]()
+		end
+	end)
+
+	if not s then
+		fault("An unexpected error occurred while attempting to install this package.")
+		fault("Error:")
+		fault(e)
+	end
+
+	local packageInfoDirectory = string.format("/var/NileRiver/packages/%s_%s", developerName, softwareName)
+	xs("mkdir " .. packageInfoDirectory)
+	xs(string.format("mv /var/NileRiver/work/%s/OpmsPackageInfo.lua %s", softwareName, packageInfoDirectory))
 end
 
 
 --[=[ Remove an Osiris package ]=]--
 Manager.removeMPackage = function(packageName)
-	local nameInfo = splitString(packageName, "/")
-	local developerName = string.lower(trimWhite(nameInfo[1]))
-	local softwareName = string.lower(trimWhite(nameInfo[2]))
-	local infoDir = "/var/NileRiver/packages/" .. developerName .. "_" .. softwareName
-
-	local packageInfo = dofile(infoDir .. "/package.lua")
-
-	if not packageInfo.exists == true then
-		fault("That package is not installed.")
-		exit()
-	end
-
-	say("Remove " .. packageName .. "? (y/n)")
-	if string.lower(read()) ~= "y" then
-		fault("Package removal aborted.")
-		exit()
-	end
-
-	say("Running package's uninstallation script.")
-	xaf("/tmp", packageInfo.remove)
-
-	say("Pacman dependencies:")
-	for _,pacmanDep in pairs(packageInfo.pacman_depends) do
-		say2(pacmanDep)
-	end
-	say("AUR dependencies:")
-	for _,aurDep in pairs(packageInfo.aur_depends) do
-		say2(aurDep)
-	end
-
-	say("Remove dependencies for " .. packageName .. "? (y/n)")
-	if string.lower(read()) == "y" then
-		rPkg(packageInfo.pacman_depends, "pacman")
-		rPkg(packageInfo.aur_depends, "aur")
-	end
-
-	say("Removing info directory.")
-	xs("rm -rf " .. infoDir)
 end
 
 
