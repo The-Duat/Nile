@@ -76,7 +76,7 @@ cat <<EOF > /var/NileRiver/config/$USER/alacritty/alacritty.toml
 background = "${primary_bg}"
 foreground = "${primary_fg}"
 dim_foreground = "${primary_dimfg}"
-bright_foreground = "${primary_dimbg}"
+bright_foreground = "${primary_dimfg}"
 
 [colors.cursor]
 text = "${cursor_text}"
