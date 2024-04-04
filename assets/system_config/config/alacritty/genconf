@@ -11,8 +11,8 @@ cursor_color=$(cat /var/NileRiver/config/$USER/alacritty/settings/cursor-color)
 vicursor_text=$(cat /var/NileRiver/config/$USER/alacritty/settings/vicursor-text)
 vicursor_color=$(cat /var/NileRiver/config/$USER/alacritty/settings/vicursor-color)
 
-search_matches_fg=$(cat /var/NileRiver/config/$USER/alacritty/settings/search_matches-fg)
-search_matches_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/search_matches-bg)
+search_matches_fg=$(cat /var/NileRiver/config/$USER/alacritty/settings/search-matches-fg)
+search_matches_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/search-matches-bg)
 
 search_focusmatch_fg=$(cat /var/NileRiver/config/$USER/alacritty/settings/search-focusmatch-fg)
 search_focusmatch_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/search-focusmatch-bg)
@@ -24,7 +24,7 @@ hintstart_fg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hintstart-fg)
 hintstart_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hintstart-bg)
 
 hintend_fg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hintend-fg)
-hindend_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hindend-bg)
+hindend_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hintend-bg)
 
 selection_text=$(cat /var/NileRiver/config/$USER/alacritty/settings/selection-text)
 selection_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/selection-bg)
