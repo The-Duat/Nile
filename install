@@ -112,10 +112,12 @@ echo -e "\nChecking filesystem."
 echo "| Checking core folder."
 if [ -d "/var/NileRiver/core" ]; then
 	echo "  > core folder present, updating."
-	rm -rf /var/NileRiver/core/*
+	rm -rf /var/NileRiver/core/libraries
+	rm /var/NileRiver/core/NileRiver.lua
 else
 	echo "  > Creating /var/NileRiver/core"
 	mkdir /var/NileRiver/core
+	mkdir /var/NileRiver/core/libraries-thirdparty
 fi
 
 echo "| Checking plugins folder."
@@ -186,14 +188,6 @@ else
 	cp -r assets/premade_folders/security /var/NileRiver
 fi
 
-echo "| Checking backup folder."
-if [ -d "/var/NileRiver/backup" ]; then
-	echo "  > Backup folder present."
-else
-	echo "  > Creating backup folder."
-	mkdir /var/NileRiver/backup
-fi
-
 echo "| Checking config folder."
 if [ -d "/var/NileRiver/config" ]; then
 	echo "  > config folder present."
@@ -211,26 +205,41 @@ else
 	mkdir /var/NileRiver/download
 fi
 
+echo "| Checking themes folder."
+if [ -d "/var/NileRiver/themes" ]; then
+	echo "  > themes folder present."
+else
+	echo "  > Creating themes folder."
+	mkdir /var/NileRiver/themes
+fi
+
 
 echo -e "\nConfiguring system."
 echo "| Checking for existing configuration."
 if [ -d "/var/NileRiver/config/$USER" ]; then
 	echo "  > Found."
-	echo "| Checking for existing backup."
-	if [ -d "/var/NileRiver/backup/$USER" ]; then
-		echo "  > Found, deleting."
-		rm -rf /var/NileRiver/backup/$USER
+	echo "| Current configurations will made into the theme Nile-Rollback"
+	if [ -d "/var/NileRiver/themes/Nile-Rollback" ]; then
+		rm -rf /var/NileRiver/themes/Nile-Rollback
 	fi
-	echo "| Backing up current config to /var/NileRiver/backup/$USER"
-	mv /var/NileRiver/config/$USER /var/NileRiver/backup/
+	mkdir /var/NileRiver/themes/Nile-Rollback
+	mv /var/NileRiver/config/$USER/* /var/NileRiver/themes/Nile-Rollback/
+	rm -rf /var/NileRiver/config/$USER
 fi
 
 mkdir /var/NileRiver/config/$USER
 
 echo "| Copying NILE config directory structure."
-cp -r assets/system_config/config/* /var/NileRiver/config/$USER
+if [ -d "/var/NileRiver/themes/Nile-Dark" ]; then
+	rm -rf /var/NileRiver/themes/Nile-Dark
+fi
+mkdir /var/NileRiver/themes/Nile-Dark
+cp -r assets/system_config/config/* /var/NileRiver/themes/Nile-Dark/
+cp -r /var/NileRiver/themes/Nile-Dark/* /var/NileRiver/config/$USER/
 echo "| Generating i3 config file."
 /var/NileRiver/config/$USER/i3/genconf
+echo "| Generating alacritty config file."
+/var/NileRiver/config/$USER/alacritty/genconf
 
 echo -e "\n\nInstalling theming."
 echo "| Installing GTK theme."
@@ -463,7 +472,7 @@ if [ "$installType" == "install" ]; then
 	echo "The installation script for the Nile Integrated Linux Environment has finished execution."
 	echo "Documentation:  https://entertheduat.org"
 	echo "Source Code:    http://github.com/The-Duat/Nile"
-	echo "Discord Server: https://discord.com/invite/AVSuRZsTXp"
+	# echo "Discord Server: https://discord.com/invite/AVSuRZsTXp"
 	echo "It is recommended to reboot your device after installation."
 	echo -e "Reboot now? (y/n)\n\n> "
 	read ans  

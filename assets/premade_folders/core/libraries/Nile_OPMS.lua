@@ -46,16 +46,28 @@ Manager.installMPackage = function(packageName, promptBypass)
 
 	local installType = {
 		["theme"] = function()
+			if checkC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == true then
+				fault("A theme by that name is already installed.")
+				exit()
+			end
 			xs("mkdir /var/NileRiver/themes/" .. packageInfo.ThemeName)
 			xs(string.format("mv /var/NileRiver/work/%s/theme/* /var/NileRiver/themes/%s/", packageName, packageInfo.ThemeName))
 		end,
 		["plugin"] = function()
+			if checkC("/var/NileRiver/plugins/" .. packageInfo.PluginName) == true then
+				fault("A plugin by that name is already installed.")
+				exit()
+			end
 			xs(string.format("mv /var/NileRiver/work/%s/plugin/PluginLoader.lua /var/NileRiver/work/%s/plugin/%s.lua", softwareName, softwareName, packageInfo.PluginName))
 			xs(string.format("mv /var/NileRiver/work/%s/plugin/%s.lua /var/NileRiver/plugins/", softwareName, packageInfo.PluginName))
 			xs(string.format("mkdir /var/NileRiver/core/libraries-thirdparty/plugin/$s", packageInfo.PluginName))
 			xs(string.format("mv /var/NileRiver/work/%s/plugin/libraries/* /var/NileRiver/core/libraries-thirdparty/plugin/%s/", softwareName, packageInfo.PluginName))
 		end,
 		["frontend"] = function()
+			if checkC("/var/NileRiver/core/libraries-thirdparty/" .. softwareName) == true then
+				fault("A frontend by that name is already installed.")
+				exit()
+			end
 			xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendprogram/* /usr/bin/", softwareName))
 			xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendlibraries/* /var/NileRiver/core/libraries-thirdparty/", softwareName))
 		end
@@ -71,6 +83,7 @@ Manager.installMPackage = function(packageName, promptBypass)
 		fault("An unexpected error occurred while attempting to install this package.")
 		fault("Error:")
 		fault(e)
+		exit()
 	end
 
 	local packageInfoDirectory = string.format("/var/NileRiver/packages/%s_%s", developerName, softwareName)
@@ -90,19 +103,33 @@ Manager.removeMPackage = function(packageName, promptBypass)
 	end)
 	if not s then
 		fault("The given OPMS package is not installed on the system.")
+		exit()
 	end
 
 	local PackageType = packageInfo.PackageType
 
 	local uninstallType = {
 		["theme"] = function()
+			if checkC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == false then
+                                fault("A theme by that name is not installed.")
+				exit()
+			end
 			xs(string.format("rm -rf /var/NileRiver/themes/%s", packageInfo.ThemeName))
 		end,
 		["plugin"] = function()
+			if checkC("/var/NileRiver/plugins/" .. packageInfo.PluginName) == false then
+                                fault("A plugin by that name is not installed.")
+				exit()
+			end
 			xs(string.format("rm -rf /var/NileRiver/core/libraries-thirdparty/plugin/$s", packageInfo.PluginName))
 		end,
 		["frontend"] = function()
-			
+			if checkC("/var/NileRiver/core/libraries-thirdparty/" .. softwareName) == false then
+                                fault("A frontend by that name is already installed.")
+                                exit()
+                        end
+			xs("rm /usr/bin/" .. softwareName)
+			xs("rm -rf /var/NileRiver/core/libraries-thirdparty/" .. softwareName)
 		end
 	}
 end
