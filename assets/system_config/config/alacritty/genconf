@@ -24,7 +24,7 @@ hintstart_fg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hintstart-fg)
 hintstart_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hintstart-bg)
 
 hintend_fg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hintend-fg)
-hindend_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hintend-bg)
+hintend_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/hintend-bg)
 
 selection_text=$(cat /var/NileRiver/config/$USER/alacritty/settings/selection-text)
 selection_bg=$(cat /var/NileRiver/config/$USER/alacritty/settings/selection-bg)
