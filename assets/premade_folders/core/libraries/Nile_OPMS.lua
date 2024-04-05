@@ -9,7 +9,7 @@ Manager.installMPackage = function(packageName, promptBypass)
 	local softwareName = string.lower(trimWhite(nameInfo[2]))
 
 	xs("rm -rf /var/NileRiver/work/*")
-	xs(string.format("cd /var/NileRiver/work && git clone https://github.com/%s/%s", developerName, softwareName))
+	x(string.format("cd /var/NileRiver/work && sudo git clone https://github.com/%s/%s", developerName, softwareName))
 
 	local s, e = pcall(function()
 		local test = dofile(string.format("/var/NileRiver/packages/%s_%s/OpmsPackageInfo.lua", developerName, softwareName))
