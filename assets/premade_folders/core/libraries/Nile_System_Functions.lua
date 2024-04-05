@@ -163,67 +163,32 @@ end
 
 
 
---[=[ Config backup/restore ]=]--
-System.csafety = function(operator, value)
-	-- Determine program to restore/backup
-	local program = userName
-
-	if value ~= "*" then
-		if not configurablePrograms[value] then
-			fault("Invalid program: " .. value)
-			exit()
-		end
-	end
-	program = userName .. "/" .. value
-
-	-- Backup given program.
-	if operator == "backup" then
-		local to = "/var/NileRiver/backup/"
-		if value then to = to .. userName end
-		say("Backup settings for " .. program .. "? (y/n)")
-		say("Old backups for " .. program .. " will be lost.")
+--[=[ Theme Management ]=]--
+System.theme = function(operator, value)
+	if operator == "compile" then
+		say("Compile current settings into a new theme? (y/n)")
 		if string.lower(read()) ~= "y" then
-			fault("Backup aborted.")
 			exit()
 		end
-		if checkC("/var/NileRiver/backup/" .. userName) == false then
-			x("mkdir /var/NileRiver/backup/" .. userName)
-			x(string.format("sudo chown -R %s:%s /var/NileRiver/backup/" .. userName, userName, userName))
-			x("sudo chmod -R 755 /var/NileRiver/backup/" .. userName)
+		say("What should this theme be called?")
+		local themeName = read()
+		themeName = themeName:gsub(" ", "-")
+		themeName = themeName:gsub("/", "-")
+
+		say("Checking existence of " .. themeName)
+		if checkC("/var/NileRiver/themes/" .. themeName) == false then
+			fault("A theme by the name " .. themeName .. " already exists. Please choose a different name.")
+			exit()
 		end
-		if value ~= "*" then
-			if checkC("/var/NileRiver/backup/" .. program) == true then
-				x("rm -rf /var/NileRiver/backup/" .. program)
-			end
+		say2("Theme name is not taken. Continuing compilation.")
+		xs("mkdir /var/NileRiver/themes/" .. themeName)
+		xs(string.format("cp -r /var/NileRiver/config/%s/* /var/NileRiver/themes/%s/", userName, themeName))
+		xs("chown -R root:root /var/NileRiver/themes/" .. themeName)
+		xs("chmod 755 /var/NileRiver/themes/" .. themeName)
+		if checkC("/var/NileRiver/themes/" .. themeName) ~= false then
+			say("Theme " .. themeName .. "has been successfully created.")
 		else
-			x("rm -rf /var/NileRiver/backup/" .. program)
-		end
-		x(string.format("cp -r /var/NileRiver/config/%s %s", program, to))
-
-	-- Restore given program.
-	elseif operator == "restore" then
-		local to = "/var/NileRiver/config/"
-		if value then to = to .. userName end
-		say("Restore settings for " .. program .. "? (y/n)")
-		say("Current settings for " .. program .. " will be lost.")
-		if string.lower(read()) ~= "y" then
-			fault("Restoration aborted.")
-			exit()
-		end
-		if value ~= "*" then
-			if checkC("/var/NileRiver/backup/" .. program) == false then
-				fault("Backup for " .. program .. " doesn't exist.")
-				exit()
-			end
-		end
-		x("rm -rf /var/NileRiver/config/" .. program)
-		x("cp -r /var/NileRiver/backup/" .. program .. " " .. to)
-		if value == "i3" or value == "*" then
-			x(string.format("cd /var/NileRiver/config/%s/i3/ && ./genconf", userName))
-		end
-		if value == "wallpaper" or value == "*" then
-			x("pkill -fi feh")
-			x(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", userName))
+			fault("Something went wrong while compiling theme " .. themeName)
 		end
 	end
 end

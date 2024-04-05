@@ -41,11 +41,9 @@ local function sendConfig()
 	NileRiver.System.config(arg[2], arg[3])
 end
 
-local function sendCsafety()
+local function sendTheme()
 	if arg[2] then
-		NileRiver.System.csafety(arg[1], arg[2])
-	else
-		NileRiver.System.csafety(arg[1], "*")
+		NileRiver.System.theme(arg[2])
 	end
 end
 
@@ -105,8 +103,7 @@ end
 local firstArgSheet = {
 	["info"]    = sendInfo,
 	["config"]  = sendConfig,
-	["backup"]  = sendCsafety,
-	["restore"] = sendCsafety,
+	["theme"]  = sendTheme,
 	["sv"]      = sendService,
 	["gfx"]     = sendGraphics,
 	["net"]     = sendNetwork,
@@ -119,5 +116,5 @@ local firstArgSheet = {
 if firstArgSheet[arg[1]] then
 	firstArgSheet[arg[1]]()
 else
-	frontend_IO.err(arg[1] .. " is not a valid \"miz\" command.")
+	frontend_IO.err(arg[1] .. " is not a valid river command.")
 end

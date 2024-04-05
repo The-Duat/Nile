@@ -54,7 +54,7 @@ local function readCommand(cmd)
 end
 Functions.readCommand = readCommand
 
--- Install packages from the native package manager.
+-- Install packages using the native package manager.
 Functions.iPkg = function(packages, aurmode)
 	local baseCommand
 	if nativePkgManager == "pacman" then
@@ -70,7 +70,7 @@ Functions.iPkg = function(packages, aurmode)
 	os.execute(baseCommand .. " " .. packageString)
 end
 
--- Remove pacman/AUR package
+-- Remove packages using the native package manager.
 Functions.rPkg = function(packages, aurmode)
 	local baseCommand
 	if nativePkgManager == "pacman" then
@@ -250,7 +250,7 @@ Functions.writeSetting = function(program, setting, value)
 	end
 end
 
--- Check "c.lua" existence. Used for system backups/restores.
+-- Check "c.lua" existence. Used to check Nile directory existence.
 Functions.checkC = function(path)
 	if pcall(function()
 		dofile(path .. "/c.lua")
@@ -258,32 +258,6 @@ Functions.checkC = function(path)
 		return true
 	else
 		return false
-	end
-end
-
--- Install a DE/WM
-Functions.iDesktop = function(desktopName)
-	for _,desktop in pairs(UITable) do
-		if desktop[1] == desktopName then
-			if desktop[3] == false then
-				os.execute("sudo pacman -S " .. desktop[2])
-			elseif desktop[3] == true then
-				os.execute("yay -S " .. desktop[2])
-			end
-		end
-	end
-end
-
--- Remove a DE/WM
-Functions.rDesktop = function(desktopName)
-	for _,desktop in pairs(UITable) do
-		if desktop[1] == desktopName then
-			if desktop[3] == true then
-				os.execute("sudo pacman -Rn " .. desktop[2])
-			elseif desktop[3] == false then
-				os.execute("yay -Rn " .. desktop[2])
-			end
-		end
 	end
 end
 
