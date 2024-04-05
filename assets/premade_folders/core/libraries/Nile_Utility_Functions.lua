@@ -250,6 +250,17 @@ Functions.writeSetting = function(program, setting, value)
 	end
 end
 
+-- View NILE program settings.
+Functions.viewSettings = function(directory)
+	for _,settingName in pairs(splitString(readCommand("ls " .. directory .. "/settings"))) do
+		settingName = trimWhite(settingName)
+		local settingFile = io.open(directory .. "/settings/" .. settingName, "r")
+		local settingValue = settingFile:read("*all")
+		say2(string.format("%-18s %s", settingName, settingValue))
+                settingFile:close()
+        end
+end
+
 -- Check "c.lua" existence. Used to check Nile directory existence.
 Functions.checkC = function(path)
 	if pcall(function()

@@ -54,6 +54,7 @@ isInt        = UtilityFunctions.isInt
 isHex        = UtilityFunctions.isHex
 wifiManager  = UtilityFunctions.wifiManager
 writeSetting = UtilityFunctions.writeSetting
+viewSettings = UtilityFunctions.viewSettings
 checkC       = UtilityFunctions.checkC
 iDesktop     = UtilityFunctions.iDesktop
 rDesktop     = UtilityFunctions.rDesktop

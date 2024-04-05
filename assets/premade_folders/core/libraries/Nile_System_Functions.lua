@@ -38,35 +38,25 @@ System.info = function(operator)
 	-- Display current i3 settings.
 	elseif operator == "i3settings" then
 		say("Current i3 settings:")
-		for _,settingName in pairs(splitString(readCommand("ls /var/NileRiver/config/" .. userName .. "/i3/settings"))) do
-			settingName = trimWhite(settingName)
-			local settingFile = io.open("/var/NileRiver/config/" .. userName .. "/i3/settings/" .. settingName, "r")
-			local settingValue = settingFile:read("*all")
-			say2(string.format("%-18s %s", settingName, settingValue))
-			settingFile:close()
-		end
+		viewSettings("/var/NileRiver/config/" .. userName .. "/i3")
 
 	-- Display current Alacritty settings.
 	elseif operator == "alacrittysettings" then
 		say("Current Alacritty settings:")
-		for _,settingName in pairs(splitString(readCommand("ls /var/NileRiver/config/" .. userName .. "/alacritty/settings"))) do
-			settingName = trimWhite(settingName)
-			local settingFile = io.open("/var/NileRiver/config/" .. userName .. "/alacritty/settings/" .. settingName, "r")
-			local settingValue = settingFile:read("*all")
-			say2(string.format("%-18s %s", settingName, settingValue))
-			settingFile:close()
-		end
+		viewSettings("/var/NileRiver/config/" .. userName .. "/alacritty")
 
 	-- Display current GTK settings.
 	elseif operator == "gtksettings" then
 		say("Current GTK settings:")
-		for _,settingName in pairs(splitString(readCommand("ls /var/NileRiver/config/" .. userName .. "/gtk/settings"))) do
-			settingName = trimWhite(settingName)
-			local settingFile = io.open("/var/NileRiver/config/" .. userName .. "/gtk/settings/" .. settingName, "r")
-			local settingValue = settingFile:read("*all")
-			say2(string.format("%-18s %s", settingName, settingValue))
-			settingFile:close()
-		end
+		viewSettings("/var/NileRiver/config/" .. userName .. "/gtk")
+	elseif checkC("/var/NileRiver/themes/" .. operator) == true then
+		say("Settings for theme " .. operator .. ":")
+		say("i3 Settings:")
+		viewSettings("/var/NileRiver/themes/" .. operator .. "/i3")
+		say("GTK Settings:")
+		viewSettings("/var/NileRiver/themes/" .. operator .. "/gtk")
+		say("Alacritty Settings:")
+		viewSettings("/var/NileRiver/themes/" .. operator .. "/alacritty")
 	end
 end
 
