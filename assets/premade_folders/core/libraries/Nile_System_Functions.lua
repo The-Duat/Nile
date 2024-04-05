@@ -80,6 +80,31 @@ System.config = function(operator, value)
 		x(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", userName))
 		say("Wallpaper changed to " .. value)
 
+	-- Change NILE Theme
+	elseif operator == "theme" then
+		if checkC("/var/NileRiver/themes/" .. value) == false then
+			fault("The theme " .. value .. " is not installed.")
+		end
+		say("Overwrite your current settings with the theme " .. value .. "? (y/n)")
+		say("Your current settings will be lost.")
+		if string.lower(read()) ~= "y" then
+			fault("Aborted.")
+		end
+		xs("rm -rf /var/NileRiver/config/" .. userName .. "/*")
+		xs("cp -r /var/NileRiver/themes/" .. value .. "/* /var/NileRiver/config/" .. userName .. "/")
+		xs(string.format("chown -R %s:%s /var/NileRiver/config/%s", userName, userName, userName))
+		xs("chmod -R 755 /var/Nile/config/%s", userName)
+		xs("pkill -fi feh")
+		x(string.format("cd /var/NileRiver/config/%s/i3 && ./genconf", userName))
+		x(string.format("cd /var/NileRiver/config/%s/gtk && ./genconf", userName))
+		x(string.format("cd /var/NileRiver/config/%s/alacritty && ./genconf", userName))
+		x(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", userName))
+		if checkC("/var/NileRiver/config/" .. userName) then
+			say("Theme has sucessfully been enabled.")
+		else
+			fault("An unknown error occured when attempting to enable theme " .. value)
+		end
+
 	-- Change the package security level.
 	elseif operator == "pkgsec" then
 		if value == "strict"
@@ -312,7 +337,7 @@ end
 
 
 --[=[ System software management. ]=]--
-System.software = function(operator, packageList, aurmode)
+System.software = function(operator, packageList, aurmode, promptBypass)
 
 	-- If channel is opms, convert packagelist table to string.
 	local packageString
@@ -350,7 +375,7 @@ System.software = function(operator, packageList, aurmode)
 				end
 			end
 			if doesItPass == true then
-				installMPackage(trimWhite(packageString))
+				installMPackage(trimWhite(packageString), promptBypass)
 			else
 				fault("Unable to install " .. packageString .. " with the \"" .. packageSecType .. "\" security type.")
 				exit()	
@@ -362,7 +387,7 @@ System.software = function(operator, packageList, aurmode)
 	-- Remove a package.
 	elseif operator == "remove" then
 		if packageType == "osiris" then
-			removeMPackage(packageString)
+			removeMPackage(packageString, promptBypass)
 		elseif packageType == "pacman" then
 			rPkg(packageList, aurmode)
 		end

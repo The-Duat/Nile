@@ -214,6 +214,47 @@ else
 fi
 
 
+
+
+
+echo -e "\nInstalling core system."
+echo "| Installing init system identification files."
+if [ "$init" == "runit" ]; then
+        echo "  > Runit detected."
+        cp assets/premade_folders/init/runit/init.lua /var/NileRiver/init
+elif [ "$init" == "systemd" ]; then
+        echo "  > SystemD detected."
+        cp assets/premade_folders/init/systemd/init.lua /var/NileRiver/init
+elif [ "$init" == "openrc" ]; then
+        echo "  > OpenRC detected."
+        cp assets/premade_folders/init/openrc/init.lua /var/NileRiver/init
+fi
+echo "| Installing package manager identification files."
+cp assets/premade_folders/pkgmanager/$manager/pm.lua /var/NileRiver/pkgmanager
+
+echo "| Installing core NILE system software."
+echo "  > Installing the NileRiver.lua backend."
+if [ -f "/var/NileRiver/core/NileRiver.lua" ]; then
+	rm /var/NileRiver/core/NileRiver.lua
+fi
+cp assets/premade_folders/core/NileRiver.lua /var/NileRiver/core/
+echo "  > Installing NILE system libraries."
+if [ -d "/var/NileRiver/core/libraries" ]; then
+	sudo -S rm -rf /var/NileRiver/core/libraries
+fi
+cp -r assets/premade_folders/core/libraries /var/NileRiver/core/
+touch /var/NileRiver/core/xinitrc
+echo "exec i3" > /var/NileRiver/core/xinitrc
+
+echo "  > Installing the river frontend."
+if [ -f "/usr/bin/river" ]; then
+	sudo -S rm /usr/bin/river
+fi
+chmod +x assets/premade_folders/river
+sudo -S cp assets/premade_folders/river /usr/bin
+
+
+
 echo -e "\nConfiguring system."
 echo "| Checking for existing configuration."
 if [ -d "/var/NileRiver/config/$USER" ]; then
@@ -333,43 +374,6 @@ else
 fi
 ln -s /var/NileRiver/config/$USER/fish/config.fish $HOME/.config/fish/config.fish
 
-
-
-echo -e "\nInstalling core system."
-echo "| Installing init system identification files."
-if [ "$init" == "runit" ]; then
-        echo "  > Runit detected."
-        cp assets/premade_folders/init/runit/init.lua /var/NileRiver/init
-elif [ "$init" == "systemd" ]; then
-        echo "  > SystemD detected."
-        cp assets/premade_folders/init/systemd/init.lua /var/NileRiver/init
-elif [ "$init" == "openrc" ]; then
-        echo "  > OpenRC detected."
-        cp assets/premade_folders/init/openrc/init.lua /var/NileRiver/init
-fi
-echo "| Installing package manager identification files."
-cp assets/premade_folders/pkgmanager/$manager/pm.lua /var/NileRiver/pkgmanager
-
-echo "| Installing core NILE system software."
-echo "  > Installing the NileRiver.lua backend."
-if [ -f "/var/NileRiver/core/NileRiver.lua" ]; then
-	rm /var/NileRiver/core/NileRiver.lua
-fi
-cp assets/premade_folders/core/NileRiver.lua /var/NileRiver/core/
-echo "  > Installing NILE system libraries."
-if [ -d "/var/NileRiver/core/libraries" ]; then
-	sudo -S rm -rf /var/NileRiver/core/libraries
-fi
-cp -r assets/premade_folders/core/libraries /var/NileRiver/core/
-touch /var/NileRiver/core/xinitrc
-echo "exec i3" > /var/NileRiver/core/xinitrc
-
-echo "  > Installing the river frontend."
-if [ -f "/usr/bin/river" ]; then
-	sudo -S rm /usr/bin/river
-fi
-chmod +x assets/premade_folders/river
-sudo -S cp assets/premade_folders/river /usr/bin
 
 
 
