@@ -5,8 +5,8 @@ bar_color=$(cat /var/NileRiver/config/$USER/i3/settings/bar-color)
 bar_position=$(cat /var/NileRiver/config/$USER/i3/settings/bar-position)
 
 border_color1=$(cat /var/NileRiver/config/$USER/i3/settings/border-color1)
-border_color3=$(cat /var/NileRiver/config/$USER/i3/settings/border-color2)
-border_color2=$(cat /var/NileRiver/config/$USER/i3/settings/border-color3)
+border_color2=$(cat /var/NileRiver/config/$USER/i3/settings/border-color2)
+border_color3=$(cat /var/NileRiver/config/$USER/i3/settings/border-color3)
 border_size=$(cat /var/NileRiver/config/$USER/i3/settings/border-size)
 
 gaps_inner=$(cat /var/NileRiver/config/$USER/i3/settings/gaps-inner)
