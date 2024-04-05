@@ -166,7 +166,7 @@ System.theme = function(operator, value)
 		themeName = themeName:gsub("/", "-")
 
 		say("Checking existence of " .. themeName)
-		if checkC("/var/NileRiver/themes/" .. themeName) == false then
+		if checkC("/var/NileRiver/themes/" .. themeName) == true then
 			fault("A theme by the name " .. themeName .. " already exists. Please choose a different name.")
 			exit()
 		end
