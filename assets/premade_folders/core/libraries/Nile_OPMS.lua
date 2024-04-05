@@ -51,7 +51,7 @@ Manager.installMPackage = function(packageName, promptBypass)
 				exit()
 			end
 			xs("mkdir /var/NileRiver/themes/" .. packageInfo.ThemeName)
-			xs(string.format("mv /var/NileRiver/work/%s/theme/* /var/NileRiver/themes/%s/", packageName, packageInfo.ThemeName))
+			xs(string.format("mv /var/NileRiver/work/%s/theme/* /var/NileRiver/themes/%s/", softwareName, packageInfo.ThemeName))
 		end,
 		["plugin"] = function()
 			if checkC("/var/NileRiver/plugins/" .. packageInfo.PluginName) == true then
