@@ -14,19 +14,6 @@ System.info = function(operator)
 		say("Github:")
 		say2("https://github.com/The-Duat/mizOS")
 
-	-- Display installable DE/WMs
-	elseif operator == "uilist" then
-		say("Installable Desktop Environments and Window Managers:")
-		for _,desktop in pairs(UITable) do
-			local manager = ""
-			if desktop[3] == true then
-				manager = "(AUR)"
-			else
-				manager = "(Pacman)"
-			end
-			say2(string.format("%-18s %s", desktop[1], manager))
-		end
-
 	-- List installed OPMS packages.
 	elseif operator == "pkgs" then
 		listInstalled()
@@ -63,6 +50,7 @@ end
 
 --[=[ System configuration ]=]--
 System.config = function(operator, value)
+
 	-- Change the system wallpaper.
 	if operator == "wallpaper" then
 		local wallpaperInfo = splitString(value, ".")
@@ -180,6 +168,7 @@ end
 
 --[=[ Theme Management ]=]--
 System.theme = function(operator, value)
+
 	if operator == "compile" then
 		say("Compile current settings into a new theme? (y/n)")
 		if string.lower(read()) ~= "y" then
@@ -211,6 +200,7 @@ end
 
 --[=[ Init System service management ]=]--
 System.service = function(operator, value)
+
 	local commandSheet
 	if initSystem == "systemd" then
 		commandSheet = systemdCommandSheet
@@ -435,6 +425,18 @@ end
 --[=[ Start i3 ]=]--
 System.start = function()
 	x("startx /var/NileRiver/core/xinitrc")
+end
+
+
+--[=[ Plugin Management ]=]--
+System.plugin = function(operator, value, arguments)           
+	if operator == "run" then
+		if checkC("/var/NileRiver/plugins/" .. value) == true then
+			dofile("/var/NileRiver/plugins/" .. value .. "/plugin.lua").main(NileRiver, arguments)
+		else
+			fault("The plugin " .. value .. " is not installed.")
+                end
+        end
 end
 
 

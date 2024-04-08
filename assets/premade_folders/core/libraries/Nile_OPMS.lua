@@ -46,7 +46,7 @@ Manager.installMPackage = function(packageName, promptBypass)
 
 	local installType = {
 		["theme"] = function()
-			if checkC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == true then
+                        if checkC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == true then
 				fault("A theme by that name is already installed.")
 				exit()
 			end
@@ -58,10 +58,10 @@ Manager.installMPackage = function(packageName, promptBypass)
 				fault("A plugin by that name is already installed.")
 				exit()
 			end
-			xs(string.format("mv /var/NileRiver/work/%s/plugin/PluginLoader.lua /var/NileRiver/work/%s/plugin/%s.lua", softwareName, softwareName, packageInfo.PluginName))
-			xs(string.format("mv /var/NileRiver/work/%s/plugin/%s.lua /var/NileRiver/plugins/", softwareName, packageInfo.PluginName))
-			xs(string.format("mkdir /var/NileRiver/core/libraries-thirdparty/plugin/$s", packageInfo.PluginName))
-			xs(string.format("mv /var/NileRiver/work/%s/plugin/libraries/* /var/NileRiver/core/libraries-thirdparty/plugin/%s/", softwareName, packageInfo.PluginName))
+			xs("mkdir /var/NileRiver/plugins/" .. packageInfo.PluginName)
+			xs(string.format("mv /var/NileRiver/work/%s/plugin/* /var/NileRiver/plugins/%s/", softwareName, packageInfo.PluginName))
+			xs(string.format("mkdir /var/NileRiver/core/libraries-thirdparty/$s", packageInfo.PluginName))
+			xs(string.format("mv /var/NileRiver/work/%s/libraries/* /var/NileRiver/core/libraries-thirdparty/%s/", softwareName, packageInfo.PluginName))
 		end,
 		["frontend"] = function()
 			if checkC("/var/NileRiver/core/libraries-thirdparty/" .. softwareName) == true then
@@ -137,6 +137,25 @@ end
 
 --[=[ Update an Osiris Package ]=]--
 Manager.updateMPackage = function(packageName, promptBypass)
+	local nameInfo = splitString(packageName, "/")
+        local developerName = string.lower(trimWhite(nameInfo[1]))
+        local softwareName = string.lower(trimWhite(nameInfo[2]))
+        local packageInfo
+        local s, e = pcall(function()
+		packageInfo = dofile(string.format("/var/NileRiver/packages/%s_%s", developerName, softwareName))
+        end)
+        if not s then
+                fault("The given OPMS package is not installed on the system.")
+                exit()
+        end
+	if promptBypass ~= true then
+		say("Update the OPMS package " .. developerName .. "/" .. softwareName .. " ? (y/n)")
+		if string.lower(read()) ~= "y" then
+			fault("Package uodate for " .. developerName .. "/" .. softwareName .. " aborted.")
+		end
+	end
+	removeMPackage(packageName, true)
+	installMPackage(packageName, true)
 end
 
 
