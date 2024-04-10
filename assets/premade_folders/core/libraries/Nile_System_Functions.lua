@@ -4,38 +4,56 @@ local System = {}
 
 --[=[ Display system info ]=]--
 System.info = function(operator)
+	local switch = {
 
-	-- Show help page.
-	if operator == "help" then
-		say("Documentation:")
-		say2("https://entertheduat.org")
-		say("Discord server:")
-		say2("https://discord.gg/AVSuRZsTXp")
-		say("Github:")
-		say2("https://github.com/The-Duat/mizOS")
+		-- Show help page.
+		["help"] = function()
+			say("Documentation:")
+			say2("https://entertheduat.org")
+			say("Discord server:")
+			say2("https://discord.gg/AVSuRZsTXp")
+			say("Github:")
+			say2("https://github.com/The-Duat/mizOS")
+		end,
 
-	-- List installed OPMS packages.
-	elseif operator == "pkgs" then
-		listInstalled()
+		-- List installed OPMS packages.
+		["pkgs"] = function()
+			listInstalled()
+		end,
 
-	-- List packages in the Duat's repository.
-	elseif operator == "repo" then
-		listRepo()
+		-- List packages in the Duat's repository.
+		["repo"] = function()
+			listRepo()
+		end,
 
-	-- Display current i3 settings.
-	elseif operator == "i3settings" then
-		say("Current i3 settings:")
-		viewSettings("/var/NileRiver/config/" .. userName .. "/i3")
+		-- Display current i3 settings.
+		["i3settings"] = function()
+			say("Current i3 settings:")
+			viewSettings("/var/NileRiver/config/" .. userName .. "/i3")
+		end,
 
-	-- Display current Alacritty settings.
-	elseif operator == "alacrittysettings" then
-		say("Current Alacritty settings:")
-		viewSettings("/var/NileRiver/config/" .. userName .. "/alacritty")
+		-- Display current Alacritty settings.
+		["alacrittysettings"] = function()
+			say("Current Alacritty settings:")
+			viewSettings("/var/NileRiver/config/" .. userName .. "/alacritty")
+		end,
 
-	-- Display current GTK settings.
-	elseif operator == "gtksettings" then
-		say("Current GTK settings:")
-		viewSettings("/var/NileRiver/config/" .. userName .. "/gtk")
+		-- Display current GTK settings.
+		["gtksettings"] = function()
+			say("Current GTK settings:")
+			viewSettings("/var/NileRiver/config/" .. userName .. "/gtk")
+		end,
+		["themes"] = function()
+			say("Installed themes:")
+			for _,theme in pairs(splitString(readCommand("ls /var/NileRiver/themes")), " ") do
+				say2(theme)
+			end
+		end
+	}
+	if switch[operator] then
+		switch[operator]()
+
+		-- Display theme info
 	elseif checkC("/var/NileRiver/themes/" .. operator) == true then
 		say("Settings for theme " .. operator .. ":")
 		say("i3 Settings:")
@@ -44,6 +62,9 @@ System.info = function(operator)
 		viewSettings("/var/NileRiver/themes/" .. operator .. "/gtk")
 		say("Alacritty Settings:")
 		viewSettings("/var/NileRiver/themes/" .. operator .. "/alacritty")
+
+	else
+		fault("Invalid operator: " .. operator)
 	end
 end
 
@@ -378,7 +399,7 @@ System.software = function(operator, packageList, aurmode, promptBypass)
 	elseif operator == "remove" then
 		if packageType == "osiris" then
 			removeMPackage(packageString, promptBypass)
-		elseif packageType == "pacman" then
+		elseif packageType == "native" then
 			rPkg(packageList, aurmode)
 		end
 	else
