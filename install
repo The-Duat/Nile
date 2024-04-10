@@ -272,10 +272,10 @@ mkdir /var/NileRiver/config/$USER
 
 echo "| Copying NILE config directory structure."
 if [ -d "/var/NileRiver/themes/Nile-Dark" ]; then
-	rm -rf /var/NileRiver/themes/Nile-Dark
+	sudo -S rm -rf /var/NileRiver/themes/Nile-Dark
+	sudo -S rm -rf /var/NileRiver/packages/the-duat_nile-dark-theme
 fi
-mkdir /var/NileRiver/themes/Nile-Dark
-cp -r assets/system_config/config/* /var/NileRiver/themes/Nile-Dark/
+lua install-luahelper.lua installthemepackages
 cp -r /var/NileRiver/themes/Nile-Dark/* /var/NileRiver/config/$USER/
 echo "| Generating i3 config file."
 /var/NileRiver/config/$USER/i3/genconf
