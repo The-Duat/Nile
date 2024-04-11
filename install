@@ -270,9 +270,11 @@ fi
 
 mkdir /var/NileRiver/config/$USER
 
-echo "| Copying NILE config directory structure."
+echo "| Installing theming."
 if [ -d "/var/NileRiver/themes/Nile-Dark" ]; then
 	sudo -S rm -rf /var/NileRiver/themes/Nile-Dark
+fi
+if [ -d "/var/NileRiver/packages/the-duat_nile-dark-theme" ]; then
 	sudo -S rm -rf /var/NileRiver/packages/the-duat_nile-dark-theme
 fi
 lua install-luahelper.lua installthemepackages
