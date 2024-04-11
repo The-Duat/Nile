@@ -271,14 +271,14 @@ fi
 mkdir /var/NileRiver/config/$USER
 
 echo "| Installing theming."
-if [ -d "/var/NileRiver/themes/Nile-Dark" ]; then
-	sudo -S rm -rf /var/NileRiver/themes/Nile-Dark
+if [ -d "/var/NileRiver/themes/Nile-Dark-Theme" ]; then
+	sudo -S rm -rf /var/NileRiver/themes/Nile-Dark-Theme
 fi
 if [ -d "/var/NileRiver/packages/the-duat_nile-dark-theme" ]; then
 	sudo -S rm -rf /var/NileRiver/packages/the-duat_nile-dark-theme
 fi
 lua install-luahelper.lua installthemepackages
-cp -r /var/NileRiver/themes/Nile-Dark/* /var/NileRiver/config/$USER/
+cp -r /var/NileRiver/themes/Nile-Dark-Theme/* /var/NileRiver/config/$USER/
 echo "| Generating i3 config file."
 /var/NileRiver/config/$USER/i3/genconf
 echo "| Generating alacritty config file."
