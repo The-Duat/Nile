@@ -52,7 +52,7 @@ local function ReadCommand(cmd)
 	out = string.gsub(out, '[\n\r]+', ' ')
 	return out
 end
-Functions.readCommand = ReadCommand
+Functions.ReadCommand = ReadCommand
 
 -- Install packages using the native package manager.
 Functions.IPkg = function(packages, aurmode)
