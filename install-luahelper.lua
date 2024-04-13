@@ -21,8 +21,8 @@ frontend_IO.err = function(text) -- Print error output.
 	print("\x1b[38;2;243;139;168m!![Error]> \x1b[38;2;203;160;247m" .. text .. "\x1b[38;2;255;255;255m")
 end
 
-NileRiver.initializeIO(frontend_IO)
+NileRiver.InitializeIO(frontend_IO)
 
 if arg[1] == "installthemepackages" then
-    NileRiver.System.software("fetch", {"The-Duat/Nile-Dark-Theme"}, false, true)
+    NileRiver.System.Software("fetch", {"The-Duat/Nile-Dark-Theme"}, false, true)
 end
