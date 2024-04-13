@@ -1,20 +1,20 @@
 local Data = {}
 
-Data.userName = os.getenv("USER")
+Data.UserName = os.getenv("USER")
 
-Data.homeDir = os.getenv("HOME")
+Data.HomeDir = os.getenv("HOME")
 
-Data.initSystem = dofile("/var/NileRiver/init/init.lua")
+Data.InitSystem = dofile("/var/NileRiver/init/init.lua")
 
-Data.nativePkgManager = dofile("/var/NileRiver/pkgmanager/pm.lua")
+Data.NativePkgManager = dofile("/var/NileRiver/pkgmanager/pm.lua")
 
-Data.packageSecType = dofile("/var/NileRiver/security/active/type.lua")
+Data.OpmsSecurityLevel = dofile("/var/NileRiver/security/active/type.lua")
 
-Data.integerCharacterSheet = "0123456789"
+Data.IntegerCharacterSheet = "0123456789"
 
-Data.hexCharacterSheet = "0123456789abcdef"
+Data.HexCharacterSheet = "0123456789abcdef"
 
-Data.configurablePrograms = {
+Data.ConfigurablePrograms = {
 	["alacritty"] = true,
 	["fish"]      = true,
 	["gtk"]       = true,
@@ -24,7 +24,7 @@ Data.configurablePrograms = {
 	["*"]         = true
 }
 
-Data.i3ConfigSheet = {
+Data.I3ConfigSheet = {
 	["bar-color"]     = "hex",
 	["bar-position"]  = "special_bar",
 	["border-color1"] = "hex",
@@ -42,13 +42,13 @@ Data.i3ConfigSheet = {
 	["ws-txt-color3"] = "hex"
 }
 
-Data.gtkConfigSheet = {
+Data.GtkConfigSheet = {
 	["gtk-theme"]    = true,
 	["icon-theme"]   = true,
 	["cursor-theme"] = true
 }
 
-Data.alacrittyConfigSheet = {
+Data.AlacrittyConfigSheet = {
 	["bright-black"]         = "hex",
 	["bright-blue"]          = "hex",
 	["bright-cyan"]          = "hex",
@@ -97,7 +97,7 @@ Data.alacrittyConfigSheet = {
 	["vicursor-text"]        = "hex"
 }
 
-Data.systemdCommandSheet = {
+Data.SystemdCommandSheet = {
 	["link"]    = {"runit_only"},
 	["unlink"]  = {"runit_only"},
 	["disable"] = {"systemctl disable %s"},
@@ -111,7 +111,7 @@ Data.systemdCommandSheet = {
 	}}
 }
 
-Data.runitCommandSheet = {
+Data.RunitCommandSheet = {
 	["link"]    = {"ln -s /etc/runit/sv/%s /run/runit/service/"},
 	["unlink"]  = {"rm /run/runit/service/%s"},
 	["disable"] = {"touch /run/runit/service/%s/down"},
@@ -125,7 +125,7 @@ Data.runitCommandSheet = {
 	}}
 }
 
-Data.openrcCommandSheet = {
+Data.OpenrcCommandSheet = {
 	["linked"]  = {"runit_only"},
 	["unlink"]  = {"runit_only"},
 	["disable"] = {"rc-update del %s default"},
@@ -139,7 +139,7 @@ Data.openrcCommandSheet = {
 	}}
 }
 
-Data.pmCommandSheet = {
+Data.PmCommandSheet = {
 	["pacman"] = {
 		["install"] = "sudo pacman -S",
 		["remove"] = "sudo pacman -Rn"

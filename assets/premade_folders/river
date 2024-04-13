@@ -29,26 +29,26 @@ frontend_IO.err = function(text) -- Print error output.
 	print("\x1b[38;2;243;139;168m!![Error]> \x1b[38;2;203;160;247m" .. text .. "\x1b[38;2;255;255;255m")
 end
 
-NileRiver.initializeIO(frontend_IO)
+NileRiver.InitializeIO(frontend_IO)
 
 
 --[=[ System function handler ]=]--
 local function sendInfo()
-	NileRiver.System.info(arg[2])
+	NileRiver.System.Info(arg[2])
 end
 
 local function sendConfig()
-	NileRiver.System.config(arg[2], arg[3])
+	NileRiver.System.Config(arg[2], arg[3])
 end
 
 local function sendTheme()
 	if arg[2] then
-		NileRiver.System.theme(arg[2])
+		NileRiver.System.Theme(arg[2])
 	end
 end
 
 local function sendService()
-	NileRiver.System.service(arg[2], arg[3])
+	NileRiver.System.Service(arg[2], arg[3])
 end
 
 local function sendGraphics()
@@ -63,14 +63,14 @@ local function sendGraphics()
 	else
 		value = arg[3]
 	end
-	NileRiver.System.graphics(arg[2], value)
+	NileRiver.System.Graphics(arg[2], value)
 end
 
 local function sendNetwork()
 	if arg[3] then
-		NileRiver.System.network(arg[2], arg[3])
+		NileRiver.System.Network(arg[2], arg[3])
 	else
-		NileRiver.System.network(arg[2], nil)
+		NileRiver.System.Network(arg[2], nil)
 	end
 end
 
@@ -85,7 +85,7 @@ local function sendSoftware()
 		end
 		argCount = argCount - 1
 	end
-	NileRiver.System.software(arg[1], packageList, hasRequestedToUseAUR)
+	NileRiver.System.Software(arg[1], packageList, hasRequestedToUseAUR)
 end
 
 local function sendUpdate()
@@ -93,8 +93,8 @@ local function sendUpdate()
 	if arg[2] == "dev" then
 		dev = true
 	end
-	NileRiver.System.update("system", dev)
-	NileRiver.System.update("packages", dev)
+	NileRiver.System.Update("system", dev)
+	NileRiver.System.Update("packages", dev)
 end
 
 

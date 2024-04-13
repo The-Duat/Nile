@@ -3,21 +3,21 @@ local Manager = {}
 
 
 --[=[ Install an Osiris package ]=]--
-Manager.installMPackage = function(packageName, promptBypass)
-	local nameInfo = splitString(packageName, "/")
-	local developerName = string.lower(trimWhite(nameInfo[1]))
-	local softwareName = string.lower(trimWhite(nameInfo[2]))
+Manager.InstallOsirisPackage = function(packageName, promptBypass)
+	local nameInfo = SplitString(packageName, "/")
+	local developerName = string.lower(TrimWhite(nameInfo[1]))
+	local softwareName = string.lower(TrimWhite(nameInfo[2]))
 
-	xs("rm -rf /var/NileRiver/work/*")
-	x(string.format("cd /var/NileRiver/work && sudo git clone https://github.com/%s/%s", developerName, softwareName))
+	Xs("rm -rf /var/NileRiver/work/*")
+	X(string.format("cd /var/NileRiver/work && sudo git clone https://github.com/%s/%s", developerName, softwareName))
 
 	local s, e = pcall(function()
 		local test = dofile(string.format("/var/NileRiver/packages/%s_%s/OpmsPackageInfo.lua", developerName, softwareName))
 	end)
 
 	if s then
-		fault("That Opms package is already installed.")
-		exit()
+		Fault("That Opms package is already installed.")
+		Exit()
 	end
 
 
@@ -27,49 +27,50 @@ Manager.installMPackage = function(packageName, promptBypass)
 	end)
 
 	if not s then
-		fault("OPMS Package " .. packageName .. " does not exist.")
-		exit()
+		Fault("OPMS Package " .. packageName .. " does not exist.")
+		Exit()
 	end
 
 	if not packageInfo.OpmsPackage or not packageInfo.PackageType then
-		fault("Broken or misconfigured OPMS package.")
-		exit()
+		Fault("Broken or misconfigured OPMS package.")
+		Exit()
 	end
 
 	if promptBypass ~= true then
-		say("Install the OPMS package " .. packageName .. " ? (y/n)")
-		if string.lower(read()) ~= "y" then
-			fault("Package installation aborted.")
-			exit()
+		Say("Install the OPMS package " .. packageName .. " ? (y/n)")
+		if string.lower(Read()) ~= "y" then
+			Fault("Package installation aborted.")
+			Exit()
 		end
 	end
 
 	local installType = {
 		["theme"] = function()
-                        if checkC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == true then
-				fault("A theme by that name is already installed.")
-				exit()
+            if CheckC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == true then
+				Fault("A theme by that name is already installed.")
+				Exit()
 			end
-			xs("mkdir /var/NileRiver/themes/" .. packageInfo.ThemeName)
-			xs(string.format("mv /var/NileRiver/work/%s/theme/* /var/NileRiver/themes/%s/", softwareName, packageInfo.ThemeName))
+			Xs("mkdir /var/NileRiver/themes/" .. packageInfo.ThemeName)
+			Xs(string.format("mv /var/NileRiver/work/%s/theme/* /var/NileRiver/themes/%s/", softwareName, packageInfo.ThemeName))
 		end,
 		["plugin"] = function()
-			if checkC("/var/NileRiver/plugins/" .. packageInfo.PluginName) == true then
-				fault("A plugin by that name is already installed.")
-				exit()
+			if CheckC("/var/NileRiver/plugins/" .. packageInfo.PluginName) == true then
+				Fault("A plugin by that name is already installed.")
+				Exit()
 			end
-			xs("mkdir /var/NileRiver/plugins/" .. packageInfo.PluginName)
-			xs(string.format("mv /var/NileRiver/work/%s/plugin/* /var/NileRiver/plugins/%s/", softwareName, packageInfo.PluginName))
-			xs(string.format("mkdir /var/NileRiver/core/libraries-thirdparty/$s", packageInfo.PluginName))
-			xs(string.format("mv /var/NileRiver/work/%s/libraries/* /var/NileRiver/core/libraries-thirdparty/%s/", softwareName, packageInfo.PluginName))
+			Xs("mkdir /var/NileRiver/plugins/" .. packageInfo.PluginName)
+			Xs(string.format("mv /var/NileRiver/work/%s/plugin/* /var/NileRiver/plugins/%s/", softwareName, packageInfo.PluginName))
+			Xs(string.format("mkdir /var/NileRiver/core/libraries-thirdparty/$s", packageInfo.PluginName))
+			Xs(string.format("mv /var/NileRiver/work/%s/libraries/* /var/NileRiver/core/libraries-thirdparty/%s/", softwareName, packageInfo.PluginName))
 		end,
 		["frontend"] = function()
-			if checkC("/var/NileRiver/core/libraries-thirdparty/" .. softwareName) == true then
-				fault("A frontend by that name is already installed.")
-				exit()
+			if CheckC("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName) == true then
+				Fault("A frontend by that name is already installed.")
+				Exit()
 			end
-			xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendprogram/* /usr/bin/", softwareName))
-			xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendlibraries/* /var/NileRiver/core/libraries-thirdparty/", softwareName))
+			Xs("mkdir /var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName)
+			Xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendprogram/%s /usr/bin/", softwareName, packageInfo.FrontendName))
+			Xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendlibraries/* /var/NileRiver/core/libraries-thirdparty/%s/", softwareName, packageInfo.FrontendName))
 		end
 	}
 
@@ -80,130 +81,130 @@ Manager.installMPackage = function(packageName, promptBypass)
 	end)
 
 	if not s then
-		fault("An unexpected error occurred while attempting to install this package.")
-		fault("Error:")
-		fault(e)
-		exit()
+		Fault("An unexpected error occurred while attempting to install this package.")
+		Fault("Error:")
+		Fault(e)
+		Exit()
 	end
 
 	local packageInfoDirectory = string.format("/var/NileRiver/packages/%s_%s", developerName, softwareName)
-	xs("mkdir " .. packageInfoDirectory)
-	xs(string.format("mv /var/NileRiver/work/%s/OpmsPackageInfo.lua %s", softwareName, packageInfoDirectory))
+	Xs("mkdir " .. packageInfoDirectory)
+	Xs(string.format("mv /var/NileRiver/work/%s/OpmsPackageInfo.lua %s", softwareName, packageInfoDirectory))
 end
 
 
 --[=[ Remove an Osiris package ]=]--
-Manager.removeMPackage = function(packageName, promptBypass)
-	local nameInfo = splitString(packageName, "/")
-	local developerName = string.lower(trimWhite(nameInfo[1]))
-	local softwareName = string.lower(trimWhite(nameInfo[2]))
+Manager.RemoveOsirisPackage = function(packageName, promptBypass)
+	local nameInfo = SplitString(packageName, "/")
+	local developerName = string.lower(TrimWhite(nameInfo[1]))
+	local softwareName = string.lower(TrimWhite(nameInfo[2]))
 	local packageInfo
 	local s, e = pcall(function()
 		packageInfo = dofile(string.format("/var/NileRiver/packages/%s_%s", developerName, softwareName))
 	end)
 	if not s then
-		fault("The given OPMS package is not installed on the system.")
-		exit()
+		Fault("The given OPMS package is not installed on the system.")
+		Exit()
 	end
 
 	local PackageType = packageInfo.PackageType
 
 	local uninstallType = {
 		["theme"] = function()
-			if checkC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == false then
-                                fault("A theme by that name is not installed.")
-				exit()
+			if CheckC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == false then
+                Fault("A theme by that name is not installed.")
+				Exit()
 			end
-			xs(string.format("rm -rf /var/NileRiver/themes/%s", packageInfo.ThemeName))
+			Xs(string.format("rm -rf /var/NileRiver/themes/%s", packageInfo.ThemeName))
 		end,
 		["plugin"] = function()
-			if checkC("/var/NileRiver/plugins/" .. packageInfo.PluginName) == false then
-                                fault("A plugin by that name is not installed.")
-				exit()
+			if CheckC("/var/NileRiver/plugins/" .. packageInfo.PluginName) == false then
+                Fault("A plugin by that name is not installed.")
+				Exit()
 			end
-			xs(string.format("rm -rf /var/NileRiver/core/libraries-thirdparty/plugin/$s", packageInfo.PluginName))
+			Xs(string.format("rm -rf /var/NileRiver/core/libraries-thirdparty/plugin/$s", packageInfo.PluginName))
 		end,
 		["frontend"] = function()
-			if checkC("/var/NileRiver/core/libraries-thirdparty/" .. softwareName) == false then
-                                fault("A frontend by that name is already installed.")
-                                exit()
-                        end
-			xs("rm /usr/bin/" .. softwareName)
-			xs("rm -rf /var/NileRiver/core/libraries-thirdparty/" .. softwareName)
+			if CheckC("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName) == false then
+                Fault("A frontend by that name is not installed.")
+                Exit()
+			end
+			Xs("rm /usr/bin/" .. packageInfo.FrontendName)
+			Xs("rm -rf /var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName)
 		end
 	}
 end
 
 
 --[=[ Update an Osiris Package ]=]--
-Manager.updateMPackage = function(packageName, promptBypass)
-	local nameInfo = splitString(packageName, "/")
-        local developerName = string.lower(trimWhite(nameInfo[1]))
-        local softwareName = string.lower(trimWhite(nameInfo[2]))
+Manager.UpdateOsirisPackage = function(packageName, promptBypass)
+	local nameInfo = SplitString(packageName, "/")
+        local developerName = string.lower(TrimWhite(nameInfo[1]))
+        local softwareName = string.lower(TrimWhite(nameInfo[2]))
         local packageInfo
         local s, e = pcall(function()
 		packageInfo = dofile(string.format("/var/NileRiver/packages/%s_%s", developerName, softwareName))
         end)
         if not s then
-                fault("The given OPMS package is not installed on the system.")
-                exit()
+                Fault("The given OPMS package is not installed on the system.")
+                Exit()
         end
 	if promptBypass ~= true then
-		say("Update the OPMS package " .. developerName .. "/" .. softwareName .. " ? (y/n)")
-		if string.lower(read()) ~= "y" then
-			fault("Package uodate for " .. developerName .. "/" .. softwareName .. " aborted.")
+		Say("Update the OPMS package " .. developerName .. "/" .. softwareName .. " ? (y/n)")
+		if string.lower(Read()) ~= "y" then
+			Fault("Package uodate for " .. developerName .. "/" .. softwareName .. " aborted.")
 		end
 	end
-	removeMPackage(packageName, true)
-	installMPackage(packageName, true)
+	RemoveOsirisPackage(packageName, true)
+	InstallOsirisPackage(packageName, true)
 end
 
 
 --[=[ Check installable package's required security level ]=]--
-Manager.checkPkgSecLevel = function(packageName)
-	say("Downloading package repo.")
-	xs("rm -rf /var/NileRiver/repo/* && sudo wget https://entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
+Manager.GetOsirisPackagePlacement = function(packageName)
+	Say("Downloading package repo.")
+	Xs("rm -rf /var/NileRiver/repo/* && sudo wget https://entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
 	local DuatRepo = dofile("/var/NileRiver/repo/repo.lua")
 
-	local packageName = trimWhite(packageName)
+	local packageName = TrimWhite(packageName)
 
 	if DuatRepo["official"][packageName] ~= nil then
-		return "strict"
+		return "official"
 	elseif DuatRepo["community"][packageName] ~= nil then
-		return "moderate"
+		return "community"
 	else
-		return "none"
+		return "global"
 	end
 end
 
 
 --[=[ Get list of installed packages ]=]-- 
-Manager.listInstalled = function()
-	say("Installed Osiris packages:")
-	for _,package in pairs(splitString(readCommand("ls /var/NileRiver/packages"))) do
-		local pkgNameInfo = splitString(package, "_")
-		say2(pkgNameInfo[1] .. "/" .. pkgNameInfo[2])
+Manager.ListInstalled = function()
+	Say("Installed Osiris packages:")
+	for _,package in pairs(SplitString(ReadCommand("ls /var/NileRiver/packages"))) do
+		local pkgNameInfo = SplitString(package, "_")
+		Say2(pkgNameInfo[1] .. "/" .. pkgNameInfo[2])
 	end
 end
 
 
 --[=[ Get list of packages in the Duat's repo ]=]--
-Manager.listRepo = function()
-	say("Downloading package repo.")
-	xs("rm -rf /var/NileRiver/repo/* && sudo wget https://entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
+Manager.ListRepo = function()
+	Say("Downloading package repo.")
+	Xs("rm -rf /var/NileRiver/repo/* && sudo wget https://entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
 
 	local DuatRepo = dofile("/var/NileRiver/repo/repo.lua")
 
-	say("The Duat's Package Repository")
-	say("Official:")
+	Say("The Duat's Package Repository")
+	Say("Official:")
 	for _,package in pairs(DuatRepo.official) do
-		say2(package[1])
+		Say2(package[1])
 	end
-	say("Community:")
+	Say("Community:")
 	for _,package in pairs(DuatRepo.community) do
-		say2(package[1])
+		Say2(package[1])
 	end
-	say("Due to the nature of \"global\" packages, they cannot be listed.")
+	Say("Due to the nature of \"global\" packages, they cannot be listed.")
 
 end
 

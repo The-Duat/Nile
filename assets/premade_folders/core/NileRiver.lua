@@ -1,86 +1,78 @@
-local NileRiver = {}
+NileRiver = {}
 
 
 
-NileRiver.initializeIO = function(frontend_IO)
-	read  = frontend_IO.inp
-	write = frontend_IO.outp
-	say   = frontend_IO.foutp
-	say2  = frontend_IO.afoutp
-	fault = frontend_IO.err
+NileRiver.InitializeIO = function(frontend_IO)
+	Read  = frontend_IO.inp
+	Write = frontend_IO.outp
+	Say   = frontend_IO.foutp
+	Say2  = frontend_IO.afoutp
+	Fault = frontend_IO.err
 end
 
-local json = dofile("/var/NileRiver/core/libraries/json.lua")
-jsonStringify = json.stringify
-jsonParse     = json.parse
+local Json = dofile("/var/NileRiver/core/libraries/json.lua")
+JsonStringify = Json.stringify
+JsonParse     = Json.parse
 
 local GlobalData = dofile("/var/NileRiver/core/libraries/Nile_Global_Data.lua")
-userName                 = GlobalData.userName
-homeDir                  = GlobalData.homeDir
-initSystem               = GlobalData.initSystem
-nativePkgManager         = GlobalData.nativePkgManager
-packageSecType           = GlobalData.packageSecType
-configurablePrograms     = GlobalData.configurablePrograms
-i3ConfigSheet            = GlobalData.i3ConfigSheet
-alacrittyConfigSheet     = GlobalData.alacrittyConfigSheet
-gtkConfigSheet           = GlobalData.gtkConfigSheet
-systemdCommandSheet      = GlobalData.systemdCommandSheet
-runitCommandSheet        = GlobalData.runitCommandSheet
-openrcCommandSheet       = GlobalData.openrcCommandSheet
-amdGpuDriverPackages     = GlobalData.amdGpuDriverPackages
-nvidiaPropDriverPackages = GlobalData.nvidiaPropDriverPackages
-nvidiaFossDriverPackages = GlobalData.nvidiaFossDriverPackages
-intelDriverPackages      = GlobalData.intelDriverPackages
-UITable                  = GlobalData.UITable
-integerCharacterSheet    = GlobalData.integerCharacterSheet
-hexCharacterSheet        = GlobalData.hexCharacterSheet
-pmCommandSheet           = GlobalData.pmCommandSheet
+UserName                 = GlobalData.UserName
+HomeDir                  = GlobalData.HomeDir
+InitSystem               = GlobalData.InitSystem
+NativePkgManager         = GlobalData.NativePkgManager
+OpmsSecurityLevel        = GlobalData.PackageSecType
+ConfigurablePrograms     = GlobalData.ConfigurablePrograms
+I3ConfigSheet            = GlobalData.I3ConfigSheet
+AlacrittyConfigSheet     = GlobalData.AlacrittyConfigSheet
+GtkConfigSheet           = GlobalData.GtkConfigSheet
+SystemdCommandSheet      = GlobalData.SystemdCommandSheet
+RunitCommandSheet        = GlobalData.RunitCommandSheet
+OpenrcCommandSheet       = GlobalData.OpenrcCommandSheet
+IntegerCharacterSheet    = GlobalData.IntegerCharacterSheet
+HexCharacterSheet        = GlobalData.HexCharacterSheet
+PmCommandSheet           = GlobalData.PmCommandSheet
 
 local UtilityFunctions = dofile("/var/NileRiver/core/libraries/Nile_Utility_Functions.lua")
-x            = UtilityFunctions.x
-xs           = UtilityFunctions.xs
-xaf          = UtilityFunctions.xaf
-runAsRoot    = UtilityFunctions.runAsRoot
-readCommand  = UtilityFunctions.readCommand
-iPkg         = UtilityFunctions.iPkg
-rPkg         = UtilityFunctions.rPkg
-sudo         = UtilityFunctions.sudo
-checkFile    = UtilityFunctions.checkFile
-readFile     = UtilityFunctions.readFile
-writeFile    = UtilityFunctions.writeFile
-splitString  = UtilityFunctions.splitString
-trimWhite    = UtilityFunctions.trimWhite
-isInt        = UtilityFunctions.isInt
-isHex        = UtilityFunctions.isHex
-wifiManager  = UtilityFunctions.wifiManager
-writeSetting = UtilityFunctions.writeSetting
-viewSettings = UtilityFunctions.viewSettings
-checkC       = UtilityFunctions.checkC
-iDesktop     = UtilityFunctions.iDesktop
-rDesktop     = UtilityFunctions.rDesktop
-exit         = UtilityFunctions.exit
+X            = UtilityFunctions.X
+Xs           = UtilityFunctions.Xs
+Xaf          = UtilityFunctions.Xaf
+RunAsRoot    = UtilityFunctions.RunAsRoot
+ReadCommand  = UtilityFunctions.ReadCommand
+IPkg         = UtilityFunctions.IPkg
+RPkg         = UtilityFunctions.RPkg
+CheckFile    = UtilityFunctions.CheckFile
+ReadFile     = UtilityFunctions.ReadFile
+WriteFile    = UtilityFunctions.WriteFile
+SplitString  = UtilityFunctions.SplitString
+TrimWhite    = UtilityFunctions.TrimWhite
+IsInt        = UtilityFunctions.IsInt
+IsHex        = UtilityFunctions.IsHex
+WifiManager  = UtilityFunctions.WifiManager
+WriteSetting = UtilityFunctions.WriteSetting
+ViewSettings = UtilityFunctions.ViewSettings
+CheckC       = UtilityFunctions.CheckC
+Exit         = UtilityFunctions.Exit
 
 local PackageManager = dofile("/var/NileRiver/core/libraries/Nile_OPMS.lua")
-installMPackage  = PackageManager.installMPackage
-removeMPackage   = PackageManager.removeMPackage
-updateMPackage   = PackageManager.updateMPackage
-checkPkgSecLevel = PackageManager.checkPkgSecLevel
-listInstalled    = PackageManager.listInstalled
-listRepo         = PackageManager.listRepo
+InstallOsirisPackage      = PackageManager.InstallOsirisPackage
+RemoveOsirisPackage       = PackageManager.RemovesOsirisPackage
+UpdateOsirisPackage       = PackageManager.UpdateOsirisPackage
+GetOsirisPackagePlacement = PackageManager.GetOsirisPackagePlacement
+ListInstalled             = PackageManager.ListInstalled
+ListRepo                  = PackageManager.ListRepo
 
 NileRiver.System = {}
 
 local SystemFunctions = dofile("/var/NileRiver/core/libraries/Nile_System_Functions.lua")
-NileRiver.System.info     = SystemFunctions.info
-NileRiver.System.config   = SystemFunctions.config
-NileRiver.System.theme    = SystemFunctions.theme
-NileRiver.System.service  = SystemFunctions.service
-NileRiver.System.graphics = SystemFunctions.graphics
-NileRiver.System.network  = SystemFunctions.network
-NileRiver.System.software = SystemFunctions.software
-NileRiver.System.update   = SystemFunctions.update
-NileRiver.System.start    = SystemFunctions.start
-NileRiver.System.plugin   = SystemFunctions.plugin
+NileRiver.System.Info     = SystemFunctions.Info
+NileRiver.System.Config   = SystemFunctions.Config
+NileRiver.System.Theme    = SystemFunctions.Theme
+NileRiver.System.Service  = SystemFunctions.Service
+NileRiver.System.Graphics = SystemFunctions.Graphics
+NileRiver.System.Network  = SystemFunctions.Network
+NileRiver.System.Software = SystemFunctions.Software
+NileRiver.System.Update   = SystemFunctions.Update
+NileRiver.System.Start    = SystemFunctions.Start
+NileRiver.System.Plugin   = SystemFunctions.Plugin
 
 
 
