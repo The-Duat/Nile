@@ -250,7 +250,7 @@ echo "  > Installing the river frontend."
 if [ -f "/usr/bin/river" ]; then
 	sudo -S rm /usr/bin/river
 fi
-chmod +x assets/premade_folders/river
+sudo -S chmod +x assets/premade_folders/river
 sudo -S cp assets/premade_folders/river /usr/bin
 
 
@@ -293,7 +293,7 @@ fi
 echo "  > Downloading theme."
 wget https://github.com/catppuccin/gtk/releases/download/v0.4.3/Catppuccin-Mocha-Standard-Pink-Dark.zip -O /var/NileRiver/download/catppuccin.zip
 echo "  > Extracting theme."
-unzip /var/NileRiver/download/catppuccin.zip -d /var/NileRiver/download/cat
+unzip /var/NileRiver/download/catppuccin.zip -d /var/NileRiver/download/cat -q
 echo "  > Renaming theme files."
 mv /var/NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark /var/NileRiver/download/cat/Catppuccin
 mv /var/NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /var/NileRiver/download/cat/Catppuccin-hdpi
@@ -319,7 +319,7 @@ fi
 echo "  > Downloading theme."
 wget https://github.com/catppuccin/cursors/raw/main/cursors/Catppuccin-Mocha-Lavender-Cursors.zip -O /var/NileRiver/download/cursor.zip
 echo "  > Extracting theme."
-unzip /var/NileRiver/download/cursor.zip -d /var/NileRiver/download/cat-cursor
+unzip /var/NileRiver/download/cursor.zip -d /var/NileRiver/download/cat-cursor -q
 echo "  > Renaming theme file."
 mv /var/NileRiver/download/cat-cursor/Catppuccin-Mocha-Lavender-Cursors /var/NileRiver/download/cat-cursor/catppuccin-cursor
 echo "  > Installing cursor theme."
@@ -457,12 +457,7 @@ for d in /var/NileRiver/config/*/; do
 done
 echo "  > /var/NileRiver/download  -  777"
 sudo -S chmod -R 777 /var/NileRiver/download
-for d in /var/NileRiver/backup/*/; do
-	dn=$(basename $d)
-	echo "  > $d   - 755 (Ownership: $dn:$dn)"
-	sudo -S chown -R $dn:$dn $d
-	sudo -S chmod -R 755 $d
-done
+
 
 echo -e "| Disabling any preinstalled display managers."
 if ps -e | grep sddm; then
