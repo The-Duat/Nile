@@ -293,7 +293,7 @@ fi
 echo "  > Downloading theme."
 wget https://github.com/catppuccin/gtk/releases/download/v0.4.3/Catppuccin-Mocha-Standard-Pink-Dark.zip -O /var/NileRiver/download/catppuccin.zip
 echo "  > Extracting theme."
-unzip /var/NileRiver/download/catppuccin.zip -d /var/NileRiver/download/cat -q
+unzip -qq /var/NileRiver/download/catppuccin.zip -d /var/NileRiver/download/cat
 echo "  > Renaming theme files."
 mv /var/NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark /var/NileRiver/download/cat/Catppuccin
 mv /var/NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /var/NileRiver/download/cat/Catppuccin-hdpi
@@ -319,7 +319,7 @@ fi
 echo "  > Downloading theme."
 wget https://github.com/catppuccin/cursors/raw/main/cursors/Catppuccin-Mocha-Lavender-Cursors.zip -O /var/NileRiver/download/cursor.zip
 echo "  > Extracting theme."
-unzip /var/NileRiver/download/cursor.zip -d /var/NileRiver/download/cat-cursor -q
+unzip -qq /var/NileRiver/download/cursor.zip -d /var/NileRiver/download/cat-cursor
 echo "  > Renaming theme file."
 mv /var/NileRiver/download/cat-cursor/Catppuccin-Mocha-Lavender-Cursors /var/NileRiver/download/cat-cursor/catppuccin-cursor
 echo "  > Installing cursor theme."
