@@ -261,7 +261,7 @@ Functions.GetNativePackages = function()
 			table.insert(formattedPackages, {["Name"] = parts[1], ["Version"] = parts[2]})
 		end
 	elseif NativePkgManager == "apt" then
-		local packages == SplitString(ReadCommandFile("apt list --installed"), "\n")
+		local packages = SplitString(ReadCommandFile("apt list --installed"), "\n")
 		local i = 2
 		while i <= #packages do
 			local parts = SplitString(packages[i], " ")
