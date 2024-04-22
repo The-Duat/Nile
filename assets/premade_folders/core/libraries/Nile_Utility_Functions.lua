@@ -54,6 +54,18 @@ local function ReadCommand(cmd)
 end
 Functions.ReadCommand = ReadCommand
 
+-- Same as ReadCommand, but by redirecting output to a file.
+local function ReadCommandFile(cmd)
+	local fileName = tostring(math.random(1000000, 2000000))
+	os.execute("touch /tmp/" .. fileName)
+	os.execute(cmd .. " > /tmp/" .. fileName)
+	local file = io.open("/tmp/" .. fileName, "r")
+	local contents = file:read("*all")
+	file:close()
+	os.execute("rm /tmp/" .. fileName)
+	return contents
+end
+
 -- Install packages using the native package manager.
 Functions.IPkg = function(packages, aurmode)
 	local baseCommand
@@ -243,7 +255,7 @@ end
 Functions.GetNativePackages = function()
 	local formattedPackages = {}
 	if NativePkgManager == "pacman" then
-		local packages = SplitString(ReadCommand("sudo pacman -Qe"), "\n")
+		local packages = SplitString(ReadCommandFile("pacman -Qe"), "\n")
 		for _,package in ipairs(packages) do
 			local parts = SplitString(package, " ")
 			table.insert(formattedPackages, {["Name"] = parts[1], ["Version"] = parts[2]})
