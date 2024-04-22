@@ -260,10 +260,18 @@ Functions.GetNativePackages = function()
 			local parts = SplitString(package, " ")
 			table.insert(formattedPackages, {["Name"] = parts[1], ["Version"] = parts[2]})
 		end
-		return formattedPackages
+	elseif NativePkgManager == "apt" then
+		local packages == SplitString(ReadCommandFile("apt list --installed"), "\n")
+		local i = 2
+		while i <= #packages do
+			local parts = SplitString(packages[i], " ")
+			table.insert(formattedPackages, {["Name"] = SplitString(parts[1], "/")[1], ["Version"] = parts[2]})
+			i = i + 1
+		end
 	else
 		return nil
 	end
+	return formattedPackages
 end
 
 -- Change NILE setting.
