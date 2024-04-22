@@ -138,7 +138,7 @@ end
 --[=[ String Manipulation ]=]--
 
 -- Split string into multiple parts.
-Functions.SplitString = function(str, splitChar)
+local function SplitString(str, splitChar)
 	local resultSplit = {}
 	if splitChar == nil then
 		splitChar = " "
@@ -150,6 +150,7 @@ Functions.SplitString = function(str, splitChar)
 	end
 	return resultSplit
 end
+Functions.SplitString = SplitString
 
 -- Remove whitespace from string.
 Functions.TrimWhite = function(str)
@@ -237,6 +238,21 @@ end
 
 
 --[=[ Other ]=]--
+
+-- Get a list of every installed native package manager.
+Functions.GetNativePackages = function()
+	local formattedPackages = {}
+	if NativePkgManager == "pacman" then
+		local packages = SplitString(ReadCommand("sudo pacman -Qe"), "\n")
+		for _,package in ipairs(packages) do
+			local parts = SplitString(package, " ")
+			table.insert(formattedPackages, {["Name"] = parts[1], ["Version"] = parts[2]})
+		end
+		return formattedPackages
+	else
+		return nil
+	end
+end
 
 -- Change NILE setting.
 Functions.WriteSetting = function(program, setting, value)

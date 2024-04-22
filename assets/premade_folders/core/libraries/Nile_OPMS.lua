@@ -179,12 +179,13 @@ end
 
 
 --[=[ Get list of installed packages ]=]-- 
-Manager.ListInstalled = function()
-	Say("Installed Osiris packages:")
+Manager.GetOsirisPackages = function()
+	local packages = {}
 	for _,package in pairs(SplitString(ReadCommand("ls /var/NileRiver/packages"))) do
 		local pkgNameInfo = SplitString(package, "_")
-		Say2(pkgNameInfo[1] .. "/" .. pkgNameInfo[2])
+		table.insert(packages, pkgNameInfo[1] .. "/" .. pkgNameInfo[2])
 	end
+	return packages
 end
 
 

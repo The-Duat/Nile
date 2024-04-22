@@ -18,7 +18,14 @@ System.Info = function(operator)
 
 		-- List installed OPMS packages.
 		["pkgs"] = function()
-			ListInstalled()
+			Say("Installed Osiris packages:")
+			for _,package in ipairs(GetOsirisPackages()) do
+				Say2(package)
+			end
+			Say("Installed Native packages:")
+			for _,package in ipairs(GetNativePackages()) do
+				Say2(package.Name .. " (" .. package.Version .. ")")
+			end
 		end,
 
 		-- List packages in the Duat's repository.
