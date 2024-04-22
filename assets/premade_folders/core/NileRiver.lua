@@ -58,7 +58,7 @@ InstallOsirisPackage      = PackageManager.InstallOsirisPackage
 RemoveOsirisPackage       = PackageManager.RemovesOsirisPackage
 UpdateOsirisPackage       = PackageManager.UpdateOsirisPackage
 GetOsirisPackagePlacement = PackageManager.GetOsirisPackagePlacement
-GetOsirisPackages         = PackageManager.ListInstalled
+GetOsirisPackages         = PackageManager.GetOsirisPackages
 ListRepo                  = PackageManager.ListRepo
 
 NileRiver.System = {}
