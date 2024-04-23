@@ -20,40 +20,14 @@ fi
 
 if command -v pacman >/dev/null 2>&1; then
 	manager="pacman"
-		echo "Updating your system to the latest packages."
-			sudo -S pacman -Syu
-		echo "Installing needed NILE dependencies."
-			sudo -S pacman -S wget alacritty curl dmenu feh firefox fish gtk3 i3-wm i3status lua luarocks maim neofetch neovim noto-fonts papirus-icon-theme picom thunar unzip xclip	
 elif command -v apt >/dev/null 2>&1; then
 	manager="apt"
-		echo "Adding required Apt repositories."
-			sudo -S add-apt-repository ppa:aslatter/ppa -y
-			sudo -S add-apt-repository ppa:papirus/papirus
-		echo "Updating your system to the latest packages."
-			sudo -S apt update && sudo apt upgrade
-		echo "Installing needed NILE dependencies."
-			sudo -S apt install wget alacritty curl dmenu feh firefox fish libgtk-3-0 i3-wm i3status lua5.4 luarocks maim neofetch fonts-noto papirus-icon-theme picom thunar unzip xclip
 elif command -v xbps-install >/dev/null 2>&1; then
 	manager="xbps"
-		echo "Updating your system to the latest packages."
-			sudo -S xbps-install -Su
-		echo "Installing needed NILE dependencies."
-			sudo -S xbps-install -S wget alacritty curl dmenu feh firefox fish-shell gtk+3 i3-gaps i3status lua luarocks maim neofetch noto-fonts-ttf papirus-icon-theme picom thunar unzip xclip
 elif command -v dnf >/dev/null 2>&1; then
 	manager="dnf"
-		echo "Installing needed NILE dependencies."
-			sudo -S dnf install wget alacritty curl dmenu feh firefox fish gtk3 i3 i3status lua luarocks maim neofetch google-noto-fonts-common papirus-icon-theme picom thunar unzip xclip
 elif command -v zypper >/dev/null 2>&1; then
 	manager="zypper"
-		echo "Updating your system to the latest packages."
-		sudo -S zypper refresh
-			if grep -q 'ID="opensuse-leap"' /etc/os-release; then
-    			sudo -S zypper up
-			elif grep -q 'ID="opensuse-tumbleweed"' /etc/os-release; then
-				sudo -S zypper dup
-			fi
-		echo "Installing needed NILE dependencies."
-			sudo -S zypper install wget alacritty curl dmenu feh mozillafirefox fish gtk3-branding-upstream i3 i3status lua53 lua53-luarocks maim neofetch noto-mono-fonts papirus-icon-theme picom thunar unzip xclip
 else
 	echo "The Nile Integrated Linux Environment does not support this Linux distribution."
 	echo "Please refer to the NILE documentation at https://entertheduat.org for a list of system requirements."
@@ -65,7 +39,7 @@ fi
 installType=""
 echo "Checking install type."
 if [ -d "/var/NileRiver" ]; then
-	echo "| Performing system update."
+	echo "| Performing NILE update."
 	installType="update"
 	sudo -S chmod -R 777 /var/NileRiver
 	sudo -S chmod -R 777 /var/NileRiver/*

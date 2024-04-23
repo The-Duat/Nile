@@ -268,6 +268,8 @@ Functions.GetNativePackages = function()
 			table.insert(formattedPackages, {["Name"] = SplitString(parts[1], "/")[1], ["Version"] = parts[2]})
 			i = i + 1
 		end
+	elseif NativePkgManager == "dnf" then
+		
 	else
 		return nil
 	end
