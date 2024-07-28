@@ -163,7 +163,7 @@ end
 --[=[ Check installable package's required security level ]=]--
 Manager.GetOsirisPackagePlacement = function(packageName)
 	Say("Downloading package repo.")
-	Xs("rm -rf /var/NileRiver/repo/* && sudo wget https://entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
+	Xs("rm -rf /var/NileRiver/repo/* && sudo wget https://nile.entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
 	local DuatRepo = dofile("/var/NileRiver/repo/repo.lua")
 
 	local packageName = TrimWhite(packageName)
@@ -192,7 +192,7 @@ end
 --[=[ Get list of packages in the Duat's repo ]=]--
 Manager.ListRepo = function()
 	Say("Downloading package repo.")
-	Xs("rm -rf /var/NileRiver/repo/* && sudo wget https://entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
+	Xs("rm -rf /var/NileRiver/repo/* && sudo wget https://nile.entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
 
 	local DuatRepo = dofile("/var/NileRiver/repo/repo.lua")
 
