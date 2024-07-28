@@ -1,6 +1,6 @@
 # The Nile Integrated Linux Environment (N.I.L.E.)
 
-[Documentation has moved, click me to be brought to the new documentation.](https://entertheduat.org)
+[Documentation has moved, click me to be brought to the new documentation.](https://nile.entertheduat.org)
 
 *-Ankhikamun 2/20/23*
 
