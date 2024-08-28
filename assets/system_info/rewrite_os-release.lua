@@ -20,7 +20,7 @@ local function addEntry(str)
 end
 
 
-local reLines = UtilModule.splitString(releaseContents, "\n")
+local reLines = UtilModule.SplitString(releaseContents, "\n")
 
 if string.sub(reLines[1], 7, 10) == "Nile" then
 	print("Already overwritten.")
@@ -28,7 +28,7 @@ if string.sub(reLines[1], 7, 10) == "Nile" then
 end
 
 for _,line in ipairs(reLines) do
-	local split = UtilModule.splitString(line, "=")
+	local split = UtilModule.SplitString(line, "=")
 	local key = split[1]
 	local value = split[2]
 	if key == "NAME" or key == "PRETTY_NAME" then
