@@ -11,6 +11,7 @@ if original == nil then
 end
 
 local releaseContents = original:read("*all")
+print("os-release contents:\n" .. releaseContents)
 original:close()
 local newContents = ""
 
