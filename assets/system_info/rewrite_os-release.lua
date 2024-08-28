@@ -3,7 +3,7 @@ local dir = arg[1]
 local original = io.open(dir .. "os-release", "r")
 local copy = io.open(dir .. "nile-os-release", "w")
 
-local splitString = dofile("/var/NileRiver/core/libraries/Nile_Utility_Functions.lua").splitString
+local UtilModule = dofile("/var/NileRiver/core/libraries/Nile_Utility_Functions.lua")
 
 if original == nil then
 	print(dir .. "os-release not found. Changes not made.")
@@ -19,7 +19,7 @@ local function addEntry(str)
 end
 
 
-local reLines = splitString(releaseContents, "\n")
+local reLines = UtilModule.splitString(releaseContents, "\n")
 
 if string.sub(reLines[1], 7, 10) == "Nile" then
 	print("Already overwritten.")
@@ -27,7 +27,7 @@ if string.sub(reLines[1], 7, 10) == "Nile" then
 end
 
 for _,line in ipairs(reLines) do
-	local split = splitString(line, "=")
+	local split = UtilModule.splitString(line, "=")
 	local key = split[1]
 	local value = split[2]
 	if key == "NAME" or key == "PRETTY_NAME" then
