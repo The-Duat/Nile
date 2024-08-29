@@ -166,11 +166,11 @@ Manager.GetOsirisPackagePlacement = function(packageName)
 	Xs("rm -rf /var/NileRiver/repo/* && sudo wget https://nile.entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
 	local DuatRepo = dofile("/var/NileRiver/repo/repo.lua")
 
-	local packageName = TrimWhite(packageName)
+	local packageNameFormatted = string.lower(TrimWhite(packageName))
 
-	if DuatRepo["official"][packageName] ~= nil then
+	if DuatRepo["official"][packageNameFormatted] ~= nil then
 		return "official"
-	elseif DuatRepo["community"][packageName] ~= nil then
+	elseif DuatRepo["community"][packageNameFormatted] ~= nil then
 		return "community"
 	else
 		return "global"
