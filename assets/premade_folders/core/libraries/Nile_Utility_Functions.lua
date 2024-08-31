@@ -1,3 +1,19 @@
+-- Package installation helper functions
+
+local function PipeCommand(command)
+	local newFileName = os.tmpname()
+	os.execute("touch /tmp/tmpname")
+	return io.popen("LANG=en_US.UTF-8 " .. command .. " < " .. newFileName .. " 2>&1")
+end
+
+
+local function installPacmanPackages(packages)
+	
+end
+
+
+
+
 --[=[ [ General Utility Functions ] ]=]--
 
 local Functions = {}
@@ -16,31 +32,6 @@ Functions.Xs = function(cmd)
 	os.execute("sudo " .. cmd)
 end
 
--- Execute string as file.
-Functions.Xaf = function(fileDir, cmd)
-	local fileName = tostring(math.random(1,1000000))
-	os.execute("touch " .. fileDir .. "/" .. fileName)
-	os.execute("sudo chown -R " .. UserName .. ":" .. UserName .. " " .. fileDir .. "/" .. fileName)
-	os.execute("sudo chmod -R 777 " .. fileDir .. "/" .. fileName)
-	local file = io.open(fileDir .. "/" .. fileName, "w")
-	if file ~= nil then
-		file:write(cmd)
-	else
-		Fault("Error dumping string into " .. fileName)
-	end
-	file:close()
-	os.execute("sleep 1")
-	os.execute("cd " .. fileDir .. " && ./" .. fileName)
-	os.execute("rm " .. fileDir .. "/" .. fileName)
-end
-
--- Run given Lua function as root.S
-Functions.RunAsRoot = function(fn)
-	if not type(fn) == "Function" then
-		Fault("Error.")
-	end
-end
-
 -- Read output of a command.
 local function ReadCommand(cmd)
 	local file = assert(io.popen(cmd, 'r'))
@@ -54,32 +45,21 @@ local function ReadCommand(cmd)
 end
 Functions.ReadCommand = ReadCommand
 
--- Same as ReadCommand, but by redirecting output to a file.
-local function ReadCommandFile(cmd)
-	local fileName = tostring(math.random(1000000, 2000000))
-	os.execute("touch /tmp/" .. fileName)
-	os.execute(cmd .. " > /tmp/" .. fileName)
-	local file = io.open("/tmp/" .. fileName, "r")
-	local contents = file:read("*all")
-	file:close()
-	os.execute("rm /tmp/" .. fileName)
-	return contents
-end
-
 -- Install packages using the native package manager.
 Functions.IPkg = function(packages, aurmode)
-	local baseCommand
-	if NativePkgManager == "pacman" then
-		baseCommand = PmCommandSheet[NativePkgManager].install
-		if aurmode == true then
-			baseCommand = "yay -S"
-		end
-	end
 	local packageString = ""
-	for _,package in pairs(packages) do
+	for _,package in ipairs(packages) do
 		packageString = packageString .. package .. " "
 	end
-	os.execute(baseCommand .. " " .. packageString)
+	packageString = string.sub(packageString, 1, #packageString - 1)
+
+	if NativePkgManager == "pacman" then
+		if aurmode == true then
+			os.execute("yay -S " .. packageString)
+		else
+			installPacmanPackages(packageString)
+		end
+	end
 end
 
 -- Remove packages using the native package manager.
@@ -96,18 +76,6 @@ Functions.RPkg = function(packages, aurmode)
 		packageString = packageString .. package .. " "
 	end
 	os.execute(baseCommand .. " " .. packageString)
-end
-
--- The Sudo function. Temporarily run Lua code as root.
-Functions.Sudo = function(fn)
-	local fnData = string.dump(fn)
-	local hexfnData = ""
-	for i = 1, #fnData do
-		local byte = string.byte(fnData, i)
-		hexfnData = hexfnData .. string.format("\\x%02x", byte)
-	end
-	local cmd = "sudo lua -e \"load('" .. hexfnData .. "')()\""
-	os.execute(cmd)
 end
 
 
@@ -222,9 +190,7 @@ Functions.WifiManager = function(action, ssid, password)
 		os.exit()
 	end
 
-	local raw = io.popen("ip route | grep default | awk '{print $5}'")
-    local wirelessInterface = raw:read("*a")
-    raw:close()
+	local wirelessInterface ReadCommand("ip route | grep default | awk '{print $5}'")
     wirelessInterface = wirelessInterface:gsub("%s+$", "")
 
 	if action == "getlocalnetworks" then
@@ -254,25 +220,35 @@ end
 -- Get a list of every installed native package manager.
 Functions.GetNativePackages = function()
 	local formattedPackages = {}
+
 	if NativePkgManager == "pacman" then
-		local packages = SplitString(ReadCommandFile("pacman -Qe"), "\n")
+		local packages = {}
+		for line in io.popen("pacman -Qe", "r"):lines() do
+			table.insert(packages, line)
+		end
 		for _,package in ipairs(packages) do
 			local parts = SplitString(package, " ")
 			table.insert(formattedPackages, {["Name"] = parts[1], ["Version"] = parts[2]})
 		end
+
 	elseif NativePkgManager == "apt" then
-		local packages = SplitString(ReadCommandFile("apt list --installed"), "\n")
-		local i = 2
-		while i <= #packages do
-			local parts = SplitString(packages[i], " ")
-			table.insert(formattedPackages, {["Name"] = SplitString(parts[1], "/")[1], ["Version"] = parts[2]})
-			i = i + 1
+		local packages = {}
+		for line in io.popen("apt list --installed"):lines() do
+			table.insert(packages, line)
 		end
+		for _,package in ipairs(packages) do
+			local parts = SplitString(package, " ")
+			table.insert(formattedPackages, {["Name"] = SplitString(parts[1], "/")[1], ["Version"] = parts[2]})
+		end
+
 	elseif NativePkgManager == "dnf" then
 		
+
 	else
 		return nil
+
 	end
+
 	return formattedPackages
 end
 
@@ -290,20 +266,41 @@ end
 
 -- View NILE program settings.
 Functions.ViewSettings = function(directory)
+	local settingsDirectory = directory .. "/settings"
+	for _,setting in ipairs(Posix.dirent.dir(settingsDirectory)) do
+		local settingFile = io.open(settingsDirectory .. "/" .. setting, "r")
+		if settingFile ~= nil then
+			Say2(string.format("%-18s %s", setting, settingFile:read("*all")))
+			settingFile:close()
+		else
+			Fault("Error opening file: " .. settingsDirectory .. "/" .. setting)
+			os.exit()
+		end
+	end
+
+	--[=[
 	for _,settingName in pairs(SplitString(ReadCommand("ls " .. directory .. "/settings"))) do
 		settingName = TrimWhite(settingName)
 		local settingFile = io.open(directory .. "/settings/" .. settingName, "r")
 		local settingValue = settingFile:read("*all")
 		Say2(string.format("%-18s %s", settingName, settingValue))
-                settingFile:close()
-        end
+        settingFile:close()
+    end
+	]=]--
 end
 
--- Check "c.lua" existence. Used to check Nile directory existence.
-Functions.CheckC = function(path)
-	if pcall(function()
-		dofile(path .. "/c.lua")
-	end) then
+-- Check if a directory exists
+Functions.DirExists = function(directory)
+	if Posix.sys.stat(directory) ~= nil then
+		return true
+	else
+		return false
+	end
+end
+
+-- Check if program is running under Root
+Functions.IsRoot = function()
+	if Posix.unistd.geteuid() == 0 then
 		return true
 	else
 		return false

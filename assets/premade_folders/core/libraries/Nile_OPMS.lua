@@ -4,6 +4,12 @@ local Manager = {}
 
 --[=[ Install an Osiris package ]=]--
 Manager.InstallOsirisPackage = function(packageName, promptBypass)
+
+	if IsRoot() == false then
+		Fault("This action must be ran as root.")
+		Exit()
+	end
+
 	local nameInfo = SplitString(packageName, "/")
 	local developerName = string.lower(TrimWhite(nameInfo[1]))
 	local softwareName = string.lower(TrimWhite(nameInfo[2]))
@@ -46,7 +52,7 @@ Manager.InstallOsirisPackage = function(packageName, promptBypass)
 
 	local installType = {
 		["theme"] = function()
-            if CheckC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == true then
+            if DirExists("/var/NileRiver/themes/" .. packageInfo.ThemeName) == true then
 				Fault("A theme by that name is already installed.")
 				Exit()
 			end
@@ -54,7 +60,7 @@ Manager.InstallOsirisPackage = function(packageName, promptBypass)
 			Xs(string.format("mv /var/NileRiver/work/%s/theme/* /var/NileRiver/themes/%s/", softwareName, packageInfo.ThemeName))
 		end,
 		["plugin"] = function()
-			if CheckC("/var/NileRiver/plugins/" .. packageInfo.PluginName) == true then
+			if DirExists("/var/NileRiver/plugins/" .. packageInfo.PluginName) == true then
 				Fault("A plugin by that name is already installed.")
 				Exit()
 			end
@@ -64,7 +70,7 @@ Manager.InstallOsirisPackage = function(packageName, promptBypass)
 			Xs(string.format("mv /var/NileRiver/work/%s/libraries/* /var/NileRiver/core/libraries-thirdparty/%s/", softwareName, packageInfo.PluginName))
 		end,
 		["frontend"] = function()
-			if CheckC("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName) == true then
+			if DirExists("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName) == true then
 				Fault("A frontend by that name is already installed.")
 				Exit()
 			end
@@ -111,21 +117,21 @@ Manager.RemoveOsirisPackage = function(packageName, promptBypass)
 
 	local uninstallType = {
 		["theme"] = function()
-			if CheckC("/var/NileRiver/themes/" .. packageInfo.ThemeName) == false then
+			if DirExists("/var/NileRiver/themes/" .. packageInfo.ThemeName) == false then
                 Fault("A theme by that name is not installed.")
 				Exit()
 			end
 			Xs(string.format("rm -rf /var/NileRiver/themes/%s", packageInfo.ThemeName))
 		end,
 		["plugin"] = function()
-			if CheckC("/var/NileRiver/plugins/" .. packageInfo.PluginName) == false then
+			if DirExists("/var/NileRiver/plugins/" .. packageInfo.PluginName) == false then
                 Fault("A plugin by that name is not installed.")
 				Exit()
 			end
 			Xs(string.format("rm -rf /var/NileRiver/core/libraries-thirdparty/plugin/$s", packageInfo.PluginName))
 		end,
 		["frontend"] = function()
-			if CheckC("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName) == false then
+			if DirExists("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName) == false then
                 Fault("A frontend by that name is not installed.")
                 Exit()
 			end

@@ -1,6 +1,6 @@
 NileRiver = {}
 
-
+Posix = require("posix")
 
 NileRiver.InitializeIO = function(frontend_IO)
 	Read  = frontend_IO.inp
@@ -34,7 +34,6 @@ PmCommandSheet           = GlobalData.PmCommandSheet
 local UtilityFunctions = dofile("/var/NileRiver/core/libraries/Nile_Utility_Functions.lua")
 X                 = UtilityFunctions.X
 Xs                = UtilityFunctions.Xs
-Xaf               = UtilityFunctions.Xaf
 RunAsRoot         = UtilityFunctions.RunAsRoot
 ReadCommand       = UtilityFunctions.ReadCommand
 IPkg              = UtilityFunctions.IPkg
@@ -50,7 +49,8 @@ WifiManager       = UtilityFunctions.WifiManager
 GetNativePackages = UtilityFunctions.GetNativePackages
 WriteSetting      = UtilityFunctions.WriteSetting
 ViewSettings      = UtilityFunctions.ViewSettings
-CheckC            = UtilityFunctions.CheckC
+DirExists         = UtilityFunctions.DirExists
+IsRoot            = UtilityFunctions.IsRoot
 Exit              = UtilityFunctions.Exit
 
 local PackageManager = dofile("/var/NileRiver/core/libraries/Nile_OPMS.lua")
@@ -61,19 +61,19 @@ GetOsirisPackagePlacement = PackageManager.GetOsirisPackagePlacement
 GetOsirisPackages         = PackageManager.GetOsirisPackages
 ListRepo                  = PackageManager.ListRepo
 
-NileRiver.System = {}
+NileRiver.Main = {}
 
-local SystemFunctions = dofile("/var/NileRiver/core/libraries/Nile_System_Functions.lua")
-NileRiver.System.Info     = SystemFunctions.Info
-NileRiver.System.Config   = SystemFunctions.Config
-NileRiver.System.Theme    = SystemFunctions.Theme
-NileRiver.System.Service  = SystemFunctions.Service
-NileRiver.System.Graphics = SystemFunctions.Graphics
-NileRiver.System.Network  = SystemFunctions.Network
-NileRiver.System.Software = SystemFunctions.Software
-NileRiver.System.Update   = SystemFunctions.Update
-NileRiver.System.Start    = SystemFunctions.Start
-NileRiver.System.Plugin   = SystemFunctions.Plugin
+local MainFunctions = dofile("/var/NileRiver/core/libraries/Nile_Main_Functions.lua")
+NileRiver.Main.Info     = MainFunctions.Info
+NileRiver.Main.Config   = MainFunctions.Config
+NileRiver.Main.Theme    = MainFunctions.Theme
+NileRiver.Main.Service  = MainFunctions.Service
+NileRiver.Main.Graphics = MainFunctions.Graphics
+NileRiver.Main.Network  = MainFunctions.Network
+NileRiver.Main.Software = MainFunctions.Software
+NileRiver.Main.Update   = MainFunctions.Update
+NileRiver.Main.Start    = MainFunctions.Start
+NileRiver.Main.Plugin   = MainFunctions.Plugin
 
 
 

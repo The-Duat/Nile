@@ -1,9 +1,9 @@
-local System = {}
+local Main = {}
 
 
 
 --[=[ Display system info ]=]--
-System.Info = function(operator)
+Main.Info = function(operator)
 	local switch = {
 
 		-- Show help page.
@@ -61,7 +61,7 @@ System.Info = function(operator)
 		switch[operator]()
 
 		-- Display theme info
-	elseif CheckC("/var/NileRiver/themes/" .. operator) == true then
+	elseif DirExists("/var/NileRiver/themes/" .. operator) == true then
 		Say("Settings for theme " .. operator .. ":")
 		Say("i3 Settings:")
 		ViewSettings("/var/NileRiver/themes/" .. operator .. "/i3")
@@ -77,7 +77,7 @@ end
 
 
 --[=[ System configuration ]=]--
-System.Config = function(operator, value)
+Main.Config = function(operator, value)
 
 	-- Change the system wallpaper.
 	if operator == "wallpaper" then
@@ -98,7 +98,7 @@ System.Config = function(operator, value)
 
 	-- Change NILE Theme
 	elseif operator == "theme" then
-		if CheckC("/var/NileRiver/themes/" .. value) == false then
+		if DirExists("/var/NileRiver/themes/" .. value) == false then
 			Fault("The theme " .. value .. " is not installed.")
 		end
 		Say("Overwrite your current settings with the theme " .. value .. "? (y/n)")
@@ -115,7 +115,7 @@ System.Config = function(operator, value)
 		X(string.format("cd /var/NileRiver/config/%s/gtk && ./genconf", UserName))
 		X(string.format("cd /var/NileRiver/config/%s/alacritty && ./genconf", UserName))
 		X(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", UserName))
-		if CheckC("/var/NileRiver/config/" .. UserName) then
+		if DirExists("/var/NileRiver/config/" .. UserName) then
 			Say("Theme has sucessfully been enabled.")
 		else
 			Fault("An unknown error occured when attempting to enable theme " .. value)
@@ -195,7 +195,7 @@ end
 
 
 --[=[ Theme Management ]=]--
-System.Theme = function(operator, value)
+Main.Theme = function(operator, value)
 
 	if operator == "compile" then
 		Say("Compile current settings into a new theme? (y/n)")
@@ -208,7 +208,7 @@ System.Theme = function(operator, value)
 		themeName = themeName:gsub("/", "-")
 
 		Say("Checking existence of " .. themeName)
-		if CheckC("/var/NileRiver/themes/" .. themeName) == true then
+		if DirExists("/var/NileRiver/themes/" .. themeName) == true then
 			Fault("A theme by the name " .. themeName .. " already exists. Please choose a different name.")
 			Exit()
 		end
@@ -217,7 +217,7 @@ System.Theme = function(operator, value)
 		Xs(string.format("cp -r /var/NileRiver/config/%s/* /var/NileRiver/themes/%s/", UserName, themeName))
 		Xs("chown -R root:root /var/NileRiver/themes/" .. themeName)
 		Xs("chmod 755 /var/NileRiver/themes/" .. themeName)
-		if CheckC("/var/NileRiver/themes/" .. themeName) ~= false then
+		if DirExists("/var/NileRiver/themes/" .. themeName) ~= false then
 			Say("Theme " .. themeName .. "has been successfully created.")
 		else
 			Fault("Something went wrong while compiling theme " .. themeName)
@@ -227,7 +227,7 @@ end
 
 
 --[=[ Init System service management ]=]--
-System.Service = function(operator, value)
+Main.Service = function(operator, value)
 
 	local commandSheet
 	if InitSystem == "systemd" then
@@ -259,7 +259,7 @@ end
 
 
 --[=[ Graphics management ]=]--
-System.Graphics = function(operator, value)
+Main.Graphics = function(operator, value)
 
 	-- If present, construct the command to be ran.
 	local commandString = ""
@@ -300,7 +300,7 @@ end
 
 
 --[=[ Network management. ]=]--
-System.Network = function(operator, value)
+Main.Network = function(operator, value)
 	if operator == "scan-ip" then
 		Say("Scanning IP Address " .. value)
 		X("wget https://freegeoip.app/json/" .. value .. " -O /var/NileRiver/download/ipinfo --no-verbose")
@@ -332,7 +332,7 @@ end
 
 
 --[=[ System software management. ]=]--
-System.Software = function(operator, packageList, aurmode, promptBypass)
+Main.Software = function(operator, packageList, aurmode, promptBypass)
 
 	-- If channel is opms, convert packagelist table to string.
 	local packageString
@@ -418,7 +418,7 @@ end
 
 
 --[=[ System updates ]=]--
-System.Update = function(updateType, dev)
+Main.Update = function(updateType, dev)
 	if updateType == "system" then
 		local devString = ""
 		if dev == true then
@@ -453,15 +453,15 @@ end
 
 
 --[=[ Start i3 ]=]--
-System.Start = function()
+Main.Start = function()
 	X("startx /var/NileRiver/core/xinitrc")
 end
 
 
 --[=[ Plugin Management ]=]--
-System.Plugin = function(operator, value, arguments)           
+Main.Plugin = function(operator, value, arguments)           
 	if operator == "run" then
-		if CheckC("/var/NileRiver/plugins/" .. value) == true then
+		if DirExists("/var/NileRiver/plugins/" .. value) == true then
 			dofile("/var/NileRiver/plugins/" .. value .. "/plugin.lua").main(NileRiver, arguments)
 		else
 			Fault("The plugin " .. value .. " is not installed.")

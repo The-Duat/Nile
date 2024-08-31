@@ -32,23 +32,23 @@ end
 NileRiver.InitializeIO(frontend_IO)
 
 
---[=[ System function handler ]=]--
+--[=[ Main function handler ]=]--
 local function sendInfo()
-	NileRiver.System.Info(arg[2])
+	NileRiver.Main.Info(arg[2])
 end
 
 local function sendConfig()
-	NileRiver.System.Config(arg[2], arg[3])
+	NileRiver.Main.Config(arg[2], arg[3])
 end
 
 local function sendTheme()
 	if arg[2] then
-		NileRiver.System.Theme(arg[2])
+		NileRiver.Main.Theme(arg[2])
 	end
 end
 
 local function sendService()
-	NileRiver.System.Service(arg[2], arg[3])
+	NileRiver.Main.Service(arg[2], arg[3])
 end
 
 local function sendGraphics()
@@ -63,14 +63,14 @@ local function sendGraphics()
 	else
 		value = arg[3]
 	end
-	NileRiver.System.Graphics(arg[2], value)
+	NileRiver.Main.Graphics(arg[2], value)
 end
 
 local function sendNetwork()
 	if arg[3] then
-		NileRiver.System.Network(arg[2], arg[3])
+		NileRiver.Main.Network(arg[2], arg[3])
 	else
-		NileRiver.System.Network(arg[2], nil)
+		NileRiver.Main.Network(arg[2], nil)
 	end
 end
 
@@ -85,7 +85,7 @@ local function sendSoftware()
 		end
 		argCount = argCount - 1
 	end
-	NileRiver.System.Software(arg[1], packageList, hasRequestedToUseAUR)
+	NileRiver.Main.Software(arg[1], packageList, hasRequestedToUseAUR)
 end
 
 local function sendUpdate()
@@ -93,8 +93,8 @@ local function sendUpdate()
 	if arg[2] == "dev" then
 		dev = true
 	end
-	NileRiver.System.Update("system", dev)
-	NileRiver.System.Update("packages", dev)
+	NileRiver.Main.Update("system", dev)
+	NileRiver.Main.Update("packages", dev)
 end
 
 
@@ -103,14 +103,14 @@ end
 local firstArgSheet = {
 	["info"]    = sendInfo,
 	["config"]  = sendConfig,
-	["theme"]  = sendTheme,
+	["theme"]   = sendTheme,
 	["sv"]      = sendService,
 	["gfx"]     = sendGraphics,
 	["net"]     = sendNetwork,
 	["fetch"]   = sendSoftware,
 	["remove"]  = sendSoftware,
 	["update"]  = sendUpdate,
-	["start"]   = NileRiver.System.start -- Takes no arguments.
+	["start"]   = NileRiver.Main.start -- Takes no arguments.
 }
 
 if firstArgSheet[arg[1]] then
