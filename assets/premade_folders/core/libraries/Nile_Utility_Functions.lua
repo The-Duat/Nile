@@ -291,7 +291,7 @@ end
 
 -- Check if a directory exists
 Functions.DirExists = function(directory)
-	if Posix.sys.stat(directory) ~= nil then
+	if Posix.sys.stat.stat(directory) ~= nil then
 		return true
 	else
 		return false
