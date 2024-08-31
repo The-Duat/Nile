@@ -251,7 +251,7 @@ fi
 if [ -d "/var/NileRiver/packages/the-duat_nile-dark-theme" ]; then
 	sudo -S rm -rf /var/NileRiver/packages/the-duat_nile-dark-theme
 fi
-lua install-luahelper.lua installthemepackages
+sudo lua install-luahelper.lua installthemepackages
 cp -r /var/NileRiver/themes/Nile-Dark-Theme/* /var/NileRiver/config/$USER/
 echo "| Generating i3 config file."
 /var/NileRiver/config/$USER/i3/genconf
