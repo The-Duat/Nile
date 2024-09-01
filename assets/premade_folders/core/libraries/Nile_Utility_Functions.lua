@@ -37,7 +37,6 @@ local function ReadCommand(cmd)
 	local file = assert(io.popen(cmd, 'r'))
 	local out = assert(file:read('*a'))
 	file:close()
-	if raw then return out end
 	out = string.gsub(out, '^%s+', '')
 	out = string.gsub(out, '%s+$', '')
 	out = string.gsub(out, '[\n\r]+', ' ')
@@ -84,7 +83,7 @@ end
 -- Check if file exists.
 Functions.CheckFile = function(path)
 	local file = io.open(path, "r")
-	if not file == nil then
+	if file ~= nil then
 		file:close()
 		return true
 	end
@@ -94,26 +93,54 @@ end
 -- Read file contents.
 Functions.ReadFile = function(path)
 	local file = io.open(path, "r")
-	if not file == nil then
+	if file ~= nil then
 		local contents = file:read("*all")
 		file:close()
 		return contents
 	else
-		Fault("Could not open file: "..path..". Does it exist?")
+		Fault("Could not open file: " .. path .. ". Does it exist?")
 	end
 end
 
 -- Write to file.
 Functions.WriteFile = function(path, contents)
 	local file = io.open(path, "w")
-	if not file == nil then
+	if file ~= nil then
 		file:write(contents)
 		file:close()
 	else
-		Fault("Could not write to file: "..path..".")
+		Fault("Could not write to file: " .. path .. ".")
 	end
 end
 
+-- Do I need to elaborate more?
+Functions.Ls = function(directory)
+	local contents = {}
+	for _,file in ipairs(Posix.dirent.dir(directory)) do
+		if file ~= "." and file ~= ".." then
+			table.insert(contents, file)
+		end
+	end
+	return contents
+end
+
+-- Move the contents of directory A into directory B
+Functions.SlideDirectory = function(dirA, dirB)
+	if Posix.sys.stat.stat(dirA) == nil then
+		Fault("SlideDirectory: Directory " .. dirA .. " does not exist.")
+		os.exit()
+	end
+	if Posix.sys.stat.stat(dirB) == nil then
+		Fault("SlideDirectory: Directory " .. dirB .. " does not exist.")
+		os.exit()
+	end
+
+	for _,file in pairs(Posix.dirent.dir(dirA)) do
+		if file ~= "." and file ~= ".." then
+			os.rename(dirA .. "/" .. file, dirB .. "/" .. file)
+		end
+	end
+end
 
 --[=[ String Manipulation ]=]--
 
@@ -254,11 +281,11 @@ end
 
 -- Change NILE setting.
 Functions.WriteSetting = function(program, setting, value)
-	local configFile = io.open(string.format("/var/NileRiver/config/%s/%s/settings/%s", userName, program, setting), "w")
+	local configFile = io.open(string.format("/var/NileRiver/config/%s/%s/settings/%s", UserName, program, setting), "w")
 	if configFile then
 		configFile:write(value)
 		configFile:close()
-		os.execute(string.format("cd /var/NileRiver/config/%s/%s && ./genconf", userName, program))
+		os.execute(string.format("cd /var/NileRiver/config/%s/%s && ./genconf", UserName, program))
 	else
 		Fault("Error opening " .. setting .. " config file for " .. program .. ".")
 	end
@@ -267,7 +294,7 @@ end
 -- View NILE program settings.
 Functions.ViewSettings = function(directory)
 	local settingsDirectory = directory .. "/settings"
-	for _,setting in ipairs(Posix.dirent.dir(settingsDirectory)) do
+	for _,setting in ipairs(Ls(settingsDirectory)) do
 		local settingFile = io.open(settingsDirectory .. "/" .. setting, "r")
 		if settingFile ~= nil then
 			Say2(string.format("%-18s %s", setting, settingFile:read("*all")))

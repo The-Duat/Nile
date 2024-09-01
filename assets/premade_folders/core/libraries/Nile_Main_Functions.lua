@@ -89,12 +89,11 @@ Main.Config = function(operator, value)
 			Fault("Incorrect filetype: " .. fileType)
 			Exit()
 		end
-		X("rm -rf /var/NileRiver/config/" .. UserName .. "/wallpaper/*")
+		os.remove(Posix.dirent.dir("/var/NileRiver/config/" .. UserName .. "/wallpaper")[1])
 		X(string.format("cp %s /var/NileRiver/config/%s/wallpaper/", value, UserName))
-		X(string.format("mv /var/NileRiver/config/%s/wallpaper/%s /var/NileRiver/config/%s/wallpaper/wallpaper.%s", UserName, wallpaperName, UserName, fileType))
+		os.rename(string.format("/var/NileRiver/config/%s/wallpaper/%s", UserName, wallpaperName), string.format("/var/NileRiver/config/%s/wallpaper/wallpaper.%s", UserName, fileType))
 		X("pkill -fi feh")
 		X(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", UserName))
-		Say("Wallpaper changed to " .. value)
 
 	-- Change NILE Theme
 	elseif operator == "theme" then
@@ -106,8 +105,8 @@ Main.Config = function(operator, value)
 		if string.lower(Read()) ~= "y" then
 			Fault("Aborted.")
 		end
-		Xs("rm -rf /var/NileRiver/config/" .. UserName .. "/*")
-		Xs("cp -r /var/NileRiver/themes/" .. value .. "/* /var/NileRiver/config/" .. UserName .. "/")
+		X("rm -rf /var/NileRiver/config/" .. UserName .. "/*")
+		X("cp -r /var/NileRiver/themes/" .. value .. "/* /var/NileRiver/config/" .. UserName .. "/")
 		Xs(string.format("chown -R %s:%s /var/NileRiver/config/%s", UserName, UserName, UserName))
 		Xs("chmod -R 755 /var/Nile/config/%s", UserName)
 		Xs("pkill -fi feh")

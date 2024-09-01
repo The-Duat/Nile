@@ -41,6 +41,7 @@ RPkg              = UtilityFunctions.RPkg
 CheckFile         = UtilityFunctions.CheckFile
 ReadFile          = UtilityFunctions.ReadFile
 WriteFile         = UtilityFunctions.WriteFile
+Ls                = UtilityFunctions.Ls
 SplitString       = UtilityFunctions.SplitString
 TrimWhite         = UtilityFunctions.TrimWhite
 IsInt             = UtilityFunctions.IsInt

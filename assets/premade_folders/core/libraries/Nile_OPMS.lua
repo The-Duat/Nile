@@ -14,8 +14,8 @@ Manager.InstallOsirisPackage = function(packageName, promptBypass)
 	local developerName = string.lower(TrimWhite(nameInfo[1]))
 	local softwareName = string.lower(TrimWhite(nameInfo[2]))
 
-	Xs("rm -rf /var/NileRiver/work/*")
-	X(string.format("cd /var/NileRiver/work && sudo git clone https://github.com/%s/%s", developerName, softwareName))
+	X("rm -rf /var/NileRiver/work/*")
+	X(string.format("cd /var/NileRiver/work && git clone https://github.com/%s/%s", developerName, softwareName))
 
 	local s, e = pcall(function()
 		local test = dofile(string.format("/var/NileRiver/packages/%s_%s/OpmsPackageInfo.lua", developerName, softwareName))
@@ -56,25 +56,25 @@ Manager.InstallOsirisPackage = function(packageName, promptBypass)
 				Fault("A theme by that name is already installed.")
 				Exit()
 			end
-			Xs("mkdir /var/NileRiver/themes/" .. packageInfo.ThemeName)
-			Xs(string.format("mv /var/NileRiver/work/%s/theme/* /var/NileRiver/themes/%s/", softwareName, packageInfo.ThemeName))
+			Posix.mkdir("/var/NileRiver/themes/" .. packageInfo.ThemeName)
+			X(string.format("mv /var/NileRiver/work/%s/theme/* /var/NileRiver/themes/%s/", softwareName, packageInfo.ThemeName))
 		end,
 		["plugin"] = function()
 			if DirExists("/var/NileRiver/plugins/" .. packageInfo.PluginName) == true then
 				Fault("A plugin by that name is already installed.")
 				Exit()
 			end
-			Xs("mkdir /var/NileRiver/plugins/" .. packageInfo.PluginName)
-			Xs(string.format("mv /var/NileRiver/work/%s/plugin/* /var/NileRiver/plugins/%s/", softwareName, packageInfo.PluginName))
-			Xs(string.format("mkdir /var/NileRiver/core/libraries-thirdparty/$s", packageInfo.PluginName))
-			Xs(string.format("mv /var/NileRiver/work/%s/libraries/* /var/NileRiver/core/libraries-thirdparty/%s/", softwareName, packageInfo.PluginName))
+			Posix.mkdir("/var/NileRiver/plugins/" .. packageInfo.PluginName)
+			X(string.format("mv /var/NileRiver/work/%s/plugin/* /var/NileRiver/plugins/%s/", softwareName, packageInfo.PluginName))
+			Posix.mkdir("/var/NileRiver/work/core/libraries-thirdparty/" .. packageInfo.PluginName)
+			X(string.format("mv /var/NileRiver/work/%s/libraries/* /var/NileRiver/core/libraries-thirdparty/%s/", softwareName, packageInfo.PluginName))
 		end,
 		["frontend"] = function()
 			if DirExists("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName) == true then
 				Fault("A frontend by that name is already installed.")
 				Exit()
 			end
-			Xs("mkdir /var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName)
+			Posix.mkdir("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName)
 			Xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendprogram/%s /usr/bin/", softwareName, packageInfo.FrontendName))
 			Xs(string.format("mv /var/NileRiver/work/%s/frontend/frontendlibraries/* /var/NileRiver/core/libraries-thirdparty/%s/", softwareName, packageInfo.FrontendName))
 		end
@@ -88,19 +88,24 @@ Manager.InstallOsirisPackage = function(packageName, promptBypass)
 
 	if not s then
 		Fault("An unexpected error occurred while attempting to install this package.")
-		Fault("Error:")
 		Fault(e)
 		Exit()
 	end
 
 	local packageInfoDirectory = string.format("/var/NileRiver/packages/%s_%s", developerName, softwareName)
-	Xs("mkdir " .. packageInfoDirectory)
-	Xs(string.format("mv /var/NileRiver/work/%s/OpmsPackageInfo.lua %s", softwareName, packageInfoDirectory))
+	Posix.mkdir(packageInfoDirectory)
+	X(string.format("mv /var/NileRiver/work/%s/OpmsPackageInfo.lua %s", softwareName, packageInfoDirectory))
 end
 
 
 --[=[ Remove an Osiris package ]=]--
 Manager.RemoveOsirisPackage = function(packageName, promptBypass)
+
+	if IsRoot() == false then
+		Fault("This action must be ran as root.")
+		Exit()
+	end
+
 	local nameInfo = SplitString(packageName, "/")
 	local developerName = string.lower(TrimWhite(nameInfo[1]))
 	local softwareName = string.lower(TrimWhite(nameInfo[2]))
@@ -121,22 +126,22 @@ Manager.RemoveOsirisPackage = function(packageName, promptBypass)
                 Fault("A theme by that name is not installed.")
 				Exit()
 			end
-			Xs(string.format("rm -rf /var/NileRiver/themes/%s", packageInfo.ThemeName))
+			X("rm -rf /var/NileRiver/themes/" .. packageInfo.ThemeName)
 		end,
 		["plugin"] = function()
 			if DirExists("/var/NileRiver/plugins/" .. packageInfo.PluginName) == false then
                 Fault("A plugin by that name is not installed.")
 				Exit()
 			end
-			Xs(string.format("rm -rf /var/NileRiver/core/libraries-thirdparty/plugin/$s", packageInfo.PluginName))
+			X("rm -rf /var/NileRiver/core/libraries-thirdparty/plugin/" .. packageInfo.PluginName)
 		end,
 		["frontend"] = function()
 			if DirExists("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName) == false then
                 Fault("A frontend by that name is not installed.")
                 Exit()
 			end
-			Xs("rm /usr/bin/" .. packageInfo.FrontendName)
-			Xs("rm -rf /var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName)
+			os.remove("/usr/bin/" .. packageInfo.FrontendName)
+			X("rm -rf /var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName)
 		end
 	}
 end
