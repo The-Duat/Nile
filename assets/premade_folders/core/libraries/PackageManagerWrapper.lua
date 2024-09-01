@@ -11,6 +11,19 @@ local function SplitString(str, splitChar)
 	return resultSplit
 end
 
+local function TrimWhite(str)
+    local trimmedString = ""
+	local i = 1
+	while i <= #str do
+		local currentChar = string.sub(str, i, i)
+		if currentChar ~= " " then
+			trimmedString = trimmedString .. currentChar
+		end
+		i = i + 1
+	end
+	return trimmedString
+end
+
 local pipe = Posix.unistd.pipe
 local fork = Posix.unistd.fork
 local execp = Posix.unistd.execp
@@ -66,13 +79,13 @@ end
 local function switch_to_direct_output()
     capturing = false
     close(read_fd)
-    print("Switched to direct output from child process.")
+    -- print("Switched to direct output from child process.")
 end
 
 local function switch_back_to_capturing()
     capturing = true
     pid, read_fd, write_fd2 = create_pipe_and_fork()
-    print("Switched back to capturing output from child process.")
+    -- print("Switched back to capturing output from child process.")
 end
 
 
@@ -97,7 +110,20 @@ Wrapper.Install.pacman = function(packageTable)
                     Fault("The package \"" .. string.sub(line, 26, #line) .. "\" does not exist.")
                     Exit()
                 end
-
+                local isPackageReal = false
+                if string.sub(line, 1, 22) == "resolving dependencies" then
+                    isPackageReal = true
+                end
+                if string.sub(line, 1, 8) == "Packages" and isPackageReal == true then
+                    local split = SplitString(line, " ")
+                    switch_to_direct_output()
+                    Say("Packages: ")
+                    for i = 1, #split, 1 do
+                        if i >= 3 then
+                            Say2(TrimWhite(split[i]))
+                        end
+                    end
+                end
             end
             buffer = ""
         end
