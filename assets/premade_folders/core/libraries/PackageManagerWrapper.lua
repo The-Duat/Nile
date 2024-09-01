@@ -105,6 +105,13 @@ Wrapper.Install.pacman = function(packageTable)
             end
             buffer = buffer .. chunk
             for line in buffer:gmatch("[^\r\n]+") do
+                if line == "error: failed to init transaction (unable to lock database)" then
+                    switch_to_direct_output()
+                    Fault("Another package management operation is currently running.")
+                    Say("If you are 100% sure no other operation is running, remove the following file:")
+                    Say2("/var/lib/pacman/db.lck")
+                    Exit()
+                end
                 if string.sub(line, 1, 25) == "error: target not found: " then
                     switch_to_direct_output()
                     Fault("The package \"" .. string.sub(line, 26, #line) .. "\" does not exist.")
