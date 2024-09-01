@@ -1,18 +1,4 @@
--- Package installation helper functions
-
-local function PipeCommand(command)
-	local newFileName = os.tmpname()
-	os.execute("touch /tmp/tmpname")
-	return io.popen("LANG=en_US.UTF-8 " .. command .. " < " .. newFileName .. " 2>&1")
-end
-
-
-local function installPacmanPackages(packages)
-	
-end
-
-
-
+local PackageManagerWrapper = dofile("/var/NileRiver/libraries/PackageManagerWrapper.lua")
 
 --[=[ [ General Utility Functions ] ]=]--
 
@@ -56,7 +42,7 @@ Functions.IPkg = function(packages, aurmode)
 		if aurmode == true then
 			os.execute("yay -S " .. packageString)
 		else
-			installPacmanPackages(packageString)
+			PackageManagerWrapper.Install.pacman(packages)
 		end
 	end
 end
