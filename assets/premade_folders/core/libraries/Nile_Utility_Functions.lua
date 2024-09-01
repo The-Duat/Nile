@@ -1,4 +1,4 @@
-local PackageManagerWrapper = dofile("/var/NileRiver/libraries/PackageManagerWrapper.lua")
+local PackageManagerWrapper = dofile("/var/NileRiver/core/libraries/PackageManagerWrapper.lua")
 
 --[=[ [ General Utility Functions ] ]=]--
 
