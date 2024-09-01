@@ -77,7 +77,11 @@ end
 
 
 Wrapper.Install.pacman = function(packageTable)
-    pid, read_fd, write_fd2 = create_pipe_and_fork()
+    local arguments = {"-S"}
+    for _,item in ipairs(packageTable) do
+        table.insert(arguments, item)
+    end
+    pid, read_fd, write_fd2 = create_pipe_and_fork("/bin/pacman", arguments)
     buffer = ""
     capturing = true
     local function read_output_line_by_line()
@@ -88,7 +92,6 @@ Wrapper.Install.pacman = function(packageTable)
             end
             buffer = buffer .. chunk
             for line in buffer:gmatch("[^\r\n]+") do
-                print("ll: " .. line)
                 if string.sub(line, 1, 25) == "error: target not found: " then
                     switch_to_direct_output()
                     Fault("The package \"" .. string.sub(line, 26, #line) .. "\" does not exist.")
