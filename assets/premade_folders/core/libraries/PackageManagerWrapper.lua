@@ -104,30 +104,45 @@ Wrapper.Install.pacman = function(packageTable)
                 break
             end
             buffer = buffer .. chunk
+            local PackagesToBeInstalled = {}
+            local CurrentlyCountingPackages = false
             for line in buffer:gmatch("[^\r\n]+") do
+
                 if line == "error: failed to init transaction (unable to lock database)" then
                     switch_to_direct_output()
                     Fault("Another package management operation is currently running.")
                     Say("If you are 100% sure no other operation is running, remove the following file:")
                     Say2("/var/lib/pacman/db.lck")
                     Exit()
-                end
-                if string.sub(line, 1, 25) == "error: target not found: " then
+
+                elseif string.sub(line, 1, 25) == "error: target not found: " then
                     switch_to_direct_output()
                     Fault("The package \"" .. string.sub(line, 26, #line) .. "\" does not exist.")
                     Exit()
-                end
-                local isPackageReal = false
-                if string.sub(line, 1, 22) == "resolving dependencies" then
-                    isPackageReal = true
-                end
-                if string.sub(line, 1, 8) == "Packages" and isPackageReal == true then
+
+                elseif string.sub(line, 1, 8) == "Packages" then
                     local split = SplitString(line, " ")
+                    for i = 3, #split, 1 do
+                        table.insert(PackagesToBeInstalled, TrimWhite(split[i]))
+                    end
+                    CurrentlyCountingPackages = true
+                elseif string.sub(line, 1, 11) == "Net Upgrade" then
                     switch_to_direct_output()
-                    Say("Packages: ")
-                    for i = 1, #split, 1 do
-                        if i >= 3 then
-                            Say2(TrimWhite(split[i]))
+                    Say("Packages:")
+                    for _,package in ipairs(PackagesToBeInstalled) do
+                        Say2(package)
+                    end
+                    Say("Required disk space: " .. SplitString(line, "\t")[2])
+                    Say("Install listed packages? (y/n)")
+                    if string.lower(Read()) == "y" then
+                        send_input("y")
+                        switch_back_to_capturing()
+                    end
+                else
+                    if CurrentlyCountingPackages == true and #line > 2 then
+                        local split = SplitString(line, " ")
+                        for _,part in ipairs(split) do
+                            table.insert(PackagesToBeInstalled, TrimWhite(part))
                         end
                     end
                 end
