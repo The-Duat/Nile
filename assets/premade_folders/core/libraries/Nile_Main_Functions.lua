@@ -89,7 +89,7 @@ Main.Config = function(operator, value)
 			Fault("Incorrect filetype: " .. fileType)
 			Exit()
 		end
-		os.remove(Posix.dirent.dir("/var/NileRiver/config/" .. UserName .. "/wallpaper")[1])
+		os.remove(Posix.dirent.dir("/var/NileRiver/config/" .. UserName .. "/wallpaper")[2])
 		X(string.format("cp %s /var/NileRiver/config/%s/wallpaper/", value, UserName))
 		os.rename(string.format("/var/NileRiver/config/%s/wallpaper/%s", UserName, wallpaperName), string.format("/var/NileRiver/config/%s/wallpaper/wallpaper.%s", UserName, fileType))
 		X("pkill -fi feh")
@@ -105,11 +105,13 @@ Main.Config = function(operator, value)
 		if string.lower(Read()) ~= "y" then
 			Fault("Aborted.")
 		end
+		-- Recursive things like this are too hard to implement from scratch in luaposix.
+		-- If someone has a better way, let me know
 		X("rm -rf /var/NileRiver/config/" .. UserName .. "/*")
 		X("cp -r /var/NileRiver/themes/" .. value .. "/* /var/NileRiver/config/" .. UserName .. "/")
-		Xs(string.format("chown -R %s:%s /var/NileRiver/config/%s", UserName, UserName, UserName))
-		Xs("chmod -R 755 /var/Nile/config/%s", UserName)
-		Xs("pkill -fi feh")
+		X(string.format("chown -R %s:%s /var/NileRiver/config/%s", UserName, UserName, UserName))
+		X("chmod -R 755 /var/Nile/config/%s", UserName)
+		X("pkill -fi feh")
 		X(string.format("cd /var/NileRiver/config/%s/i3 && ./genconf", UserName))
 		X(string.format("cd /var/NileRiver/config/%s/gtk && ./genconf", UserName))
 		X(string.format("cd /var/NileRiver/config/%s/alacritty && ./genconf", UserName))
@@ -126,9 +128,16 @@ Main.Config = function(operator, value)
 		or value == "moderate"
 		or value == "none" then
 			local currentLevel = dofile("/var/NileRiver/security/active/type.lua")
-			Xs("rm /var/NileRiver/security/active/*")
-			Xs("cp /var/NileRiver/security/storage/" .. value .. "/type.lua /var/NileRiver/security/active")
-			Say("Package security level changed from " .. currentLevel .. " to " .. value .. ".")
+			os.remove(Posix.dirent.dir("/var/NileRiver/security/active")[2])
+			local file = io.open("/var/NileRiver/security/type.lua", "w")
+			if file ~= nil then
+				file:write("return \"" .. value .. "\"")
+				file:close()
+				Say("OPMS security level changed from " .. currentLevel .. " to " .. value .. ".")
+			else
+				Fault("Failed to open file: /var/NileRiver/security/type.lua")
+			end
+			
 		else
 			Fault("Invalid security type: " .. value)
 		end

@@ -77,8 +77,16 @@ Functions.RPkg = function(packages, aurmode)
 	os.execute(baseCommand .. " " .. packageString)
 end
 
-
 --[=[ File Manipulation ]=]--
+
+-- Check if a directory exists
+Functions.DirExists = function(directory)
+	if Posix.sys.stat.stat(directory) ~= nil then
+		return true
+	else
+		return false
+	end
+end
 
 -- Check if file exists.
 Functions.CheckFile = function(path)
@@ -139,6 +147,14 @@ Functions.SlideDirectory = function(dirA, dirB)
 		if file ~= "." and file ~= ".." then
 			os.rename(dirA .. "/" .. file, dirB .. "/" .. file)
 		end
+	end
+end
+
+-- Download a file from the hip information superhighway
+Functions.DownloadFile = function(url, savelocation)
+	if Posix.sys.stat.stat(savelocation) ~= nil then
+		Say(string.format("Downloading file '%s' to '%s'", url, savelocation))
+		os.execute(string.format("wget %s -P %s --no-verbose > /dev/null 2>&1", url, savelocation))
 	end
 end
 
@@ -314,15 +330,6 @@ Functions.ViewSettings = function(directory)
         settingFile:close()
     end
 	]=]--
-end
-
--- Check if a directory exists
-Functions.DirExists = function(directory)
-	if Posix.sys.stat.stat(directory) ~= nil then
-		return true
-	else
-		return false
-	end
 end
 
 -- Check if program is running under Root

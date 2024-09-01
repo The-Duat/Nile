@@ -149,6 +149,12 @@ end
 
 --[=[ Update an Osiris Package ]=]--
 Manager.UpdateOsirisPackage = function(packageName, promptBypass)
+
+	if IsRoot() == false then
+		Fault("This action must be ran as root.")
+		Exit()
+	end
+
 	local nameInfo = SplitString(packageName, "/")
         local developerName = string.lower(TrimWhite(nameInfo[1]))
         local softwareName = string.lower(TrimWhite(nameInfo[2]))
@@ -173,9 +179,22 @@ end
 
 --[=[ Check installable package's required security level ]=]--
 Manager.GetOsirisPackagePlacement = function(packageName)
+
+	if IsRoot() == false then
+		Fault("This action must be ran as root.")
+		Exit()
+	end
+
 	Say("Downloading package repo.")
-	Xs("rm -rf /var/NileRiver/repo/* && sudo wget https://nile.entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
+	if CheckFile("/var/NileRiver/repo/repo.lua") == true then
+		os.remove("/var/NileRiver/repo/repo.lua")
+	end
+	DownloadFile("https://nile.entertheduat.org/repo.lua", "/var/NileRiver/repo")
 	local DuatRepo = dofile("/var/NileRiver/repo/repo.lua")
+	if DuatRepo == nil then
+		Fault("Download failed.")
+		Exit()
+	end
 
 	local packageNameFormatted = string.lower(TrimWhite(packageName))
 
@@ -192,7 +211,8 @@ end
 --[=[ Get list of installed packages ]=]-- 
 Manager.GetOsirisPackages = function()
 	local packages = {}
-	for _,package in pairs(SplitString(ReadCommand("ls /var/NileRiver/packages"))) do
+	-- for _,package in pairs(SplitString(ReadCommand("ls /var/NileRiver/packages"))) do
+	for _,package in ipairs(Ls("/var/NileRiver/packages")) do
 		local pkgNameInfo = SplitString(package, "_")
 		table.insert(packages, pkgNameInfo[1] .. "/" .. pkgNameInfo[2])
 	end
@@ -202,10 +222,22 @@ end
 
 --[=[ Get list of packages in the Duat's repo ]=]--
 Manager.ListRepo = function()
-	Say("Downloading package repo.")
-	Xs("rm -rf /var/NileRiver/repo/* && sudo wget https://nile.entertheduat.org/repo.lua -P /var/NileRiver/repo/ --no-verbose")
 
+	if IsRoot() == false then
+		Fault("This action must be ran as root.")
+		Exit()
+	end
+
+	Say("Downloading package repo.")
+	if CheckFile("/var/NileRiver/repo/repo.lua") == true then
+		os.remove("/var/NileRiver/repo/repo.lua")
+	end
+	DownloadFile("https://nile.entertheduat.org/repo.lua", "/var/NileRiver/repo")
 	local DuatRepo = dofile("/var/NileRiver/repo/repo.lua")
+	if DuatRepo == nil then
+		Fault("Download failed.")
+		Exit()
+	end
 
 	Say("The Duat's Package Repository")
 	Say("Official:")
