@@ -124,6 +124,13 @@ Main.Config = function(operator, value)
 
 	-- Change the package security level.
 	elseif operator == "pkgsec" then
+
+		if IsRoot() == false then
+			Fault("This action must be ran as root.")
+			Exit()
+		end
+
+		Say("Attempting to set the OPMS security level to " .. value .. ".")
 		if value == "strict"
 		or value == "moderate"
 		or value == "none" then
@@ -144,6 +151,7 @@ Main.Config = function(operator, value)
 
 	-- Change i3 settings.
 	elseif I3ConfigSheet[operator] then
+		Say("Attempting to set " .. operator .. " to " .. value .. ".")
 		local dataType = I3ConfigSheet[operator]
 		if dataType == "special_bar" then
 			if value == "top" 
@@ -178,10 +186,10 @@ Main.Config = function(operator, value)
 				Exit()
 			end
 		end
-		Say(operator .. " has been set to " .. value .. ".")
 
 	-- Change Alacritty settings.
 	elseif AlacrittyConfigSheet[operator] then
+		Say("Attempting to set " .. operator .. " to " .. value .. ".")
 		local dataType = AlacrittyConfigSheet[operator]
 		if dataType == "hex" then
 			if IsHex(value) == true then
@@ -193,6 +201,7 @@ Main.Config = function(operator, value)
 
 	-- Change GTK settings.
 	elseif GtkConfigSheet[operator] == true then
+		Say("Attempting to set " .. operator .. " to " .. value .. ".")
 		WriteSetting("gtk", operator, value)
 		Say(operator .. " has changed to " .. value .. ".")
 	else
@@ -207,6 +216,7 @@ Main.Theme = function(operator, value)
 
 	if operator == "compile" then
 		Say("Compile current settings into a new theme? (y/n)")
+		Say("Installed themes are available to all users.")
 		if string.lower(Read()) ~= "y" then
 			Exit()
 		end
@@ -220,6 +230,7 @@ Main.Theme = function(operator, value)
 			Fault("A theme by the name " .. themeName .. " already exists. Please choose a different name.")
 			Exit()
 		end
+		-- Ugh. More shell jank. Sadly, I need this as I need both normal user and root access for this to work.
 		Say2("Theme name is not taken. Continuing compilation.")
 		Xs("mkdir /var/NileRiver/themes/" .. themeName)
 		Xs(string.format("cp -r /var/NileRiver/config/%s/* /var/NileRiver/themes/%s/", UserName, themeName))
