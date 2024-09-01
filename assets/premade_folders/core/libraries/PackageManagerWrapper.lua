@@ -47,9 +47,10 @@ Wrapper.Install.pacman = function(packageTable)
         close(write_fd)
         close(read_fd2)
         local buffer = ""
+        local capturing = true
     
         local function read_output_line_by_line()
-            while true do
+            while capturing do
                 local chunk = Posix.unistd.read(read_fd, 1024)
                 if not chunk or #chunk == 0 then
                     break
@@ -58,6 +59,8 @@ Wrapper.Install.pacman = function(packageTable)
                 for line in buffer:gmatch("[^\r\n]+") do
 
                     if string.sub(line, 1, 25) == "error: target not found: " then
+                        capturing = false
+                        close(read_fd)
                         Fault("The package \"" .. string.sub(line, 26, #line) .. "\" does not exist.")
                     end
 
