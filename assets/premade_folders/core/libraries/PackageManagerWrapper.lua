@@ -127,6 +127,7 @@ Wrapper.Install.pacman = function(packageTable)
                     end
                     CurrentlyCountingPackages = true
                 elseif string.sub(line, 1, 11) == "Net Upgrade" then
+                    CurrentlyCountingPackages = false
                     switch_to_direct_output()
                     Say("Packages:")
                     for _,package in ipairs(PackagesToBeInstalled) do
