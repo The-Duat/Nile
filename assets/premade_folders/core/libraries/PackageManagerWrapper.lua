@@ -115,6 +115,9 @@ Wrapper.Install.pacman = function(packageTable)
                     Say2("/var/lib/pacman/db.lck")
                     Exit()
 
+                elseif string.sub(line, 1, 12) == ":: There are" then
+                    send_input("\r")
+
                 elseif string.sub(line, 1, 25) == "error: target not found: " then
                     switch_to_direct_output()
                     Fault("The package \"" .. string.sub(line, 26, #line) .. "\" does not exist.")
