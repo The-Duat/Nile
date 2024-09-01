@@ -69,7 +69,7 @@ Wrapper.Install.pacman = function(packageTable)
         close(write_fd2)
         close(write_fd)
         close(read_fd2)
-        local argTable = {"/bin/pacman"}
+        local argTable = {"/bin/pacman", "-S"}
         for _,p in ipairs(packageTable) do
             table.insert(argTable, p)
         end
