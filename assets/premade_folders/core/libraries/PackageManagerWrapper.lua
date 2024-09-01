@@ -1,3 +1,16 @@
+local function SplitString(str, splitChar)
+	local resultSplit = {}
+	if splitChar == nil then
+		splitChar = " "
+	end
+	if str and splitChar then
+		for part in string.gmatch(str, "([^"..splitChar.."]+)") do
+			table.insert(resultSplit, part)
+		end
+	end
+	return resultSplit
+end
+
 local pipe = Posix.unistd.pipe
 local fork = Posix.unistd.fork
 local execp = Posix.unistd.execp
@@ -44,7 +57,9 @@ Wrapper.Install.pacman = function(packageTable)
                 buffer = buffer .. chunk
                 for line in buffer:gmatch("[^\r\n]+") do
 
-                    print("Output: " .. line)
+                    if string.sub(line, 1, 25) == "error: target not found: " then
+                        Fault("The package \"" .. string.sub(line, 26, #line) .. "\" does not exist.")
+                    end
 
                 end
                 buffer = ""
