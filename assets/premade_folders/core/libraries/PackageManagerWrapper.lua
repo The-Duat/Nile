@@ -131,6 +131,7 @@ Wrapper.Install.pacman = function(packageTable)
                         table.insert(PackagesToBeInstalled, TrimWhite(split[i]))
                     end
                     CurrentlyCountingPackages = true
+
                 elseif string.sub(line, 1, 11) == "Net Upgrade" then
                     CurrentlyCountingPackages = false
                     switch_to_direct_output()
@@ -138,7 +139,7 @@ Wrapper.Install.pacman = function(packageTable)
                     for _,package in ipairs(PackagesToBeInstalled) do
                         Say2(package)
                     end
-                    Say("Required disk space: " .. SplitString(line, " ")[4])
+                    Say("Required disk space: " .. SplitString(line, " ")[4] .. " " .. SplitString(line, " ")[5])
                     Say("Install listed packages? (y/n)")
                     if string.lower(Read()) == "y" then
                         send_input("y\n")
