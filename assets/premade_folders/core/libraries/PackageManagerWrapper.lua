@@ -138,7 +138,7 @@ Wrapper.Install.pacman = function(packageTable)
                     for _,package in ipairs(PackagesToBeInstalled) do
                         Say2(package)
                     end
-                    Say("Required disk space: " .. SplitString(line, "\t")[4])
+                    Say("Required disk space: " .. SplitString(line, " ")[4])
                     Say("Install listed packages? (y/n)")
                     if string.lower(Read()) == "y" then
                         send_input("y\n")
