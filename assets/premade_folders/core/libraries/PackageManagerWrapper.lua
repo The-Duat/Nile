@@ -151,7 +151,7 @@ Wrapper.Install.pacman = function(packageTable)
                         Exit()
                     end
                 else
-                    if CurrentlyCountingPackages == true and #line > 2 and string.sub(line, 1, 15) ~= "Total Installed" then
+                    if CurrentlyCountingPackages == true and #line > 2 and string.sub(line, 1, 15) ~= "Total Installed" and string.sub(line, 1, 14) ~= "Total Download" then
                         local split = SplitString(line, " ")
                         for _,part in ipairs(split) do
                             table.insert(PackagesToBeInstalled, TrimWhite(part))
