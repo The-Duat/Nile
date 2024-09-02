@@ -24,12 +24,14 @@ local function TrimWhite(str)
 	return trimmedString
 end
 
-local pipe = Posix.unistd.pipe
-local fork = Posix.unistd.fork
+local pipe  = Posix.unistd.pipe
+local fork  = Posix.unistd.fork
 local execp = Posix.unistd.execp
-local dup2 = Posix.unistd.dup2
+local dup2  = Posix.unistd.dup2
 local close = Posix.unistd.close
-local wait = Posix.sys.wait.wait
+local wait  = Posix.sys.wait.wait
+local kill  = Posix.signal.kill
+SIGKILL = 9
 
 local read_fd, write_fd = pipe()
 local read_fd2, write_fd2 = pipe()
@@ -139,8 +141,13 @@ Wrapper.Install.pacman = function(packageTable)
                     Say("Required disk space: " .. SplitString(line, "\t")[4])
                     Say("Install listed packages? (y/n)")
                     if string.lower(Read()) == "y" then
-                        send_input("y")
+                        send_input("y\n")
                         switch_back_to_capturing()
+                    else
+                        Fault("Package installation aborted.")
+                        kill(pid, SIGKILL)
+                        os.remove("/var/lib/pacman/db.lck")
+                        Exit()
                     end
                 else
                     if CurrentlyCountingPackages == true and #line > 2 and string.sub(line, 1, 15) ~= "Total Installed" then
