@@ -115,8 +115,8 @@ Wrapper.Install.pacman = function(packageTable)
                     Say2("/var/lib/pacman/db.lck")
                     Exit()
 
-                elseif string.sub(line, 1, 12) == ":: There are" then
-                    send_input("\r")
+                elseif string.sub(line, 1, 17) == "Enter a selection" then
+                    send_input("\n")
 
                 elseif string.sub(line, 1, 25) == "error: target not found: " then
                     switch_to_direct_output()
@@ -136,14 +136,14 @@ Wrapper.Install.pacman = function(packageTable)
                     for _,package in ipairs(PackagesToBeInstalled) do
                         Say2(package)
                     end
-                    Say("Required disk space: " .. SplitString(line, "\t")[2])
+                    Say("Required disk space: " .. SplitString(line, "\t")[4])
                     Say("Install listed packages? (y/n)")
                     if string.lower(Read()) == "y" then
                         send_input("y")
                         switch_back_to_capturing()
                     end
                 else
-                    if CurrentlyCountingPackages == true and #line > 2 then
+                    if CurrentlyCountingPackages == true and #line > 2 and string.sub(line, 1, 15) ~= "Total Installed" then
                         local split = SplitString(line, " ")
                         for _,part in ipairs(split) do
                             table.insert(PackagesToBeInstalled, TrimWhite(part))
