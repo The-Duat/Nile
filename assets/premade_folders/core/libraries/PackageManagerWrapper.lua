@@ -117,7 +117,7 @@ Wrapper.Install.pacman = function(packageTable)
                     Say2("/var/lib/pacman/db.lck")
                     Exit()
 
-                elseif string.sub(line, 1, 17) == "Enter a selection" then
+                elseif string.sub(line, 1, 17) == "Enter a selection" or string.sub(line, 1, 14) == "Enter a number" then
                     send_input("\n")
 
                 elseif string.sub(line, 1, 25) == "error: target not found: " then
