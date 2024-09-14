@@ -99,6 +99,7 @@ Wrapper.Install.pacman = function(packageTable)
     pid, read_fd, write_fd2 = create_pipe_and_fork("/bin/pacman", arguments)
     buffer = ""
     capturing = true
+    local debug = false
     local function read_output_line_by_line()
         while capturing do
             local chunk = Posix.unistd.read(read_fd, 1024)
@@ -109,8 +110,10 @@ Wrapper.Install.pacman = function(packageTable)
             local PackagesToBeInstalled = {}
             local CurrentlyCountingPackages = false
             for line in buffer:gmatch("[^\r\n]+") do
+		if debug == true then
+			print(line)
 
-                if line == "error: failed to init transaction (unable to lock database)" then
+	    	elseif line == "error: failed to init transaction (unable to lock database)" then
                     switch_to_direct_output()
                     Fault("Another package management operation is currently running.")
                     Say("If you are 100% sure no other operation is running, remove the following file:")
@@ -143,8 +146,9 @@ Wrapper.Install.pacman = function(packageTable)
                     Say("Install listed packages? (y/n)")
                     if string.lower(Read()) == "y" then
                         send_input("y\n")
+			debug = true
                         switch_back_to_capturing()
-                    else
+		else
                         Fault("Package installation aborted.")
                         kill(pid, SIGKILL)
                         os.remove("/var/lib/pacman/db.lck")
