@@ -186,6 +186,35 @@ Wrapper.Install.pacman = function(packageTable)
 end
 
 
+Wrapper.Remove.pacman = function(packageTable)
+	local arguments = {"-S"}
+    	for _,item in ipairs(packageTable) do
+        	table.insert(arguments, item)
+    	end
+    	pid, read_fd, write_fd2 = create_pipe_and_fork("/bin/pacman", arguments)
+	    buffer = ""
+	    capturing = true
+	    local debug = false
+	    local firstInstallLineMark = true
+	    local function read_output_line_by_line()
+	        while capturing do
+	            local chunk = Posix.unistd.read(read_fd, 1024)
+	            if not chunk or #chunk == 0 then
+	                break
+	            end
+	            buffer = buffer .. chunk
+	            local PackagesToBeInstalled = {}
+	            local CurrentlyCountingPackages = false
+	            for line in buffer:gmatch("[^\r\n]+") do
+			if debug == true then
+				print(line)
+			end
+		end
+	end
+
+
+end
+
 
 
 return Wrapper
