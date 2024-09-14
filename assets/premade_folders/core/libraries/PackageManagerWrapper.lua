@@ -77,7 +77,7 @@ local capturing = true
 local function send_input(input)
     Posix.unistd.write(write_fd2, input)
 end
-
+--[=[
 local function switch_to_direct_output()
     capturing = false
     close(read_fd)
@@ -89,7 +89,7 @@ local function switch_back_to_capturing()
     pid, read_fd, write_fd2 = create_pipe_and_fork()
     -- print("Switched back to capturing output from child process.")
 end
-
+]=]--
 
 Wrapper.Install.pacman = function(packageTable)
     local arguments = {"-S"}
@@ -114,7 +114,7 @@ Wrapper.Install.pacman = function(packageTable)
 			print(line)
 
 	    	elseif line == "error: failed to init transaction (unable to lock database)" then
-                    switch_to_direct_output()
+                    -- switch_to_direct_output()
                     Fault("Another package management operation is currently running.")
                     Say("If you are 100% sure no other operation is running, remove the following file:")
                     Say2("/var/lib/pacman/db.lck")
@@ -124,7 +124,7 @@ Wrapper.Install.pacman = function(packageTable)
                     send_input("\n")
 
                 elseif string.sub(line, 1, 25) == "error: target not found: " then
-                    switch_to_direct_output()
+                    -- switch_to_direct_output()
                     Fault("The package \"" .. string.sub(line, 26, #line) .. "\" does not exist.")
                     Exit()
 
@@ -137,7 +137,7 @@ Wrapper.Install.pacman = function(packageTable)
 
                 elseif string.sub(line, 1, 11) == "Net Upgrade" or string.sub(line, 1, 15) == "Total Installed" then
                     CurrentlyCountingPackages = false
-                    switch_to_direct_output()
+                    -- switch_to_direct_output()
                     Say("Packages:")
                     for _,package in ipairs(PackagesToBeInstalled) do
                         Say2(package)
@@ -147,7 +147,7 @@ Wrapper.Install.pacman = function(packageTable)
                     if string.lower(Read()) == "y" then
                         send_input("y\n")
 			debug = true
-                        switch_back_to_capturing()
+                        --  switch_back_to_capturing()
 		else
                         Fault("Package installation aborted.")
                         kill(pid, SIGKILL)
