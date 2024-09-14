@@ -100,7 +100,7 @@ Wrapper.Install.pacman = function(packageTable)
     buffer = ""
     capturing = true
     local debug = false
-    local firstInstallLineMark = false
+    local firstInstallLineMark = true
     local function read_output_line_by_line()
         while capturing do
             local chunk = Posix.unistd.read(read_fd, 1024)
@@ -165,8 +165,9 @@ Wrapper.Install.pacman = function(packageTable)
 		elseif string.sub(line, 1, 10) == "installing" then
 			if firstInstallLineMark == true then
 				Say("Installing packages.")
+				firstInstallLineMark = false
 			end
-			Say2("Installing " .. string.sub(line, 15, #line - 3))
+			Say2("Installing " .. string.sub(line, 12, #line - 3))
 
                 else
                     if CurrentlyCountingPackages == true and #line > 2 and string.sub(line, 1, 15) ~= "Total Installed" and string.sub(line, 1, 14) ~= "Total Download" then
