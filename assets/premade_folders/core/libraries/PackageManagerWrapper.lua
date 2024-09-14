@@ -187,7 +187,7 @@ end
 
 
 Wrapper.Remove.pacman = function(packageTable)
-	local arguments = {"-S"}
+	local arguments = {"-Rn"}
     	for _,item in ipairs(packageTable) do
         	table.insert(arguments, item)
     	end
