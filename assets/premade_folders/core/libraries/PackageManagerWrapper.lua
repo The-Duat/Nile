@@ -100,6 +100,7 @@ Wrapper.Install.pacman = function(packageTable)
     buffer = ""
     capturing = true
     local debug = false
+    local firstInstallLineMark = false
     local function read_output_line_by_line()
         while capturing do
             local chunk = Posix.unistd.read(read_fd, 1024)
@@ -148,12 +149,25 @@ Wrapper.Install.pacman = function(packageTable)
                         send_input("y\n")
 			debug = true
                         --  switch_back_to_capturing()
-		else
+		    else
                         Fault("Package installation aborted.")
                         kill(pid, SIGKILL)
                         os.remove("/var/lib/pacman/db.lck")
                         Exit()
                     end
+
+		elseif line == ":: Retrieving packages..." then
+			Say("Downloading packages.")
+
+		elseif string.sub(line, #line - 13, #line == "downloading...") then
+			Say2("Downloading " .. string.sub(line, 1, #line - 15))
+
+		elseif string.sub(line, 1, 10) == "installing" then
+			if firstInstallLineMark == true then
+				Say("Installing packages.")
+			end
+			Say2("Installing " .. string.sub(line, 15, #line - 3))
+
                 else
                     if CurrentlyCountingPackages == true and #line > 2 and string.sub(line, 1, 15) ~= "Total Installed" and string.sub(line, 1, 14) ~= "Total Download" then
                         local split = SplitString(line, " ")
