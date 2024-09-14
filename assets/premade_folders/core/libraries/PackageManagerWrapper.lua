@@ -147,7 +147,6 @@ Wrapper.Install.pacman = function(packageTable)
                     Say("Install listed packages? (y/n)")
                     if string.lower(Read()) == "y" then
                         send_input("y\n")
-			debug = true
                         --  switch_back_to_capturing()
 		    else
                         Fault("Package installation aborted.")
@@ -159,7 +158,7 @@ Wrapper.Install.pacman = function(packageTable)
 		elseif line == ":: Retrieving packages..." then
 			Say("Downloading packages.")
 
-		elseif string.sub(line, #line - 13, #line == "downloading...") then
+		elseif string.sub(line, #line - 13, #line) == "downloading..." then
 			Say2("Downloading " .. string.sub(line, 1, #line - 15))
 
 		elseif string.sub(line, 1, 10) == "installing" then
