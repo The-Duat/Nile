@@ -95,7 +95,7 @@ Main.Config = function(operator, value)
 		X("pkill -fi feh")
 		X(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", UserName))
 
-	-- Change NILE Theme
+		-- Change NILE Theme
 	elseif operator == "theme" then
 		if DirExists("/var/NileRiver/themes/" .. value) == false then
 			Fault("The theme " .. value .. " is not installed.")
@@ -122,7 +122,7 @@ Main.Config = function(operator, value)
 			Fault("An unknown error occured when attempting to enable theme " .. value)
 		end
 
-	-- Change the package security level.
+		-- Change the package security level.
 	elseif operator == "pkgsec" then
 
 		if IsRoot() == false then
@@ -132,8 +132,8 @@ Main.Config = function(operator, value)
 
 		Say("Attempting to set the OPMS security level to " .. value .. ".")
 		if value == "strict"
-		or value == "moderate"
-		or value == "none" then
+			or value == "moderate"
+			or value == "none" then
 			local currentLevel = dofile("/var/NileRiver/security/active/type.lua")
 			os.remove(Posix.dirent.dir("/var/NileRiver/security/active")[2])
 			local file = io.open("/var/NileRiver/security/type.lua", "w")
@@ -144,18 +144,18 @@ Main.Config = function(operator, value)
 			else
 				Fault("Failed to open file: /var/NileRiver/security/type.lua")
 			end
-			
+
 		else
 			Fault("Invalid security type: " .. value)
 		end
 
-	-- Change i3 settings.
+		-- Change i3 settings.
 	elseif I3ConfigSheet[operator] then
 		Say("Attempting to set " .. operator .. " to " .. value .. ".")
 		local dataType = I3ConfigSheet[operator]
 		if dataType == "special_bar" then
 			if value == "top" 
-			or value == "bottom" then
+				or value == "bottom" then
 				WriteSetting("i3", operator, value)
 			else
 				Fault("Invalid bar position: " .. value)
@@ -163,9 +163,9 @@ Main.Config = function(operator, value)
 			end
 		elseif dataType == "special_mod" then
 			if value == "Mod1"
-			or value == "Mod2"
-			or value == "Mod3"
-			or value == "Mod4" then
+				or value == "Mod2"
+				or value == "Mod3"
+				or value == "Mod4" then
 				WriteSetting("i3", operator, value)
 			else
 				Fault("Invalid mod key: " .. value)
@@ -187,7 +187,7 @@ Main.Config = function(operator, value)
 			end
 		end
 
-	-- Change Alacritty settings.
+		-- Change Alacritty settings.
 	elseif AlacrittyConfigSheet[operator] then
 		Say("Attempting to set " .. operator .. " to " .. value .. ".")
 		local dataType = AlacrittyConfigSheet[operator]
@@ -199,7 +199,7 @@ Main.Config = function(operator, value)
 			end
 		end
 
-	-- Change GTK settings.
+		-- Change GTK settings.
 	elseif GtkConfigSheet[operator] == true then
 		Say("Attempting to set " .. operator .. " to " .. value .. ".")
 		WriteSetting("gtk", operator, value)
@@ -292,11 +292,11 @@ Main.Graphics = function(operator, value)
 	if operator == "xd" then
 		x("export DRI_PRIME=1 && exec " .. commandString)
 
-	-- Run command on integrated GPU.
+		-- Run command on integrated GPU.
 	elseif operator == "xi" then
 		x("export DRI_PRIME=0 && exec " .. commandString)
 
-	-- Change the graphics mode.
+		-- Change the graphics mode.
 	elseif operator == "mode" then
 		if value == "i" then
 			Say(ReadCommand("supergfxctl --mode Integrated"))
@@ -422,8 +422,8 @@ Main.Software = function(operator, packageList, aurmode, promptBypass)
 		elseif packageType == "native" then
 			IPkg(packageList, aurmode)
 		end
-	
-	-- Remove a package.
+
+		-- Remove a package.
 	elseif operator == "remove" then
 		if packageType == "osiris" then
 			RemoveOsirisPackage(packageString, promptBypass)
@@ -485,7 +485,7 @@ Main.Plugin = function(operator, value, arguments)
 		else
 			Fault("The plugin " .. value .. " is not installed.")
 		end
-    end
+	end
 end
 
 

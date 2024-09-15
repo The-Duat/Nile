@@ -207,10 +207,10 @@ end
 Functions.WifiManager = function(action, ssid, password)
 	local netmanager = "none"
 	if #ReadCommand("ps -C iwd") > 25 then
-        netmanager = "iwd"
-    elseif #ReadCommand("ps -C NetworkManager") > 25 then
-        netmanager = "ntm"
-    end
+		netmanager = "iwd"
+	elseif #ReadCommand("ps -C NetworkManager") > 25 then
+		netmanager = "ntm"
+	end
 	if netmanager == "none" then
 		Fault("No compatible network management program is running.")
 		Say("Compatible network management programs:")
@@ -220,7 +220,7 @@ Functions.WifiManager = function(action, ssid, password)
 	end
 
 	local wirelessInterface ReadCommand("ip route | grep default | awk '{print $5}'")
-    wirelessInterface = wirelessInterface:gsub("%s+$", "")
+	wirelessInterface = wirelessInterface:gsub("%s+$", "")
 
 	if action == "getlocalnetworks" then
 		if netmanager == "ntm" then
@@ -271,7 +271,7 @@ Functions.GetNativePackages = function()
 		end
 
 	elseif NativePkgManager == "dnf" then
-		
+
 
 	else
 		return nil
@@ -309,12 +309,12 @@ Functions.ViewSettings = function(directory)
 
 	--[=[
 	for _,settingName in pairs(SplitString(ReadCommand("ls " .. directory .. "/settings"))) do
-		settingName = TrimWhite(settingName)
-		local settingFile = io.open(directory .. "/settings/" .. settingName, "r")
-		local settingValue = settingFile:read("*all")
-		Say2(string.format("%-18s %s", settingName, settingValue))
-        settingFile:close()
-    end
+	settingName = TrimWhite(settingName)
+	local settingFile = io.open(directory .. "/settings/" .. settingName, "r")
+	local settingValue = settingFile:read("*all")
+	Say2(string.format("%-18s %s", settingName, settingValue))
+	settingFile:close()
+	end
 	]=]--
 end
 

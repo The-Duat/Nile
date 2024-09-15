@@ -52,7 +52,7 @@ Manager.InstallOsirisPackage = function(packageName, promptBypass)
 
 	local installType = {
 		["theme"] = function()
-            if DirExists("/var/NileRiver/themes/" .. packageInfo.ThemeName) == true then
+			if DirExists("/var/NileRiver/themes/" .. packageInfo.ThemeName) == true then
 				Fault("A theme by that name is already installed.")
 				Exit()
 			end
@@ -123,22 +123,22 @@ Manager.RemoveOsirisPackage = function(packageName, promptBypass)
 	local uninstallType = {
 		["theme"] = function()
 			if DirExists("/var/NileRiver/themes/" .. packageInfo.ThemeName) == false then
-                Fault("A theme by that name is not installed.")
+				Fault("A theme by that name is not installed.")
 				Exit()
 			end
 			X("rm -rf /var/NileRiver/themes/" .. packageInfo.ThemeName)
 		end,
 		["plugin"] = function()
 			if DirExists("/var/NileRiver/plugins/" .. packageInfo.PluginName) == false then
-                Fault("A plugin by that name is not installed.")
+				Fault("A plugin by that name is not installed.")
 				Exit()
 			end
 			X("rm -rf /var/NileRiver/core/libraries-thirdparty/plugin/" .. packageInfo.PluginName)
 		end,
 		["frontend"] = function()
 			if DirExists("/var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName) == false then
-                Fault("A frontend by that name is not installed.")
-                Exit()
+				Fault("A frontend by that name is not installed.")
+				Exit()
 			end
 			os.remove("/usr/bin/" .. packageInfo.FrontendName)
 			X("rm -rf /var/NileRiver/core/libraries-thirdparty/" .. packageInfo.FrontendName)
@@ -156,16 +156,16 @@ Manager.UpdateOsirisPackage = function(packageName, promptBypass)
 	end
 
 	local nameInfo = SplitString(packageName, "/")
-        local developerName = string.lower(TrimWhite(nameInfo[1]))
-        local softwareName = string.lower(TrimWhite(nameInfo[2]))
-        local packageInfo
-        local s, e = pcall(function()
+	local developerName = string.lower(TrimWhite(nameInfo[1]))
+	local softwareName = string.lower(TrimWhite(nameInfo[2]))
+	local packageInfo
+	local s, e = pcall(function()
 		packageInfo = dofile(string.format("/var/NileRiver/packages/%s_%s", developerName, softwareName))
-        end)
-        if not s then
-                Fault("The given OPMS package is not installed on the system.")
-                Exit()
-        end
+	end)
+	if not s then
+		Fault("The given OPMS package is not installed on the system.")
+		Exit()
+	end
 	if promptBypass ~= true then
 		Say("Update the OPMS package " .. developerName .. "/" .. softwareName .. " ? (y/n)")
 		if string.lower(Read()) ~= "y" then
