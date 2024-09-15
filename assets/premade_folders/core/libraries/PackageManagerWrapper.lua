@@ -239,7 +239,7 @@ Wrapper.Remove.pacman = function(packageTable)
 			end
 		end
 	end
-
+end
 
 
 return Wrapper
