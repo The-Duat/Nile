@@ -351,7 +351,7 @@ end
 
 
 --[=[ System software management. ]=]--
-Main.Software = function(operator, packageList, aurmode, promptBypass)
+Main.Pm = function(operator, packageList, aurmode, promptBypass)
 
 	-- If channel is opms, convert packagelist table to string.
 	local packageString
@@ -366,7 +366,7 @@ Main.Software = function(operator, packageList, aurmode, promptBypass)
 	end
 
 	-- Install a package.
-	if operator == "fetch" then
+	if operator == "install" then
 		if packageType == "osiris" then
 			local packagePlacement = GetOsirisPackagePlacement(packageString)
 
