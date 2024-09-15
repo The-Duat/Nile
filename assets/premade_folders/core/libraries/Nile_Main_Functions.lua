@@ -451,15 +451,18 @@ Main.Update = function(updateType, dev)
 		end
 		X("cd /var/NileRiver/src && sudo git clone https://github.com/The-Duat/Nile && cd /var/NileRiver/src/Nile && " .. devString .. " ./install && sudo rm -rf /var/NileRiver/src/*")
 	elseif updateType == "packages" then
-		ListInstalled()
-		Say("Update installed Osiris packages? (y/n)")
+		local opackages = GetOsirisPackages()
+		Say("Installed OPMS packages:")
+		for _,opackage in ipairs(opackage) do
+			Say2(opackage)
+		end
+		Say("Update installed OPMS packages? (y/n)")
 		if string.lower(Read()) ~= "y" then
-			Fault("Osiris package update aborted.")
+			Fault("OPMS package update aborted.")
 			Fault("It is considered dangerous to update the system and not the packages, or vice versa.")
 			Exit()
 		end
-		local packages = SplitString(ReadCommand("ls /var/NileRiver/packages"))
-		for _,package in pairs(packages) do
+		for _,opackage in ipairs(opackages) do
 			local splitName = SplitString(package, "_")
 			if splitName[1] and splitName[2] then
 				UpdateOsirisPackage(TrimWhite(splitName[1] .. "/" .. splitName[2]))
