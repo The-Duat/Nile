@@ -208,6 +208,33 @@ Wrapper.Remove.pacman = function(packageTable)
 			for line in buffer:gmatch("[^\r\n]+") do
 				if debug == true then
 					print(line)
+
+				elseif string.sub(line, 1, 8) == "Packages" then
+					local split = SplitString(line, " ")
+					for i = 3, #split, 1 do
+						table.insert(PackagesToBeInstalled, TrimWhite(split[i]))
+					end
+					CurrentlyCountingPackages = true
+
+				elseif string.sub(line, 1, 9) == "Total Rem" then
+					CurrentlyCountingPackages = false
+					-- switch_to_direct_output()
+					Say("Packages:")
+					for _,package in ipairs(PackagesToBeInstalled) do
+						Say2(package)
+					end
+					Say("Removed size: " .. SplitString(line, " ")[4] .. " " .. SplitString(line, " ")[5])
+					Say("Uninstall listed packages? (y/n)")
+					if string.lower(Read()) == "y" then
+						send_input("y\n")
+						--  switch_back_to_capturing()
+					else
+						Fault("Package uninstallation aborted.")
+						kill(pid, SIGKILL)
+						os.remove("/var/lib/pacman/db.lck")
+						Exit()
+					end
+
 				end
 			end
 		end
