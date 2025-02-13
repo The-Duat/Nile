@@ -1,4 +1,4 @@
-local PackageManagerWrapper = dofile("/var/NileRiver/core/libraries/PackageManagerWrapper.lua")
+local PackageManagerWrapper = dofile("/NileRiver/core/libraries/PackageManagerWrapper.lua")
 
 --[=[ [ General Utility Functions ] ]=]--
 
@@ -283,11 +283,11 @@ end
 
 -- Change NILE setting.
 Functions.WriteSetting = function(program, setting, value)
-	local configFile = io.open(string.format("/var/NileRiver/config/%s/%s/settings/%s", UserName, program, setting), "w")
+	local configFile = io.open(string.format("/NileRiver/config/%s/%s/settings/%s", UserName, program, setting), "w")
 	if configFile then
 		configFile:write(value)
 		configFile:close()
-		os.execute(string.format("cd /var/NileRiver/config/%s/%s && ./genconf", UserName, program))
+		os.execute(string.format("cd /NileRiver/config/%s/%s && ./genconf", UserName, program))
 	else
 		Fault("Error opening " .. setting .. " config file for " .. program .. ".")
 	end

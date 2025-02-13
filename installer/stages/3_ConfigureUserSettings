@@ -1,0 +1,143 @@
+#!/bin/bash
+
+
+echo -e "\nConfiguring NILE user settings."
+
+echo -e "| Downloading Nile-Dark-Theme components."
+if [ ! -d "/NileRiver/download/cat" ]; then
+	mkdir /NileRiver/download/cat
+fi
+if [ ! -d "/NileRiver/download/cat-cursor" ]; then
+	mkdir /NileRiver/download/cat-cursor
+fi
+
+echo -e "  > Downloading Catppuccin GTK theme."
+wget https://github.com/catppuccin/gtk/releases/download/v0.4.3/Catppuccin-Mocha-Standard-Pink-Dark.zip -O /NileRiver/download/catppuccin.zip
+unzip -qq /NileRiver/download/catppuccin.zip -d /NileRiver/download/cat
+mv /NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark /NileRiver/download/cat/Catppuccin
+mv /NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /NileRiver/download/cat/Catppuccin-hdpi
+mv /NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-xhdpi /NileRiver/download/cat/Catppuccin-xhdpi
+
+echo -e "  > Downloading Catppuccin cursor theme."
+wget https://github.com/catppuccin/cursors/raw/main/cursors/Catppuccin-Mocha-Lavender-Cursors.zip -O /NileRiver/download/cursor.zip
+unzip -qq /NileRiver/download/cursor.zip -d /NileRiver/download/cat-cursor
+mv /NileRiver/download/cat-cursor/Catppuccin-Mocha-Lavender-Cursors /NileRiver/download/cat-cursor/catppuccin-cursor
+
+echo -e "  > Downloading Catppuccin Papirus icons."
+git clone https://github.com/catppuccin/papirus-folders /NileRiver/download/cat-papi
+echo -e "  > Installing Catppuccin Papirus icons to /usr/share/icons/"
+cp -r /NileRiver/download/cat-papi/src/* /usr/share/icons/Papirus
+echo -e "  > Overwriting old Papirus icons."
+/NileRiver/download/cat-papi/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
+
+echo -e "| Installing Nile-Dark-Theme components."
+for user_dir in /home/*; do
+    if [ -d "$user_dir" ]; then
+        username=$(basename "$user_dir")
+
+        echo " > Installing Catppuccin GTK theme for user $username"
+        if [ -d "/home/$username/.themes/catppuccin" ]; then
+            rm -rf /home/$username/.themes/Catppuccin
+        fi
+        if [ -d "/home/$username/.themes/catppuccin-hdpi" ]; then
+            rm -rf /home/$username/.themes/Catppuccin-hdpi
+        fi
+        if [ -d "/home/$username/.themes/catppuccin-xhdpi" ]; then
+            rm -rf /home/$username/.themes/Catppuccin-xhdpi
+        fi
+        cp -r /NileRiver/download/cat/* /home/$username/.themes/
+    fi
+done
+
+for user_dir in /home/*; do
+    if [ -d "$user_dir" ]; then
+        username=$(basename "$user_dir")
+
+        echo " > Installing Catppuccin cursor theme for user $username"
+        if [ -d "/home/$username/.icons/cat-cursor" ]; then
+        	rm -rf /home/$username/.icons/cat-cursor
+        fi
+        cp -r /NileRiver/download/cat-cursor/catppuccin-cursor /home/$username/.icons/
+    fi
+done
+
+echo -e "| Installing Nile-Dark-Theme OPMS package."
+lua ../lua-helpers/install-nile-dark-theme.lua
+
+
+echo -e "| Removing any Nile-Rollback themes."
+rm -rf /NileRiver/themes/Nile-Rollback*
+
+echo -e "| Checking for existing configurations."
+for user_dir in /home/*; do
+    if [ -d "$user_dir" ]; then
+        username=$(basename "$user_dir")
+
+        echo -e "  > Checking existence of configurations for user $username"
+        if [ -d /NileRiver/config/$username ]; then
+            echo -e "  > Found."
+            echo -e "  > Backing up configurations to theme Nile-Rollback-$username"
+            mkdir /NileRiver/themes/Nile-Rollback-$username
+            cp -r /NileRiver/config/$username/* /NileRiver/themes/Nile-Rollback-$username/
+            echo -e "  > Updating configuration files."
+            rm /NileRiver/config/$username/i3/config
+            rm /NileRiver/config/$username/gtk/settings.ini
+            rm /NileRiver/config/$username/alacritty/alacritty.toml
+            /NileRiver/core/genconfs/i3/genconf $username
+            /NileRiver/core/genconfs/gtk/genconf $username
+            /NileRiver/core/genconfs/alacritty/genconf $username
+        else
+            echo -e "  > Not found. Applying default Nile-Dark-Theme to $username"
+            mkdir /NileRiver/config/$username
+            cp -r /NileRiver/themes/Nile-Dark-Theme/* /NileRiver/config/$username/
+            echo -e "  > Creating configuration files."
+            /NileRiver/core/genconfs/i3/genconf $username
+            /NileRiver/core/genconfs/gtk/genconf $username
+            /NileRiver/core/genconfs/alacritty/genconf $username
+        fi
+    fi
+done
+
+
+echo -e "| Creating config file symlinks for all users."
+for user_dir in /home/*; do
+    if [ -d "$user_dir" ]; then
+        username=$(basename "$user_dir")
+
+        echo "  > Creating i3 symlink for user $username"
+        if [ -d "/home/$username/.config/i3" ]; then
+        	rm -rf /home/$username/.config/i3/*
+        else
+        	mkdir /home/$username/.config/i3
+        fi
+        ln -s /NileRiver/config/$username/i3/config /home/$username/.config/i3/config
+
+        echo "  > Creating GTK symlink for user $username"
+        if [ -f "/home/$username/.config/gtk-3.0/settings.ini" ]; then
+        	rm /home/$username/.config/gtk-3.0/settings.ini
+        fi
+        ln -s /NileRiver/config/$username/gtk/settings.ini /home/$username/.config/gtk-3.0/settings.ini
+
+        echo "  > Creating picom symlink for user $username"
+        if [ -f "/home/$username/.config/picom.conf" ]; then
+        	rm /home/$username/.config/picom.conf
+        fi
+        ln -s /NileRiver/config/$username/picom/picom.conf /home/$username/.config/picom.conf
+
+        echo "  > Creating alacritty symlink for user $username"
+        if [ -d "/home/$username/.config/alacritty" ]; then
+        	rm -rf /home/$username/.config/alacritty/*
+        else
+        	mkdir /home/$username/.config/alacritty
+        fi
+        ln -s /NileRiver/config/$username/alacritty/alacritty.toml /home/$username/.config/alacritty/alacritty.toml
+
+        echo "  > Creating fish symlink for user $username"
+        if [ -d "/home/$username/.config/fish" ]; then
+        	rm -rf /home/$username/.config/fish/*
+        else
+        	mkdir /home/$username/.config/fish
+        fi
+        ln -s /NileRiver/config/$username/fish/config.fish /home/$username/.config/fish/config.fish
+    fi
+done

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+for user_dir in /home/*; do
+    if [ -d "$user_dir" ]; then
+
+        username=$(basename "$user_dir")
+        echo "| Performing NILE pre-install for $username."
+
+        echo -e "Checking $user_dir filesystem."
+        
+        if [ -d "$user_dir/.config" ]; then
+            echo "  > $user_dir/.config already exists."
+        else
+            echo "  > Creating $user_dir/.config"
+            mkdir "$user_dir/.config"
+        fi
+
+        if [ -d "$user_dir/.themes" ]; then
+            echo "  > $user_dir/.themes already exists."
+        else
+            echo "  > Creating $user_dir/.themes"
+            mkdir "$user_dir/.themes"
+        fi
+
+        if [ -d "$user_dir/.icons" ]; then
+            echo "  > $user_dir/.icons already exists."
+        else
+            echo "  > Creating $user_dir/.icons"
+            mkdir "$user_dir/.icons"
+        fi
+
+        echo "fish" >> "$user_dir/.bashrc"
+    fi
+done

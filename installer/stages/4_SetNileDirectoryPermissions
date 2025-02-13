@@ -1,0 +1,37 @@
+#!/bin/bash
+
+echo "| Setting NILE filesystem base ownership."
+echo "  > /NileRiver     -  root:root"
+sudo -S chown -R root:root /NileRiver
+
+echo "| Setting NILE filesystem permissions."
+echo "  > /NileRiver            -  755"
+sudo -S chmod -R 755 /NileRiver
+echo "  > /NileRiver/core       -  755"
+sudo -S chmod -R 755 /NileRiver/core
+echo "  > /NileRiver/plugins       -  755"
+sudo -S chmod -R 755 /NileRiver/plugins
+echo "  > /NileRiver/init       -  755"
+sudo -S chmod -R 755 /NileRiver/init
+echo "  > /NileRiver/pkgmanager -  755"
+sudo -S chmod -R 755 /NileRiver/pkgmanager
+echo "  > /NileRiver/repo       -  755"
+sudo -S chmod -R 755 /NileRiver/repo
+echo "  > /NileRiver/packages   -  755"
+sudo -S chmod -R 755 /NileRiver/packages
+echo "  > /NileRiver/security   -  755"
+sudo -S chmod -R 755 /NileRiver/security
+echo "  > /NileRiver/work       -  755"
+sudo -S chmod -R 755 /NileRiver/work
+echo "  > /NileRiver/src        -  755"
+sudo -S chmod -R 755 /NileRiver/src
+echo "  > /NileRiver/config     -  755"
+sudo -S chmod -R 755 /NileRiver/config
+for d in /NileRiver/config/*/; do
+	dn=$(basename $d)
+	echo "  > $d   - 755 (Ownership: $dn:$dn)"
+	sudo -S chown -R $dn:$dn $d
+	sudo -S chmod -R 755 $d
+done
+echo "  > /NileRiver/download  -  777"
+sudo -S chmod -R 777 /NileRiver/download

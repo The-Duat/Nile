@@ -36,23 +36,23 @@ Main.Info = function(operator)
 		-- Display current i3 settings.
 		["i3settings"] = function()
 			Say("Current i3 settings:")
-			ViewSettings("/var/NileRiver/config/" .. UserName .. "/i3")
+			ViewSettings("/NileRiver/config/" .. UserName .. "/i3")
 		end,
 
 		-- Display current Alacritty settings.
 		["alacrittysettings"] = function()
 			Say("Current Alacritty settings:")
-			ViewSettings("/var/NileRiver/config/" .. UserName .. "/alacritty")
+			ViewSettings("/NileRiver/config/" .. UserName .. "/alacritty")
 		end,
 
 		-- Display current GTK settings.
 		["gtksettings"] = function()
 			Say("Current GTK settings:")
-			ViewSettings("/var/NileRiver/config/" .. UserName .. "/gtk")
+			ViewSettings("/NileRiver/config/" .. UserName .. "/gtk")
 		end,
 		["themes"] = function()
 			Say("Installed themes:")
-			for _,theme in pairs(SplitString(ReadCommand("ls /var/NileRiver/themes"), " ")) do
+			for _,theme in pairs(SplitString(ReadCommand("ls /NileRiver/themes"), " ")) do
 				Say2(theme)
 			end
 		end
@@ -61,14 +61,14 @@ Main.Info = function(operator)
 		switch[operator]()
 
 		-- Display theme info
-	elseif DirExists("/var/NileRiver/themes/" .. operator) == true then
+	elseif DirExists("/NileRiver/themes/" .. operator) == true then
 		Say("Settings for theme " .. operator .. ":")
 		Say("i3 Settings:")
-		ViewSettings("/var/NileRiver/themes/" .. operator .. "/i3")
+		ViewSettings("/NileRiver/themes/" .. operator .. "/i3")
 		Say("GTK Settings:")
-		ViewSettings("/var/NileRiver/themes/" .. operator .. "/gtk")
+		ViewSettings("/NileRiver/themes/" .. operator .. "/gtk")
 		Say("Alacritty Settings:")
-		ViewSettings("/var/NileRiver/themes/" .. operator .. "/alacritty")
+		ViewSettings("/NileRiver/themes/" .. operator .. "/alacritty")
 
 	else
 		Fault("Invalid operator: " .. operator)
@@ -89,15 +89,15 @@ Main.Config = function(operator, value)
 			Fault("Incorrect filetype: " .. fileType)
 			Exit()
 		end
-		os.remove(Posix.dirent.dir("/var/NileRiver/config/" .. UserName .. "/wallpaper")[2])
-		X(string.format("cp %s /var/NileRiver/config/%s/wallpaper/", value, UserName))
-		os.rename(string.format("/var/NileRiver/config/%s/wallpaper/%s", UserName, wallpaperName), string.format("/var/NileRiver/config/%s/wallpaper/wallpaper.%s", UserName, fileType))
+		os.remove(Posix.dirent.dir("/NileRiver/config/" .. UserName .. "/wallpaper")[2])
+		X(string.format("cp %s /NileRiver/config/%s/wallpaper/", value, UserName))
+		os.rename(string.format("/NileRiver/config/%s/wallpaper/%s", UserName, wallpaperName), string.format("/NileRiver/config/%s/wallpaper/wallpaper.%s", UserName, fileType))
 		X("pkill -fi feh")
-		X(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", UserName))
+		X(string.format("feh --bg-fill --zoom fill /NileRiver/config/%s/wallpaper/wallpaper.*", UserName))
 
 		-- Change NILE Theme
 	elseif operator == "theme" then
-		if DirExists("/var/NileRiver/themes/" .. value) == false then
+		if DirExists("/NileRiver/themes/" .. value) == false then
 			Fault("The theme " .. value .. " is not installed.")
 		end
 		Say("Overwrite your current settings with the theme " .. value .. "? (y/n)")
@@ -107,16 +107,16 @@ Main.Config = function(operator, value)
 		end
 		-- Recursive things like this are too hard to implement from scratch in luaposix.
 		-- If someone has a better way, let me know
-		X("rm -rf /var/NileRiver/config/" .. UserName .. "/*")
-		X("cp -r /var/NileRiver/themes/" .. value .. "/* /var/NileRiver/config/" .. UserName .. "/")
-		X(string.format("chown -R %s:%s /var/NileRiver/config/%s", UserName, UserName, UserName))
+		X("rm -rf /NileRiver/config/" .. UserName .. "/*")
+		X("cp -r /NileRiver/themes/" .. value .. "/* /NileRiver/config/" .. UserName .. "/")
+		X(string.format("chown -R %s:%s /NileRiver/config/%s", UserName, UserName, UserName))
 		X("chmod -R 755 /var/Nile/config/%s", UserName)
 		X("pkill -fi feh")
-		X(string.format("cd /var/NileRiver/config/%s/i3 && ./genconf", UserName))
-		X(string.format("cd /var/NileRiver/config/%s/gtk && ./genconf", UserName))
-		X(string.format("cd /var/NileRiver/config/%s/alacritty && ./genconf", UserName))
-		X(string.format("feh --bg-fill --zoom fill /var/NileRiver/config/%s/wallpaper/wallpaper.*", UserName))
-		if DirExists("/var/NileRiver/config/" .. UserName) then
+		X(string.format("cd /NileRiver/config/%s/i3 && ./genconf", UserName))
+		X(string.format("cd /NileRiver/config/%s/gtk && ./genconf", UserName))
+		X(string.format("cd /NileRiver/config/%s/alacritty && ./genconf", UserName))
+		X(string.format("feh --bg-fill --zoom fill /NileRiver/config/%s/wallpaper/wallpaper.*", UserName))
+		if DirExists("/NileRiver/config/" .. UserName) then
 			Say("Theme has sucessfully been enabled.")
 		else
 			Fault("An unknown error occured when attempting to enable theme " .. value)
@@ -134,15 +134,15 @@ Main.Config = function(operator, value)
 		if value == "strict"
 			or value == "moderate"
 			or value == "none" then
-			local currentLevel = dofile("/var/NileRiver/security/active/type.lua")
-			os.remove(Posix.dirent.dir("/var/NileRiver/security/active")[2])
-			local file = io.open("/var/NileRiver/security/type.lua", "w")
+			local currentLevel = dofile("/NileRiver/security/active/type.lua")
+			os.remove(Posix.dirent.dir("/NileRiver/security/active")[2])
+			local file = io.open("/NileRiver/security/type.lua", "w")
 			if file ~= nil then
 				file:write("return \"" .. value .. "\"")
 				file:close()
 				Say("OPMS security level changed from " .. currentLevel .. " to " .. value .. ".")
 			else
-				Fault("Failed to open file: /var/NileRiver/security/type.lua")
+				Fault("Failed to open file: /NileRiver/security/type.lua")
 			end
 
 		else
@@ -226,17 +226,17 @@ Main.Theme = function(operator, value)
 		themeName = themeName:gsub("/", "-")
 
 		Say("Checking existence of " .. themeName)
-		if DirExists("/var/NileRiver/themes/" .. themeName) == true then
+		if DirExists("/NileRiver/themes/" .. themeName) == true then
 			Fault("A theme by the name " .. themeName .. " already exists. Please choose a different name.")
 			Exit()
 		end
 		-- Ugh. More shell jank. Sadly, I need this as I need both normal user and root access for this to work.
 		Say2("Theme name is not taken. Continuing compilation.")
-		Xs("mkdir /var/NileRiver/themes/" .. themeName)
-		Xs(string.format("cp -r /var/NileRiver/config/%s/* /var/NileRiver/themes/%s/", UserName, themeName))
-		Xs("chown -R root:root /var/NileRiver/themes/" .. themeName)
-		Xs("chmod 755 /var/NileRiver/themes/" .. themeName)
-		if DirExists("/var/NileRiver/themes/" .. themeName) ~= false then
+		Xs("mkdir /NileRiver/themes/" .. themeName)
+		Xs(string.format("cp -r /NileRiver/config/%s/* /NileRiver/themes/%s/", UserName, themeName))
+		Xs("chown -R root:root /NileRiver/themes/" .. themeName)
+		Xs("chmod 755 /NileRiver/themes/" .. themeName)
+		if DirExists("/NileRiver/themes/" .. themeName) ~= false then
 			Say("Theme " .. themeName .. "has been successfully created.")
 		else
 			Fault("Something went wrong while compiling theme " .. themeName)
@@ -322,8 +322,8 @@ end
 Main.Network = function(operator, value)
 	if operator == "scan-ip" then
 		Say("Scanning IP Address " .. value)
-		X("wget https://freegeoip.app/json/" .. value .. " -O /var/NileRiver/download/ipinfo --no-verbose")
-		local IPData = JsonParse(ReadCommand("cat /var/NileRiver/download/ipinfo"))
+		X("wget https://freegeoip.app/json/" .. value .. " -O /NileRiver/download/ipinfo --no-verbose")
+		local IPData = JsonParse(ReadCommand("cat /NileRiver/download/ipinfo"))
 		Say("General IP information:")
 		for data,val in pairs(IPData) do
 			local data2 = tostring(data)
@@ -337,7 +337,7 @@ Main.Network = function(operator, value)
 				Say2(data2 .. ": " .. val2)
 			end
 		end
-		X("rm /var/NileRiver/download/ipinfo")
+		X("rm /NileRiver/download/ipinfo")
 	elseif operator == "scan-wifi" then
 		WifiManager("getlocalnetworks", nil, nil)
 	elseif operator == "connect" then
@@ -449,7 +449,7 @@ Main.Update = function(updateType, dev)
 			Fault("NILE System Update aborted.")
 			Exit()
 		end
-		X("cd /var/NileRiver/src && sudo git clone https://github.com/The-Duat/Nile && cd /var/NileRiver/src/Nile && " .. devString .. " ./install && sudo rm -rf /var/NileRiver/src/*")
+		X("cd /NileRiver/src && sudo git clone https://github.com/The-Duat/Nile && cd /NileRiver/src/Nile && " .. devString .. " ./install && sudo rm -rf /NileRiver/src/*")
 	elseif updateType == "packages" then
 		local opackages = GetOsirisPackages()
 		Say("Installed OPMS packages:")
@@ -476,15 +476,15 @@ end
 
 --[=[ Start i3 ]=]--
 Main.Start = function()
-	X("startx /var/NileRiver/core/xinitrc")
+	X("startx /NileRiver/core/xinitrc")
 end
 
 
 --[=[ Plugin Management ]=]--
 Main.Plugin = function(operator, value, arguments)           
 	if operator == "run" then
-		if DirExists("/var/NileRiver/plugins/" .. value) == true then
-			dofile("/var/NileRiver/plugins/" .. value .. "/plugin.lua").main(NileRiver, arguments)
+		if DirExists("/NileRiver/plugins/" .. value) == true then
+			dofile("/NileRiver/plugins/" .. value .. "/plugin.lua").main(NileRiver, arguments)
 		else
 			Fault("The plugin " .. value .. " is not installed.")
 		end

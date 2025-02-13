@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "| Checking source folder."
+if [ -d "/NileRiver/src/Nile" ]; then
+	echo "  > Cleaning source folder."
+	rm -rf /NileRiver/src/Nile
+else
+	echo "  > Source folder not found."
+fi
+
+
+echo -e "| Enabling sddm display manager."
+if ps -e | grep gdm; then
+	echo -e "  > gdm detected, disabling."
+	river sv disable gdm
+fi
+river sv enable sddm

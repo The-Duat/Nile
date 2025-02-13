@@ -4,11 +4,11 @@ Data.UserName = os.getenv("USER")
 
 Data.HomeDir = os.getenv("HOME")
 
-Data.InitSystem = dofile("/var/NileRiver/init/init.lua")
+Data.InitSystem = dofile("/NileRiver/init/init.lua")
 
-Data.NativePkgManager = dofile("/var/NileRiver/pkgmanager/pm.lua")
+Data.NativePkgManager = dofile("/NileRiver/pkgmanager/pm.lua")
 
-Data.OpmsSecurityLevel = dofile("/var/NileRiver/security/active/type.lua")
+Data.OpmsSecurityLevel = dofile("/NileRiver/security/active/type.lua")
 
 Data.IntegerCharacterSheet = "0123456789"
 

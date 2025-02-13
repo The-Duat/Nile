@@ -10,11 +10,11 @@ NileRiver.InitializeIO = function(frontend_IO)
 	Fault = frontend_IO.err
 end
 
-local Json = dofile("/var/NileRiver/core/libraries/json.lua")
+local Json = dofile("/NileRiver/core/libraries/json.lua")
 JsonStringify = Json.stringify
 JsonParse     = Json.parse
 
-local GlobalData = dofile("/var/NileRiver/core/libraries/Nile_Global_Data.lua")
+local GlobalData = dofile("/NileRiver/core/libraries/Nile_Global_Data.lua")
 UserName                 = GlobalData.UserName
 HomeDir                  = GlobalData.HomeDir
 InitSystem               = GlobalData.InitSystem
@@ -31,7 +31,7 @@ IntegerCharacterSheet    = GlobalData.IntegerCharacterSheet
 HexCharacterSheet        = GlobalData.HexCharacterSheet
 PmCommandSheet           = GlobalData.PmCommandSheet
 
-local UtilityFunctions = dofile("/var/NileRiver/core/libraries/Nile_Utility_Functions.lua")
+local UtilityFunctions = dofile("/NileRiver/core/libraries/Nile_Utility_Functions.lua")
 X                 = UtilityFunctions.X
 Xs                = UtilityFunctions.Xs
 RunAsRoot         = UtilityFunctions.RunAsRoot
@@ -56,7 +56,7 @@ ViewSettings      = UtilityFunctions.ViewSettings
 IsRoot            = UtilityFunctions.IsRoot
 Exit              = UtilityFunctions.Exit
 
-local PackageManager = dofile("/var/NileRiver/core/libraries/Nile_OPMS.lua")
+local PackageManager = dofile("/NileRiver/core/libraries/Nile_OPMS.lua")
 InstallOsirisPackage      = PackageManager.InstallOsirisPackage
 RemoveOsirisPackage       = PackageManager.RemovesOsirisPackage
 UpdateOsirisPackage       = PackageManager.UpdateOsirisPackage
@@ -66,7 +66,7 @@ ListRepo                  = PackageManager.ListRepo
 
 NileRiver.Main = {}
 
-local MainFunctions = dofile("/var/NileRiver/core/libraries/Nile_Main_Functions.lua")
+local MainFunctions = dofile("/NileRiver/core/libraries/Nile_Main_Functions.lua")
 NileRiver.Main.Info     = MainFunctions.Info
 NileRiver.Main.Config   = MainFunctions.Config
 NileRiver.Main.Theme    = MainFunctions.Theme

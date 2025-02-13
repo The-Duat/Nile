@@ -1,0 +1,105 @@
+#!/bin/bash
+
+echo -e "\nChecking NILE directory structure."
+echo "| Checking core folder."
+if [ -d "/NileRiver/core" ]; then
+	echo "  > core folder present, removing old files."
+	rm -rf /NileRiver/core/*
+else
+	echo "  > Creating /NileRiver/core"
+	mkdir /NileRiver/core
+	mkdir /NileRiver/core/libraries-thirdparty
+fi
+
+echo "| Checking plugins folder."
+if [ -d "/NileRiver/plugins" ]; then
+	echo "  > plugins folder present."
+else
+	echo "  > Creating /NileRiver/plugins"
+	mkdir /NileRiver/plugins
+fi
+
+echo "| Checking src folder."
+if [ -d "/NileRiver/src" ]; then
+	echo "  > src folder present."
+else
+	echo "  > Creating /NileRiver/src"
+	mkdir /NileRiver/src
+fi
+
+echo "| Checking packages folder."
+if [ -d "/NileRiver/packages" ]; then
+	echo "  > Packages folder present."
+else
+	echo "  > Creating /NileRiver/packages"
+	mkdir /NileRiver/packages
+fi
+
+echo "| Checking repo folder."
+if [ -d "/NileRiver/repo" ]; then
+	echo "  > repo folder present."
+else
+	echo "  > Creating /NileRiver/repo"
+	mkdir /NileRiver/repo
+fi
+
+echo "| Checking work folder."
+if [ -d "/NileRiver/work" ]; then
+	echo "  > work folder present."
+else
+	echo "  > Creating /NileRiver/work"
+	mkdir /NileRiver/work
+fi
+
+echo "| Checking init folder."
+if [ -d "/NileRiver/init" ]; then
+	echo "  > init folder present."
+	echo "  > Clearing old init folder."
+	rm -rf /NileRiver/init/*
+else
+	echo "  > Creating init folder."
+	mkdir /NileRiver/init
+fi
+
+echo "| Checking pkgmanager folder."
+if [ -d "/NileRiver/pkgmanager" ]; then
+	echo "  > pkgmanager folder present."
+	echo "  > Clearing old pkgmanager folder."
+	rm -rf /NileRiver/pkgmanager/*
+else
+	echo "  > Creating pkgmanager folder."
+	mkdir /NileRiver/pkgmanager
+fi
+
+echo "| Checking security folder."
+if [ -d "/NileRiver/security" ]; then
+	echo "  > security folder present."
+else
+	echo "  > Creating security folder."
+	cp -r assets/premade_folders/security /NileRiver
+fi
+
+echo "| Checking config folder."
+if [ -d "/NileRiver/config" ]; then
+	echo "  > config folder present."
+else
+	echo "  > Creating config folder."
+	mkdir /NileRiver/config
+fi
+
+echo "| Checking download folder."
+if [ -d "/NileRiver/download" ]; then
+	echo "  > download folder present, clearing."
+	rm -rf /NileRiver/download/*
+else
+	echo "  > Creating download folder."
+	mkdir /NileRiver/download
+fi
+
+echo "| Checking themes folder."
+if [ -d "/NileRiver/themes" ]; then
+	echo "  > themes folder present."
+else
+	echo "  > Creating themes folder."
+	mkdir /NileRiver/themes
+fi

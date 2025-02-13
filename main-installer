@@ -1,0 +1,50 @@
+#!/bin/bash
+
+
+os_name=$(uname -s)
+
+if [ -f "/usr/bin/sv" ]; then
+	InitSystem="runit"
+elif [ -f "/usr/bin/systemctl" ]; then
+    InitSystem="systemd"
+elif [ -f "/usr/bin/rc-service" ]; then
+    InitSystem="openrc"
+else
+	echo "The Nile Integrated Linux Environment does not support this Linux distribution."
+	echo "Please refer to the NILE documentation at https://entertheduat.org for a list of system requirements."
+	exit
+fi
+
+if command -v pacman >/dev/null 2>&1; then
+	PackageManager="pacman"
+elif command -v apt >/dev/null 2>&1; then
+	PackageManager="apt"
+elif command -v xbps-install >/dev/null 2>&1; then
+	PackageManager="xbps"
+elif command -v dnf >/dev/null 2>&1; then
+	PackageManager="dnf"
+elif command -v zypper >/dev/null 2>&1; then
+	PackageManager="zypper"
+else
+	echo "The Nile Integrated Linux Environment does not support this Linux distribution."
+	echo "Please refer to the NILE documentation at https://nile.entertheduat.org for a list of system requirements."
+	exit
+fi
+
+
+echo "Checking install type."
+if [ -d "/NileRiver" ]; then
+	echo "| Performing NILE update."
+else
+	echo "| Performing NILE installation."
+	./install/stages/0_PreInstall
+fi
+
+./install/stages/1_CreateBaseFolders
+./install/stages/2_InstallCoreComponents $InitSystem $PackageManager
+./install/stages/3_ConfigureUserConfigs
+./install/stages/4_SetNileDirectoryPermissions
+./install/stages/5_CleanUp
+
+
+echo -e "NILE installation script has finished."

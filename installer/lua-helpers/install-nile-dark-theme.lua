@@ -23,7 +23,4 @@ end
 
 NileRiver.InitializeIO(frontend_IO)
 
-if arg[1] == "installthemepackages" then
-    NileRiver.Main.Software("fetch", {"The-Duat/Nile-Dark-Theme"}, false, true)
-	-- NileRiver.Main.Config("theme", "Nile-Dark-Theme")
-end
+NileRiver.Main.Software("fetch", {"The-Duat/Nile-Dark-Theme"}, false, true)
