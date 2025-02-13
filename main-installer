@@ -26,7 +26,7 @@ elif command -v dnf >/dev/null 2>&1; then
 elif command -v zypper >/dev/null 2>&1; then
 	PackageManager="zypper"
 else
-	echo "The Nile Integrated Linux Environment does not support this Linux distribution ($os_name)."
+	echo "The Nile Integrated Linux Environment does not support this Linux distribution. ($os_name)"
 	echo "Please refer to the NILE documentation at https://nile.entertheduat.org for a list of system requirements."
 	exit
 fi
