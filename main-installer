@@ -37,14 +37,14 @@ if [ -d "/NileRiver" ]; then
 	echo "| Performing NILE update."
 else
 	echo "| Performing NILE installation."
-	./install/stages/0_PreInstall
+	./installer/stages/0_PreInstall
 fi
 
-./install/stages/1_CreateBaseFolders
-./install/stages/2_InstallCoreComponents $InitSystem $PackageManager
-./install/stages/3_ConfigureUserConfigs
-./install/stages/4_SetNileDirectoryPermissions
-./install/stages/5_CleanUp
+./installer/stages/1_CreateBaseFolders
+./installer/stages/2_InstallCoreComponents $InitSystem $PackageManager
+./installer/stages/3_ConfigureUserConfigs
+./installer/stages/4_SetNileDirectoryPermissions
+./installer/stages/5_CleanUp
 
 
 echo -e "NILE installation script has finished."
