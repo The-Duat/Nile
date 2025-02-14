@@ -42,7 +42,7 @@ fi
 
 ./installer/stages/1_CreateBaseFolders
 ./installer/stages/2_InstallCoreComponents $InitSystem $PackageManager
-./installer/stages/3_ConfigureUserConfigs
+./installer/stages/3_ConfigureUserSettings
 ./installer/stages/4_SetNileDirectoryPermissions
 ./installer/stages/5_CleanUp
 
