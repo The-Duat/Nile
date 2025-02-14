@@ -450,7 +450,7 @@ Main.Update = function(updateType, dev)
 			Exit()
 		end
 		if dev == true then
-			X("cd /NileRiver/src && git clone https://github.com/The-Duat/Nile && cd /NileRiver/src/Nile && ./install && rm -rf /NileRiver/src/*")
+			X("cd /NileRiver/src && git clone https://github.com/The-Duat/Nile && cd /NileRiver/src/Nile && ./main-installer && rm -rf /NileRiver/src/*")
 		else
 			Fault("Regular updates are not implemented yet.")
 		end
