@@ -99,11 +99,13 @@ Main.Config = function(operator, value)
 	elseif operator == "theme" then
 		if DirExists("/NileRiver/themes/" .. value) == false then
 			Fault("The theme " .. value .. " is not installed.")
+			Exit()
 		end
 		Say("Overwrite your current settings with the theme " .. value .. "? (y/n)")
 		Say("Your current settings will be lost.")
 		if string.lower(Read()) ~= "y" then
 			Fault("Aborted.")
+			Exit()
 		end
 		-- Recursive things like this are too hard to implement from scratch in luaposix.
 		-- If someone has a better way, let me know
@@ -112,9 +114,9 @@ Main.Config = function(operator, value)
 		X(string.format("chown -R %s:%s /NileRiver/config/%s", UserName, UserName, UserName))
 		X("chmod -R 755 /var/Nile/config/%s", UserName)
 		X("pkill -fi feh")
-		X(string.format("cd /NileRiver/config/%s/i3 && ./genconf", UserName))
-		X(string.format("cd /NileRiver/config/%s/gtk && ./genconf", UserName))
-		X(string.format("cd /NileRiver/config/%s/alacritty && ./genconf", UserName))
+		X(string.format("cd /NileRiver/core/genconfs/i3 && ./genconf %s", UserName))
+		X(string.format("cd /NileRiver/core/genconfs/gtk && ./genconf %s", UserName))
+		X(string.format("cd /NileRiver/core/genconfs/alacritty && ./genconf %s", UserName))
 		X(string.format("feh --bg-fill --zoom fill /NileRiver/config/%s/wallpaper/wallpaper.*", UserName))
 		if DirExists("/NileRiver/config/" .. UserName) then
 			Say("Theme has sucessfully been enabled.")
@@ -125,10 +127,7 @@ Main.Config = function(operator, value)
 		-- Change the package security level.
 	elseif operator == "pkgsec" then
 
-		if IsRoot() == false then
-			Fault("This action must be ran as root.")
-			Exit()
-		end
+		CheckRoot()
 
 		Say("Attempting to set the OPMS security level to " .. value .. ".")
 		if value == "strict"
@@ -277,7 +276,7 @@ Main.Service = function(operator, value)
 end
 
 
---[=[ Graphics management ]=]--
+--[=[ Graphics management. Undocumented. May be made into a plugin.]=]--
 Main.Graphics = function(operator, value)
 
 	-- If present, construct the command to be ran.
@@ -290,11 +289,11 @@ Main.Graphics = function(operator, value)
 
 	-- Run command on dedicated GPU.
 	if operator == "xd" then
-		x("export DRI_PRIME=1 && exec " .. commandString)
+		X("export DRI_PRIME=1 && exec " .. commandString)
 
 		-- Run command on integrated GPU.
 	elseif operator == "xi" then
-		x("export DRI_PRIME=0 && exec " .. commandString)
+		X("export DRI_PRIME=0 && exec " .. commandString)
 
 		-- Change the graphics mode.
 	elseif operator == "mode" then
@@ -438,22 +437,28 @@ end
 
 --[=[ System updates ]=]--
 Main.Update = function(updateType, dev)
+
 	if updateType == "system" then
-		local devString = ""
-		if dev == true then
-			devString = "sudo git checkout development &&"
-			Say("Developer mode enabled.")
-		end
+		CheckRoot()
 		Say("Update the NILE? (y/n)")
+		if dev == true then
+			Say2("Updating to developer version. Your system may break.")
+			Say2("You have been warned.")
+		end
 		if string.lower(Read()) ~= "y" then
 			Fault("NILE System Update aborted.")
 			Exit()
 		end
-		X("cd /NileRiver/src && sudo git clone https://github.com/The-Duat/Nile && cd /NileRiver/src/Nile && " .. devString .. " ./install && sudo rm -rf /NileRiver/src/*")
+		if dev == true then
+			X("cd /NileRiver/src && git clone https://github.com/The-Duat/Nile && cd /NileRiver/src/Nile && ./install && rm -rf /NileRiver/src/*")
+		else
+			Fault("Regular updates are not implemented yet.")
+		end
+
 	elseif updateType == "packages" then
 		local opackages = GetOsirisPackages()
 		Say("Installed OPMS packages:")
-		for _,opackage in ipairs(opackage) do
+		for _,opackage in ipairs(opackages) do
 			Say2(opackage)
 		end
 		Say("Update installed OPMS packages? (y/n)")
@@ -463,7 +468,7 @@ Main.Update = function(updateType, dev)
 			Exit()
 		end
 		for _,opackage in ipairs(opackages) do
-			local splitName = SplitString(package, "_")
+			local splitName = SplitString(opackage, "_")
 			if splitName[1] and splitName[2] then
 				UpdateOsirisPackage(TrimWhite(splitName[1] .. "/" .. splitName[2]))
 			end

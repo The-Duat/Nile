@@ -5,10 +5,7 @@ local Manager = {}
 --[=[ Install an Osiris package ]=]--
 Manager.InstallOsirisPackage = function(packageName, promptBypass)
 
-	if IsRoot() == false then
-		Fault("This action must be ran as root.")
-		Exit()
-	end
+	CheckRoot()
 
 	local nameInfo = SplitString(packageName, "/")
 	local developerName = string.lower(TrimWhite(nameInfo[1]))
@@ -101,10 +98,7 @@ end
 --[=[ Remove an Osiris package ]=]--
 Manager.RemoveOsirisPackage = function(packageName, promptBypass)
 
-	if IsRoot() == false then
-		Fault("This action must be ran as root.")
-		Exit()
-	end
+	CheckRoot()
 
 	local nameInfo = SplitString(packageName, "/")
 	local developerName = string.lower(TrimWhite(nameInfo[1]))
@@ -150,10 +144,7 @@ end
 --[=[ Update an Osiris Package ]=]--
 Manager.UpdateOsirisPackage = function(packageName, promptBypass)
 
-	if IsRoot() == false then
-		Fault("This action must be ran as root.")
-		Exit()
-	end
+	CheckRoot()
 
 	local nameInfo = SplitString(packageName, "/")
 	local developerName = string.lower(TrimWhite(nameInfo[1]))
@@ -180,10 +171,7 @@ end
 --[=[ Check installable package's required security level ]=]--
 Manager.GetOsirisPackagePlacement = function(packageName)
 
-	if IsRoot() == false then
-		Fault("This action must be ran as root.")
-		Exit()
-	end
+	CheckRoot()
 
 	Say("Downloading package repo.")
 	if CheckFile("/NileRiver/repo/repo.lua") == true then
@@ -222,11 +210,6 @@ end
 
 --[=[ Get list of packages in the Duat's repo ]=]--
 Manager.ListRepo = function()
-
-	if IsRoot() == false then
-		Fault("This action must be ran as root.")
-		Exit()
-	end
 
 	Say("Downloading package repo.")
 	if CheckFile("/NileRiver/repo/repo.lua") == true then

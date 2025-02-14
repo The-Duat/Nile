@@ -53,7 +53,7 @@ WifiManager       = UtilityFunctions.WifiManager
 GetNativePackages = UtilityFunctions.GetNativePackages
 WriteSetting      = UtilityFunctions.WriteSetting
 ViewSettings      = UtilityFunctions.ViewSettings
-IsRoot            = UtilityFunctions.IsRoot
+CheckRoot         = UtilityFunctions.CheckRoot
 Exit              = UtilityFunctions.Exit
 
 local PackageManager = dofile("/NileRiver/core/libraries/Nile_OPMS.lua")

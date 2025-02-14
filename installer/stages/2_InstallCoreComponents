@@ -23,7 +23,7 @@ fi
 cp assets/premade_folders/core/NileRiver.lua /NileRiver/core/
 echo "  > Installing NILE system libraries."
 if [ -d "/NileRiver/core/libraries" ]; then
-	sudo -S rm -rf /NileRiver/core/libraries
+	rm -rf /NileRiver/core/libraries
 fi
 cp -r assets/premade_folders/core/libraries /NileRiver/core/
 touch /NileRiver/core/xinitrc
@@ -31,7 +31,7 @@ echo "exec i3" > /NileRiver/core/xinitrc
 
 echo "  > Installing the river frontend."
 if [ -f "/usr/bin/river" ]; then
-	sudo -S rm /usr/bin/river
+	rm /usr/bin/river
 fi
-sudo -S chmod +x assets/premade_folders/river
-sudo -S cp assets/premade_folders/river /usr/bin
+chmod +x assets/premade_folders/river
+cp assets/premade_folders/river /usr/bin

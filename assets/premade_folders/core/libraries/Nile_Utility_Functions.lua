@@ -319,11 +319,10 @@ Functions.ViewSettings = function(directory)
 end
 
 -- Check if program is running under Root
-Functions.IsRoot = function()
-	if Posix.unistd.geteuid() == 0 then
-		return true
-	else
-		return false
+Functions.CheckRoot = function()
+	if Posix.unistd.geteuid() ~= 0 then
+		Fault("This operation must be ran with root privileges.")
+		os.exit()
 	end
 end
 
