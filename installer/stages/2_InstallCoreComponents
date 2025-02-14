@@ -15,23 +15,13 @@ fi
 echo "| Installing package manager identification files."
 cp assets/premade_folders/pkgmanager/$2/pm.lua /NileRiver/pkgmanager
 
-echo "| Installing core NILE system software."
-echo "  > Installing the NileRiver.lua backend."
-if [ -f "/NileRiver/core/NileRiver.lua" ]; then
-	rm /NileRiver/core/NileRiver.lua
-fi
-cp assets/premade_folders/core/NileRiver.lua /NileRiver/core/
-echo "  > Installing NILE system libraries."
-if [ -d "/NileRiver/core/libraries" ]; then
-	rm -rf /NileRiver/core/libraries
-fi
-cp -r assets/premade_folders/core/libraries /NileRiver/core/
-touch /NileRiver/core/xinitrc
-echo "exec i3" > /NileRiver/core/xinitrc
+echo "| Installing NILE core."
+cp -r assets/premade_folders/core/* /NileRiver/core/
 
 echo "  > Installing the river frontend."
 if [ -f "/usr/bin/river" ]; then
 	rm /usr/bin/river
 fi
-chmod +x assets/premade_folders/river
 cp assets/premade_folders/river /usr/bin
+chown root:root /usr/bin/river
+chmod 755 /usr/bin/river

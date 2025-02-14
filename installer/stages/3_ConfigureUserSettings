@@ -62,7 +62,7 @@ for user_dir in /home/*; do
 done
 
 echo -e "| Installing Nile-Dark-Theme OPMS package."
-lua ../lua-helpers/install-nile-dark-theme.lua
+lua installer/lua-helpers/install-nile-dark-theme.lua
 
 
 echo -e "| Removing any Nile-Rollback themes."

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo "| Setting NILE filesystem base ownership."
+echo "| Setting NILE directory ownership."
 echo "  > /NileRiver     -  root:root"
 chown -R root:root /NileRiver
 
-echo "| Setting NILE filesystem permissions."
+echo "| Setting NILE directory permissions."
 echo "  > /NileRiver            -  755"
 chmod -R 755 /NileRiver
 echo "  > /NileRiver/core       -  755"
@@ -29,8 +29,8 @@ echo "  > /NileRiver/config     -  755"
 chmod -R 755 /NileRiver/config
 for d in /NileRiver/config/*/; do
 	dn=$(basename $d)
-	echo "  > $d   - 755 (Ownership: $dn:$dn)"
-	chown -R $dn:$dn $d
+	echo "  > $d   - 755 (Ownership: $dn)"
+	chown -R $dn $d
 	chmod -R 755 $d
 done
 echo "  > /NileRiver/download  -  777"

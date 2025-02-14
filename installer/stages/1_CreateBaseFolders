@@ -8,7 +8,6 @@ if [ -d "/NileRiver/core" ]; then
 else
 	echo "  > Creating /NileRiver/core"
 	mkdir /NileRiver/core
-	mkdir /NileRiver/core/libraries-thirdparty
 fi
 
 echo "| Checking plugins folder."

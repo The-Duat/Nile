@@ -10,7 +10,7 @@ NileRiver.InitializeIO = function(frontend_IO)
 	Fault = frontend_IO.err
 end
 
-local Json = dofile("/NileRiver/core/libraries/json.lua")
+local Json = dofile("/NileRiver/core/libraries-thirdparty/json.lua")
 JsonStringify = Json.stringify
 JsonParse     = Json.parse
 
