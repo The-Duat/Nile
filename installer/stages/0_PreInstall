@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir /NileRiver
+
 for user_dir in /home/*; do
     if [ -d "$user_dir" ]; then
 
