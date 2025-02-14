@@ -113,8 +113,10 @@ for user_dir in /home/*; do
         ln -s /NileRiver/config/$username/i3/config /home/$username/.config/i3/config
 
         echo "  > Creating GTK symlink for user $username"
-        if [ -f "/home/$username/.config/gtk-3.0/settings.ini" ]; then
-        	rm /home/$username/.config/gtk-3.0/settings.ini
+        if [ -d "/home/$username/.config/gtk-3.0" ]; then
+        	rm -rf /home/$username/.config/gtk-3.0/settings.ini
+        else
+        	mkdir /home/$username/.config/gtk-3.0
         fi
         ln -s /NileRiver/config/$username/gtk/settings.ini /home/$username/.config/gtk-3.0/settings.ini
 

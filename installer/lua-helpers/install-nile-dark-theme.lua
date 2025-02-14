@@ -1,4 +1,4 @@
-local NileRiver = dofile("/var/NileRiver/core/NileRiver.lua")
+local NileRiver = dofile("/NileRiver/core/NileRiver.lua")
 
 local frontend_IO = {}
 
