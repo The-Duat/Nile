@@ -17,6 +17,10 @@ unzip -qq /NileRiver/download/catppuccin.zip -d /NileRiver/download/cat
 mv /NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark /NileRiver/download/cat/Catppuccin
 mv /NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /NileRiver/download/cat/Catppuccin-hdpi
 mv /NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-xhdpi /NileRiver/download/cat/Catppuccin-xhdpi
+echo -e "  > Installing Catppuccin GTK theme to /usr/share/themes/"
+mv /NileRiver/download/cat/Catppuccin /usr/share/themes/
+mv /NileRiver/download/cat/Catppuccin-hdpi /usr/share/themes/
+mv /NileRiver/download/cat/Catppuccin-xhdpi /usr/share/themes/
 
 echo -e "  > Downloading Catppuccin cursor theme."
 wget https://github.com/catppuccin/cursors/releases/download/v2.0.0/catppuccin-mocha-lavender-cursors.zip -O /NileRiver/download/cursor.zip
@@ -38,36 +42,6 @@ chmod +x /NileRiver/papirus-folders
 echo -e "  > Overwriting old Papirus icons."
 /NileRiver/download/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
 
-echo -e "| Installing Nile-Dark-Theme components."
-for user_dir in /home/*; do
-    if [ -d "$user_dir" ]; then
-        username=$(basename "$user_dir")
-
-        echo -e " > Installing Catppuccin GTK theme for user $username"
-        if [ -d "/home/$username/.themes/catppuccin" ]; then
-            rm -rf /home/$username/.themes/Catppuccin
-        fi
-        if [ -d "/home/$username/.themes/catppuccin-hdpi" ]; then
-            rm -rf /home/$username/.themes/Catppuccin-hdpi
-        fi
-        if [ -d "/home/$username/.themes/catppuccin-xhdpi" ]; then
-            rm -rf /home/$username/.themes/Catppuccin-xhdpi
-        fi
-        cp -r /NileRiver/download/cat/* /home/$username/.themes/
-    fi
-done
-
-for user_dir in /home/*; do
-    if [ -d "$user_dir" ]; then
-        username=$(basename "$user_dir")
-
-        echo " > Installing Catppuccin cursor theme for user $username"
-        if [ -d "/home/$username/.icons/cat-cursor" ]; then
-        	rm -rf /home/$username/.icons/cat-cursor
-        fi
-        cp -r /NileRiver/download/cat-cursor/catppuccin-cursor /home/$username/.icons/
-    fi
-done
 
 echo -e "| Installing Nile-Dark-Theme OPMS package."
 lua installer/lua-helpers/install-nile-dark-theme.lua
