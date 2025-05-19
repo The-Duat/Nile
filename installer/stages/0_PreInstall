@@ -8,7 +8,7 @@ for user_dir in /home/*; do
         username=$(basename "$user_dir")
         echo "| Performing NILE pre-install for $username."
 
-        echo -e "Checking $user_dir filesystem."
+        echo -e "Checking $user_dir directory structure."
         
         if [ -d "$user_dir/.config" ]; then
             echo "  > $user_dir/.config already exists."

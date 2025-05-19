@@ -23,4 +23,4 @@ end
 
 NileRiver.InitializeIO(frontend_IO)
 
-NileRiver.Main.Software("fetch", {"The-Duat/Nile-Dark-Theme"}, false, true)
+NileRiver.Main.Pm("fetch", {"The-Duat/Nile-Dark-Theme"}, false, true)
