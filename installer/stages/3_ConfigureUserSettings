@@ -19,16 +19,22 @@ mv /NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-hdpi /NileRiver/d
 mv /NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-xhdpi /NileRiver/download/cat/Catppuccin-xhdpi
 
 echo -e "  > Downloading Catppuccin cursor theme."
-wget https://github.com/catppuccin/cursors/raw/main/cursors/Catppuccin-Mocha-Lavender-Cursors.zip -O /NileRiver/download/cursor.zip
+wget https://github.com/catppuccin/cursors/releases/download/v2.0.0/catppuccin-mocha-lavender-cursors.zip -O /NileRiver/download/cursor.zip
 unzip -qq /NileRiver/download/cursor.zip -d /NileRiver/download/cat-cursor
 mv /NileRiver/download/cat-cursor/Catppuccin-Mocha-Lavender-Cursors /NileRiver/download/cat-cursor/catppuccin-cursor
 
-echo -e "  > Downloading Catppuccin Papirus icons."
+echo -e "  > Installing Papirus icon theme."
+wget -qO- https://git.io/papirus-icon-theme-install | sh
+
+echo -e "  > Downloading Catppuccin Papirus folders."
 git clone https://github.com/catppuccin/papirus-folders /NileRiver/download/cat-papi
-echo -e "  > Installing Catppuccin Papirus icons to /usr/share/icons/"
+echo -e "  > Installing Catppuccin Papirus folders to /usr/share/icons/"
 cp -r /NileRiver/download/cat-papi/src/* /usr/share/icons/Papirus
+echo -e "  > Downloading papirus-folders script."
+wget https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-folders/master/papirus-folders -O /NileRiver/download/papirus-folders
+chmod +x ./papirus-folders
 echo -e "  > Overwriting old Papirus icons."
-/NileRiver/download/cat-papi/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
+/NileRiver/download/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
 
 echo -e "| Installing Nile-Dark-Theme components."
 for user_dir in /home/*; do
