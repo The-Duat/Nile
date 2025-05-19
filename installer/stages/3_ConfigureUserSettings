@@ -3,7 +3,7 @@
 
 echo -e "\nConfiguring NILE user settings."
 
-echo -e "| Downloading Nile-Dark-Theme components."
+echo -e "| Setting up Nile-Dark-Theme components."
 if [ ! -d "/NileRiver/download/cat" ]; then
 	mkdir /NileRiver/download/cat
 fi
@@ -21,7 +21,9 @@ mv /NileRiver/download/cat/Catppuccin-Mocha-Standard-Pink-Dark-xhdpi /NileRiver/
 echo -e "  > Downloading Catppuccin cursor theme."
 wget https://github.com/catppuccin/cursors/releases/download/v2.0.0/catppuccin-mocha-lavender-cursors.zip -O /NileRiver/download/cursor.zip
 unzip -qq /NileRiver/download/cursor.zip -d /NileRiver/download/cat-cursor
-mv /NileRiver/download/cat-cursor/Catppuccin-Mocha-Lavender-Cursors /NileRiver/download/cat-cursor/catppuccin-cursor
+mv /NileRiver/download/cat-cursor/catppuccin-mocha-lavender-cursors /NileRiver/download/cat-cursor/catppuccin-cursor
+echo -e "  > Installing Catppuccin cursor theme to /usr/share/icons/"
+mv /NileRiver/download/cat-cursor/catppuccin-cursor /usr/share/icons/
 
 echo -e "  > Installing Papirus icon theme."
 wget -qO- https://git.io/papirus-icon-theme-install | sh
@@ -32,7 +34,7 @@ echo -e "  > Installing Catppuccin Papirus folders to /usr/share/icons/"
 cp -r /NileRiver/download/cat-papi/src/* /usr/share/icons/Papirus
 echo -e "  > Downloading papirus-folders script."
 wget https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-folders/master/papirus-folders -O /NileRiver/download/papirus-folders
-chmod +x ./papirus-folders
+chmod +x /NileRiver/papirus-folders
 echo -e "  > Overwriting old Papirus icons."
 /NileRiver/download/papirus-folders -C cat-mocha-pink --theme Papirus-Dark
 
@@ -41,7 +43,7 @@ for user_dir in /home/*; do
     if [ -d "$user_dir" ]; then
         username=$(basename "$user_dir")
 
-        echo " > Installing Catppuccin GTK theme for user $username"
+        echo -e " > Installing Catppuccin GTK theme for user $username"
         if [ -d "/home/$username/.themes/catppuccin" ]; then
             rm -rf /home/$username/.themes/Catppuccin
         fi
