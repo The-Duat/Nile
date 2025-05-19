@@ -74,9 +74,17 @@ local function sendNetwork()
 	end
 end
 
-local function sendSoftware()
+local function sendPkgManager()
+	local operator = ""
 	local hasRequestedToUseAUR = false
 	local packageList = {}
+
+	if arg[1] ==  "fetch" then
+		operator = "install"
+	else
+		operator = arg[1]
+	end
+
 	while argCount > 1 do
 		if arg[argCount] ~= "-aur" then
 			table.insert(packageList, arg[argCount])
@@ -85,7 +93,8 @@ local function sendSoftware()
 		end
 		argCount = argCount - 1
 	end
-	NileRiver.Main.Software(arg[1], packageList, hasRequestedToUseAUR)
+
+	NileRiver.Main.Pm(operator, packageList, hasRequestedToUseAUR)
 end
 
 local function sendUpdate()
@@ -108,7 +117,7 @@ local firstArgSheet = {
 	["gfx"]     = sendGraphics,
 	["net"]     = sendNetwork,
 	["fetch"]   = sendSoftware,
-	["remove"]  = sendSoftware,
+	["remove"]  = sendPkgManager,
 	["update"]  = sendUpdate,
 	["start"]   = NileRiver.Main.start -- Takes no arguments.
 }
